@@ -1,0 +1,60 @@
+const { readFileSync } = require('node:fs');
+const { kapsoConfigFromEnv, kapsoRequest } = require('./lib/kapso-api');
+const { hasHelpFlag, parseFlags, requireFlag, parseJsonValue } = require('./lib/args');
+
+function ok(data) {
+  return { ok: true, data };
+}
+
+function err(message, details) {
+  return { ok: false, error: { message, details } };
+}
+
+function resolvePayload(flags) {
+  if (typeof flags.payload === 'string' && flags.payload.length > 0) {
+    return parseJsonValue(flags.payload, 'payload');
+  }
+  if (typeof flags['payload-file'] === 'string' && flags['payload-file'].length > 0) {
+    return JSON.parse(readFileSync(flags['payload-file'], 'utf8'));
+  }
+  throw new Error('Provide --payload or --payload-file');
+}
+
+async function main() {
+  const argv = process.argv.slice(2);
+  if (hasHelpFlag(argv)) {
+    console.log(
+      JSON.stringify(
+        {
+          ok: true,
+          usage:
+            'node /agent-skills/kapso-function-management/scripts/invoke.js --function-id <id> (--payload <json> | --payload-file <path>)',
+          env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
+        },
+        null,
+        2
+      )
+    );
+    return 0;
+  }
+
+  try {
+    const flags = parseFlags(argv);
+    const functionId = requireFlag(flags, 'function-id');
+    const payload = resolvePayload(flags);
+    const config = kapsoConfigFromEnv();
+    const data = await kapsoRequest(config, `/functions/${encodeURIComponent(functionId)}/invoke`, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    console.log(JSON.stringify(ok(data), null, 2));
+    return 0;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(JSON.stringify(err('Command failed', { message }), null, 2));
+    return 1;
+  }
+}
+
+main().then((code) => process.exit(code));

@@ -1,0 +1,65 @@
+const { readFileSync } = require('node:fs');
+const { kapsoConfigFromEnv, kapsoRequest } = require('./lib/kapso-api');
+const { hasHelpFlag, parseFlags, requireFlag } = require('./lib/args');
+
+function ok(data) {
+  return { ok: true, data };
+}
+
+function err(message, details) {
+  return { ok: false, error: { message, details } };
+}
+
+function resolveCode(flags) {
+  if (typeof flags.code === 'string' && flags.code.length > 0) {
+    return flags.code;
+  }
+  if (typeof flags['code-file'] === 'string' && flags['code-file'].length > 0) {
+    return readFileSync(flags['code-file'], 'utf8');
+  }
+  throw new Error('Provide --code or --code-file');
+}
+
+async function main() {
+  const argv = process.argv.slice(2);
+  if (hasHelpFlag(argv)) {
+    console.log(
+      JSON.stringify(
+        {
+          ok: true,
+          usage:
+            'node /agent-skills/kapso-function-management/scripts/create.js --name <name> (--code <js> | --code-file <path>) [--description <text>]',
+          env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
+        },
+        null,
+        2
+      )
+    );
+    return 0;
+  }
+
+  try {
+    const flags = parseFlags(argv);
+    const name = requireFlag(flags, 'name');
+    const code = resolveCode(flags);
+    const payload = { name, code };
+    if (typeof flags.description === 'string' && flags.description.length > 0) {
+      payload.description = flags.description;
+    }
+
+    const config = kapsoConfigFromEnv();
+    const data = await kapsoRequest(config, '/functions', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    console.log(JSON.stringify(ok(data), null, 2));
+    return 0;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(JSON.stringify(err('Command failed', { message }), null, 2));
+    return 1;
+  }
+}
+
+main().then((code) => process.exit(code));
