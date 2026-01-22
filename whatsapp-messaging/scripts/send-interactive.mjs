@@ -4,12 +4,12 @@ import { err, ok, printResult } from './lib/output.mjs';
 
 function usage() {
   return {
-    usage: 'node scripts/send-template.mjs --phone-number-id <PHONE_NUMBER_ID> --json <payload> | --file <path>',
+    usage: 'node scripts/send-interactive.mjs --phone-number-id <PHONE_NUMBER_ID> --json <payload> | --file <path>',
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)'],
-    notes: ['Payload must include messaging_product: "whatsapp" and type: "template".'],
+    notes: ['Payload must include messaging_product: "whatsapp" and type: "interactive".'],
     hints: [
       'To discover phone_number_id (Meta phone number id), run: node scripts/list-platform-phone-numbers.mjs',
-      'Start from an asset payload in assets/ (send-time examples) and adjust the template name/to/components.'
+      'Start from an asset payload in assets/ (send-interactive-*.json) and adjust to/interactive fields.'
     ]
   };
 }
@@ -27,12 +27,20 @@ function normalizePayload(payload) {
     throw new Error('messaging_product must be whatsapp');
   }
 
-  if (payload.type !== 'template') {
-    throw new Error('type must be template');
+  if (payload.type !== 'interactive') {
+    throw new Error('type must be interactive');
   }
 
   if (!payload.to) {
     throw new Error('to is required');
+  }
+
+  if (!payload.interactive || typeof payload.interactive !== 'object') {
+    throw new Error('interactive is required and must be an object');
+  }
+
+  if (!payload.interactive.type) {
+    throw new Error('interactive.type is required');
   }
 
   return payload;
@@ -63,8 +71,9 @@ async function main() {
 
     return printResult(ok({ response }));
   } catch (error) {
-    return printResult(err('Failed to send template message', { message: String(error?.message || error), ...usage() }));
+    return printResult(err('Failed to send interactive message', { message: String(error?.message || error), ...usage() }));
   }
 }
 
 main().then((code) => process.exit(code));
+

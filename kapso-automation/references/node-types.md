@@ -1,5 +1,25 @@
 # Workflow Node Types
 
+## Supported node_type values
+
+These are the `data.node_type` values supported by the Platform API and validated by `scripts/validate-graph.js`:
+
+- `start`
+- `send_text`
+- `send_template`
+- `send_interactive`
+- `wait_for_response`
+- `set_variable`
+- `decide`
+- `call`
+- `webhook`
+- `pipedream`
+- `function`
+- `agent`
+- `handoff`
+
+Messaging nodes are `send_text`, `send_template`, and `send_interactive`.
+
 Node structure:
 
 ```json
@@ -127,6 +147,22 @@ Notes:
 
 Saves the next message into `vars.user_reply`.
 
+## set_variable
+
+```json
+{
+  "node_type": "set_variable",
+  "config": {
+    "variable_name": "customer_name",
+    "variable_value": "{{vars.user_reply}}",
+    "value_type": "string"
+  }
+}
+```
+
+Notes:
+- Use `value_type: "string"` unless you have a specific reason to store a different type.
+
 ## decide (AI routing)
 
 ```json
@@ -185,6 +221,29 @@ Rules:
 ```
 
 `headers` and `body_template` must be valid JSON objects.
+
+## pipedream (apps)
+
+```json
+{
+  "node_type": "pipedream",
+  "config": {
+    "action_id": "slack-send_message_to_channel",
+    "app_slug": "slack",
+    "account_id": "apn_example",
+    "configured_props": {
+      "channel": "#general",
+      "text": "Hello {{vars.user_name}}!"
+    },
+    "dynamic_props_id": "dp_optional",
+    "save_response_to": "app_result"
+  }
+}
+```
+
+Notes:
+- Use `references/app-integrations.md` for how to find `action_id`, `account_id`, and build `configured_props`.
+- `configured_props` may include `{{vars.*}}`, `{{system.*}}`, `{{context.*}}` runtime variables.
 
 ## function
 

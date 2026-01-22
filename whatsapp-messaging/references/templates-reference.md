@@ -10,6 +10,15 @@ Required env vars:
 - `KAPSO_META_GRAPH_VERSION` (optional, default: `v24.0`)
 - `KAPSO_META_BASE_URL` (optional, defaults to `${KAPSO_API_BASE_URL}/meta`)
 
+## Discover IDs (recommended)
+
+Template CRUD requires `business_account_id` (WABA ID). Sending messages and uploading media require `phone_number_id` (Meta phone number id).
+
+Use the Platform API to discover both:
+
+- Script: `node scripts/list-platform-phone-numbers.mjs`
+- Raw: `GET /platform/v1/whatsapp/phone_numbers` (header: `X-API-Key: $KAPSO_API_KEY`)
+
 ## Meta proxy endpoints used
 
 - List WABA phone numbers:
@@ -42,7 +51,8 @@ AUTHENTICATION templates:
 - If user wants custom OTP text, use UTILITY instead.
 
 Status flow:
-- draft -> submitted -> approved/rejected
+- Kapso does not maintain a separate draft state; create/update calls go to Meta immediately.
+- Use `status` from Meta (`APPROVED`, `PENDING`, `REJECTED`, etc) via list/status scripts.
 
 Parameter types:
 - POSITIONAL: `{{1}}`, `{{2}}` (sequential).
@@ -161,6 +171,19 @@ Button ordering rules:
 - Valid: QUICK_REPLY, QUICK_REPLY, URL, PHONE_NUMBER
 - Invalid: QUICK_REPLY, URL, QUICK_REPLY
 - Dynamic URL variables must be at the end of the URL.
+
+URL button variables use positional placeholders in the URL (for example `{{1}}`). At send-time, include a `button` component with `sub_type: "url"` and the correct `index`.
+
+Example (send-time URL button param):
+
+```json
+{
+  "type": "button",
+  "sub_type": "url",
+  "index": "0",
+  "parameters": [{ "type": "text", "text": "ORDER-123" }]
+}
+```
 
 ## AUTHENTICATION components
 

@@ -5,7 +5,11 @@ import { err, ok, printResult } from './lib/output.mjs';
 function usage() {
   return {
     usage: 'node scripts/template-status.mjs --business-account-id <WABA_ID> --name <template_name> [--fields <fields>]',
-    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)']
+    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)'],
+    hints: [
+      'To discover business_account_id (WABA), run: node scripts/list-platform-phone-numbers.mjs',
+      'To list all templates (and get ids/status), use scripts/list-templates.mjs.'
+    ]
   };
 }
 

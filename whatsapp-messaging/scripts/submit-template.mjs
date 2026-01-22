@@ -5,7 +5,11 @@ import { err, ok, printResult } from './lib/output.mjs';
 function usage() {
   return {
     usage: 'node scripts/submit-template.mjs --business-account-id <WABA_ID> --json <payload> | --file <path>',
-    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)']
+    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)'],
+    hints: [
+      'To discover business_account_id (WABA), run: node scripts/list-platform-phone-numbers.mjs',
+      'This uses the same Meta endpoint as create-template; use whichever command name matches the task.'
+    ]
   };
 }
 

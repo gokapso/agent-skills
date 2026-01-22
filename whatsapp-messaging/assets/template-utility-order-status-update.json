@@ -1,5 +1,5 @@
 {
-  "name": "order_ready_named",
+  "name": "order_status_update",
   "language": "en_US",
   "category": "UTILITY",
   "parameter_format": "NAMED",
@@ -7,7 +7,7 @@
     {
       "type": "HEADER",
       "format": "TEXT",
-      "text": "Order {{order_id}} is ready",
+      "text": "Order {{order_id}} update",
       "example": {
         "header_text_named_params": [
           { "param_name": "order_id", "example": "ORDER-123" }
@@ -16,11 +16,12 @@
     },
     {
       "type": "BODY",
-      "text": "Hi {{customer_name}}, your total is {{amount}}.",
+      "text": "Hi {{customer_name}}, your order is {{status}}. {{details}}",
       "example": {
         "body_text_named_params": [
           { "param_name": "customer_name", "example": "Alex" },
-          { "param_name": "amount", "example": "$42.00" }
+          { "param_name": "status", "example": "shipped" },
+          { "param_name": "details", "example": "Expected delivery: Jan 25" }
         ]
       }
     },
@@ -34,11 +35,11 @@
         {
           "type": "URL",
           "text": "Track order",
-          "url": "https://example.com/track?id={{order_id}}",
-          "example": ["https://example.com/track?id=ORDER-123"]
-        },
-        { "type": "QUICK_REPLY", "text": "Need help" }
+          "url": "https://example.com/orders/{{1}}",
+          "example": ["https://example.com/orders/ORDER-123"]
+        }
       ]
     }
   ]
 }
+

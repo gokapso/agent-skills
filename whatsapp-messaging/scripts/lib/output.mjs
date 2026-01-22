@@ -11,13 +11,12 @@ export function err(message, details) {
 }
 
 export function printResult(result) {
-  if (result.ok) {
-    // eslint-disable-next-line no-console
-    console.log(JSON.stringify(result, null, 2));
-    return 0;
-  }
+  const json = JSON.stringify(result, null, 2);
 
+  // Skill runners sometimes only surface stdout. Print errors there too so
+  // agents don't see only "exit status 2" with no details.
   // eslint-disable-next-line no-console
-  console.error(JSON.stringify(result, null, 2));
-  return 2;
+  console.log(json);
+
+  return result.ok ? 0 : 2;
 }

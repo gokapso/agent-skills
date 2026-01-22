@@ -9,7 +9,8 @@ function usage() {
   return {
     usage: 'node scripts/upload-media.mjs --phone-number-id <PHONE_NUMBER_ID> --file <path> --mime-type <mime> [--filename <name>]',
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)'],
-    notes: ['This returns a media id for send-time headers, not a template header_handle.']
+    notes: ['This returns a media id for send-time headers, not a template header_handle.'],
+    hints: ['To discover phone_number_id (Meta phone number id), run: node scripts/list-platform-phone-numbers.mjs']
   };
 }
 

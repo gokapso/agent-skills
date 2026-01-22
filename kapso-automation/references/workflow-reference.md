@@ -88,6 +88,19 @@ Implemented calls:
 
 Variables CRUD endpoints are not defined for Platform API. Scripts intentionally return blocked for create/update/delete operations.
 
+## Workflow graphs: endpoints, shapes, and roundtrips
+
+- `GET /platform/v1/workflows/:id` returns workflow metadata (including `lock_version`) but does NOT include `definition`.
+- `GET /platform/v1/workflows/:id/definition` returns a workflow record that includes `definition` (nodes + edges).
+- `PATCH /platform/v1/workflows/:id` accepts either `workflow: { ... }` or `flow: { ... }` envelopes.
+  - To update the graph: send `workflow: { definition: <definition> }`.
+
+Graph shapes:
+- `get-graph.js` returns a ReactFlow-style definition that includes extra/computed fields (`node.type`, `data.display_name`, `edge.id`, `edge.type`).
+- The API accepts a minimal editable definition (`nodes[].id/position/data.node_type/data.config` and `edges[].source/target/label`) and ignores/strips extra fields.
+
+Source of truth: `references/graph-contract.md`.
+
 ## Phone number lookup for triggers
 
 Use `scripts/list-whatsapp-phone-numbers.js` to find `phone_number_id` for inbound_message triggers.
@@ -103,7 +116,7 @@ The `scripts/validate-graph.js` script checks:
 - Only `decide` nodes may branch; other nodes may have 0 or 1 outgoing `next` edge.
 - Decide node condition labels must match outgoing edge labels.
 
-Warnings are emitted for unknown node types or extra decide edges.
+Warnings are emitted for unknown node types or extra decide edges. Treat warnings as blockers before you PATCH a graph.
 
 ## Assets
 

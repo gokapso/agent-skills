@@ -5,7 +5,11 @@ import { err, ok, printResult } from './lib/output.mjs';
 function usage() {
   return {
     usage: 'node scripts/update-template.mjs --business-account-id <WABA_ID> --hsm-id <template_id> --json <payload> | --file <path>',
-    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)']
+    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID', 'KAPSO_META_GRAPH_VERSION (optional)'],
+    hints: [
+      'To discover business_account_id (WABA), run: node scripts/list-platform-phone-numbers.mjs',
+      'Find template id (hsm_id) via list-templates or template-status.'
+    ]
   };
 }
 

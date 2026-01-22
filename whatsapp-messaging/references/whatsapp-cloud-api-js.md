@@ -64,8 +64,22 @@ await client.messages.sendTemplate({
 });
 ```
 
+## Send an interactive button message
+
+```ts
+await client.messages.sendInteractiveButtons({
+  phoneNumberId: "<PHONE_NUMBER_ID>",
+  to: "+15551234567",
+  bodyText: "Choose an option",
+  buttons: [
+    { id: "accept", title: "Accept" },
+    { id: "decline", title: "Decline" }
+  ]
+});
+```
+
 ## Notes
 
-- Use `phoneNumberId` from the connected WhatsApp number.
+- Use `phoneNumberId` from the connected WhatsApp number (discover via `node scripts/list-platform-phone-numbers.mjs`).
 - With Kapso proxy, keep `baseUrl` and `kapsoApiKey` set.
 - Template rules still apply (examples, button ordering, media headers).
