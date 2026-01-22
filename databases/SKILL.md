@@ -1,6 +1,6 @@
 ---
 name: databases
-description: Explore and modify a project's D1 database (tables, row queries, CRUD) using PostgREST-style filters; use when users need database inspection or updates.
+description: Explore and modify project D1 database tables and rows; use when users need to inspect data or run CRUD operations.
 ---
 
 # Kapso Database Management

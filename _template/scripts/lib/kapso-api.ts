@@ -10,16 +10,13 @@ function requireEnv(name: string): string {
   return value;
 }
 
-function normalizePlatformBase(raw: string): string {
-  const trimmed = raw.replace(/\/+$/, '');
-  if (trimmed.endsWith('/platform/v1')) return trimmed;
-  if (trimmed.endsWith('/api')) return `${trimmed}/platform/v1`;
-  return `${trimmed}/platform/v1`;
+function normalizeBaseUrl(raw: string): string {
+  return raw.replace(/\/+$/, '');
 }
 
 export function kapsoConfigFromEnv(): KapsoConfig {
   return {
-    baseUrl: normalizePlatformBase(requireEnv('KAPSO_API_BASE_URL')),
+    baseUrl: normalizeBaseUrl(requireEnv('KAPSO_API_BASE_URL')),
     apiKey: requireEnv('KAPSO_API_KEY'),
     projectId: requireEnv('PROJECT_ID')
   };

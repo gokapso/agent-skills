@@ -20,6 +20,9 @@ function kapsoConfigFromEnv() {
 
 async function kapsoRequest(config, path, init = {}) {
   const url = `${config.baseUrl}${path}`;
+  if (process.env.KAPSO_DEBUG_URLS === 'true') {
+    console.error(`[kapso-debug] ${init.method || 'GET'} ${url}`);
+  }
   const headers = new Headers(init.headers || undefined);
   headers.set('X-API-Key', config.apiKey);
   if (!headers.has('Content-Type')) {

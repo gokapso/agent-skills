@@ -14,30 +14,59 @@ Required env vars:
 
 - List WABA phone numbers:
   - `GET /{business_account_id}/phone_numbers`
-
 - List templates:
   - `GET /{business_account_id}/message_templates`
-
 - Create template:
   - `POST /{business_account_id}/message_templates`
-
 - Update template:
   - `POST /{business_account_id}/message_templates?hsm_id=<template_id>`
-
 - Delete template (not scripted):
   - `DELETE /{business_account_id}/message_templates?name=<template_name>`
-
 - Send template message:
   - `POST /{phone_number_id}/messages`
-
 - Upload media for send-time headers:
   - `POST /{phone_number_id}/media`
 
-## Header handle limitation
+## Template concepts
 
-The Meta proxy registry does not expose the resumable upload endpoints required to obtain `header_handle` values for template review. Use Platform media ingest (`/platform/v1/whatsapp/media` with `delivery: meta_resumable_asset`) if a header_handle is required.
+Categories:
+- MARKETING: promotional content.
+- UTILITY: transactional updates.
+- AUTHENTICATION: OTP/verification (special rules below).
 
-## Template components (creation time)
+AUTHENTICATION templates:
+- Require Meta business verification.
+- Body text is fixed by Meta (not customizable).
+- Must include an OTP button (COPY_CODE or ONE_TAP).
+- Send-time still requires the OTP value in body param {{1}} and URL button param.
+- If user wants custom OTP text, use UTILITY instead.
+
+Status flow:
+- draft -> submitted -> approved/rejected
+
+Parameter types:
+- POSITIONAL: `{{1}}`, `{{2}}` (sequential).
+- NAMED: `{{customer_name}}` (lowercase + underscores). Prefer NAMED.
+
+Component types:
+- HEADER (optional)
+- BODY (required)
+- FOOTER (optional)
+- BUTTONS (optional)
+
+## Parameter format (creation time)
+
+Set `parameter_format`:
+- `POSITIONAL` (default): `{{1}}`, `{{2}}` with no gaps.
+- `NAMED` (recommended): `{{order_id}}`.
+
+## Example requirements (creation time)
+
+If any variables appear in HEADER or BODY, you must include examples:
+- POSITIONAL: `example.header_text` and 2D `example.body_text`.
+- NAMED: `example.header_text_named_params` and `example.body_text_named_params`.
+
+## Components cheat sheet (creation time)
 
 ### Header (TEXT, named)
 
@@ -127,12 +156,13 @@ The Meta proxy registry does not expose the resumable upload endpoints required 
 }
 ```
 
-Rules:
-
+Button ordering rules:
 - Do not interleave QUICK_REPLY with URL/PHONE_NUMBER.
-- Dynamic URL variables must appear at the end.
+- Valid: QUICK_REPLY, QUICK_REPLY, URL, PHONE_NUMBER
+- Invalid: QUICK_REPLY, URL, QUICK_REPLY
+- Dynamic URL variables must be at the end of the URL.
 
-## AUTHENTICATION template components
+## AUTHENTICATION components
 
 ```json
 {
@@ -151,14 +181,9 @@ Rules:
 }
 ```
 
-Notes:
-
-- Body text is fixed by Meta.
-- OTP button is required.
-
 ## Send-time components
 
-### Named parameters
+Named parameters:
 
 ```json
 {
@@ -169,7 +194,7 @@ Notes:
 }
 ```
 
-### Positional parameters
+Positional parameters:
 
 ```json
 {
@@ -180,7 +205,7 @@ Notes:
 }
 ```
 
-### AUTHENTICATION send-time
+AUTHENTICATION send-time:
 
 ```json
 [
@@ -197,7 +222,20 @@ Notes:
 ]
 ```
 
-### Media header send-time
+Media header send-time (use id or link, not both):
+
+```json
+{
+  "type": "header",
+  "parameters": [
+    { "type": "image", "image": { "id": "4490709327384033" } }
+  ]
+}
+```
+
+## Header handle limitation
+
+The Meta proxy does not expose resumable upload endpoints for `header_handle`. Use Platform media ingest (`/platform/v1/whatsapp/media` with `delivery: meta_resumable_asset`) if a header_handle is required.
 
 ```json
 {

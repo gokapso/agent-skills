@@ -1,6 +1,6 @@
 ---
 name: whatsapp-flows
-description: Manage WhatsApp Flows via Kapso Platform API: list/create/update/publish flows, manage flow versions, attach data endpoints, and check encryption. Use Meta proxy only for send-test and delete operations.
+description: "Manage WhatsApp Flows via Kapso Platform API: list/create/update/publish flows, manage flow versions, attach data endpoints, and check encryption. Use Meta proxy only for send-test and delete operations."
 ---
 
 # Kapso WhatsApp Flow Management
@@ -127,4 +127,4 @@ Some endpoints are not exposed yet in the Platform API. These scripts may return
 
 - `list-flow-responses` (Platform API missing flow responses endpoint)
 
-If a command fails with 404, surface that the endpoint is missing and note the dependency in `kapso-agent-skills-platform-api.md`.
+If a command fails with 404, surface that the endpoint is missing and note the dependency in the `platform-api` skill reference.

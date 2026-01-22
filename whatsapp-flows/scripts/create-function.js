@@ -19,7 +19,6 @@ run(async () => {
       name,
       code,
       description: getStringFlag(flags, 'description'),
-      function_type: getStringFlag(flags, 'function-type') || 'cloudflare_worker',
       runtime_config: runtimeConfig
     }
   };

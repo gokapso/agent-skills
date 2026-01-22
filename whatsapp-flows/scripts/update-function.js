@@ -19,7 +19,6 @@ run(async () => {
       name: getStringFlag(flags, 'name'),
       code,
       description: getStringFlag(flags, 'description'),
-      function_type: getStringFlag(flags, 'function-type'),
       runtime_config: runtimeConfig
     }
   };
