@@ -24,8 +24,8 @@ run(async () => {
   return platformRequest({
     method: 'GET',
     path: functionId
-      ? `/functions/${functionId}/invocations`
-      : `/whatsapp/flows/${flowId}/function_invocations`,
+      ? `/platform/v1/functions/${functionId}/invocations`
+      : `/platform/v1/whatsapp/flows/${flowId}/function_invocations`,
     query
   });
 });

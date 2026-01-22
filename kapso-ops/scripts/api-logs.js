@@ -38,7 +38,7 @@ async function main() {
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
       config,
-      `/external_api_logs${suffix ? `?${suffix}` : ''}`
+      `/platform/v1/external_api_logs${suffix ? `?${suffix}` : ''}`
     );
 
     console.log(JSON.stringify({ ok: true, data }, null, 2));

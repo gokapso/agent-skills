@@ -138,8 +138,9 @@ Automatically provision a phone number for customers:
 ## Full example
 
 ```javascript
+const KAPSO_API_BASE_URL = 'https://api.kapso.ai';
 const setupLink = await fetch(
-  `https://api.kapso.ai/platform/v1/customers/${customerId}/setup_links`,
+  `${KAPSO_API_BASE_URL}/platform/v1/customers/${customerId}/setup_links`,
   {
     method: 'POST',
     headers: {

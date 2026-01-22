@@ -9,6 +9,6 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: `/functions/${functionId}/deploy`
+    path: `/platform/v1/functions/${functionId}/deploy`
   });
 });

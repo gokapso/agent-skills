@@ -88,7 +88,7 @@ function metaBaseUrl() {
 
 function platformBaseUrl() {
   const config = getConfig();
-  return `${config.baseUrl}/platform/v1`;
+  return config.baseUrl;
 }
 
 async function metaRequest(options) {

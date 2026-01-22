@@ -8,7 +8,7 @@ This skill manages workflow graphs, triggers, executions, and app integrations o
 
 Required env vars:
 
-- `KAPSO_API_BASE_URL` (example: `https://api.kapso.ai`)
+- `KAPSO_API_BASE_URL` (host only, no `/platform/v1`, example: `https://api.kapso.ai`)
 - `KAPSO_API_KEY`
 - `PROJECT_ID`
 
@@ -50,6 +50,7 @@ Each script is a single operation. Run with `node` or `bun`.
 - `scripts/create-integration.js`
 - `scripts/update-integration.js`
 - `scripts/delete-integration.js`
+- `scripts/list-whatsapp-phone-numbers.js`
 
 ## Platform API endpoints
 
@@ -83,8 +84,14 @@ Implemented calls:
 - `GET /platform/v1/integrations/actions/:action_id/schema`
 - `POST /platform/v1/integrations/actions/:action_id/configure_prop`
 - `POST /platform/v1/integrations/actions/:action_id/reload_props`
+- `GET /platform/v1/whatsapp/phone_numbers` (for inbound_message triggers)
 
 Variables CRUD endpoints are not defined for Platform API. Scripts intentionally return blocked for create/update/delete operations.
+
+## Phone number lookup for triggers
+
+Use `scripts/list-whatsapp-phone-numbers.js` to find `phone_number_id` for inbound_message triggers.
+Do not use `/whatsapp_configs` (not a Platform API endpoint).
 
 ## Graph validation rules (local)
 

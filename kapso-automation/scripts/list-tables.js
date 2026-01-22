@@ -28,7 +28,7 @@ async function main() {
 
   try {
     const config = kapsoConfigFromEnv();
-    const data = await kapsoRequest(config, '/database_tables');
+    const data = await kapsoRequest(config, '/platform/v1/database_tables');
     console.log(JSON.stringify(ok(data), null, 2));
     return 0;
   } catch (error) {

@@ -16,7 +16,7 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: `/whatsapp/flows/${flowId}/publish`,
+    path: `/platform/v1/whatsapp/flows/${flowId}/publish`,
     body: Object.keys(body).length > 0 ? body : undefined
   });
 });

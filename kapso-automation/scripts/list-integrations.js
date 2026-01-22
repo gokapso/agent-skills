@@ -6,6 +6,9 @@ import { parseArgs, getBooleanFlag } from './lib/workflows/args.js';
 function usage() {
   return ok({
     usage: 'node scripts/list-integrations.js',
+    notes: [
+      'Check integrations[].variable_definitions to see required tool inputs.'
+    ],
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
   });
 }

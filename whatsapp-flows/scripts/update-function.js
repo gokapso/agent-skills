@@ -25,7 +25,7 @@ run(async () => {
 
   return platformRequest({
     method: 'PATCH',
-    path: `/functions/${functionId}`,
+    path: `/platform/v1/functions/${functionId}`,
     body
   });
 });

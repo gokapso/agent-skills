@@ -8,7 +8,8 @@ All Platform API requests require:
 X-API-Key: <api_key>
 ```
 
-Base URL: `https://api.kapso.ai/platform/v1`
+Base host: `https://api.kapso.ai`
+Platform API base path: `/platform/v1`
 
 ## Meta proxy (WhatsApp Cloud API)
 

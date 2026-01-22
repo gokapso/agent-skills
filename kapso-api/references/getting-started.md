@@ -102,8 +102,9 @@ curl -X POST https://api.kapso.ai/meta/whatsapp/v24.0/110987654321/messages \
 
 ```javascript
 const KAPSO_API_KEY = 'YOUR_API_KEY';
-const PLATFORM_API_URL = 'https://api.kapso.ai/platform/v1';
-const WHATSAPP_API_URL = 'https://api.kapso.ai/meta/whatsapp';
+const KAPSO_API_BASE_URL = 'https://api.kapso.ai';
+const PLATFORM_API_URL = `${KAPSO_API_BASE_URL}/platform/v1`;
+const WHATSAPP_API_URL = `${KAPSO_API_BASE_URL}/meta/whatsapp`;
 
 async function onboardCustomer(customerData) {
   // 1. Create customer

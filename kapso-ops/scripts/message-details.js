@@ -36,7 +36,7 @@ async function main() {
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
       config,
-      `/whatsapp/messages/${encodeURIComponent(messageId)}`
+      `/platform/v1/whatsapp/messages/${encodeURIComponent(messageId)}`
     );
 
     console.log(JSON.stringify(ok(data), null, 2));

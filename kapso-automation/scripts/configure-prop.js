@@ -6,6 +6,10 @@ import { parseArgs, getFlag, getBooleanFlag } from './lib/workflows/args.js';
 function usage() {
   return ok({
     usage: 'node scripts/configure-prop.js --action-id <id> --prop-name <name> --account-id <id> [--configured-props <json>] [--dynamic-props-id <id>]',
+    notes: [
+      'Use accounts[].pipedream_account_id for --account-id.',
+      'If you pass an internal account UUID, the script will try to resolve it.'
+    ],
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
   });
 }
@@ -17,6 +21,32 @@ function parseJson(value, label) {
   } catch (error) {
     throw new Error(`Invalid JSON for ${label}: ${String(error?.message || error)}`);
   }
+}
+
+function normalizeAccounts(payload) {
+  if (Array.isArray(payload?.accounts)) return payload.accounts;
+  if (Array.isArray(payload?.accounts?.accounts)) return payload.accounts.accounts;
+  if (Array.isArray(payload)) return payload;
+  return [];
+}
+
+async function resolveAccountId(config, accountId) {
+  if (accountId.startsWith('apn_')) return accountId;
+
+  const response = await requestJson(config, {
+    method: 'GET',
+    path: '/platform/v1/integrations/accounts'
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to resolve account id. Use list-accounts and pass pipedream_account_id.');
+  }
+
+  const accounts = normalizeAccounts(response.data);
+  const match = accounts.find((account) => account.id === accountId);
+  if (match?.pipedream_account_id) return match.pipedream_account_id;
+
+  throw new Error('account-id must be pipedream_account_id (use list-accounts output).');
 }
 
 async function main() {
@@ -44,11 +74,20 @@ async function main() {
     return 2;
   }
 
-  if (!Object.keys(configuredProps).length) {
-    configuredProps = { account_id: accountId };
+  const config = loadConfig();
+  let resolvedAccountId = accountId;
+
+  try {
+    resolvedAccountId = await resolveAccountId(config, accountId);
+  } catch (error) {
+    printJson(err('Failed to resolve account-id', { message: error.message }));
+    return 2;
   }
 
-  const config = loadConfig();
+  if (!Object.keys(configuredProps).length) {
+    configuredProps = { account_id: resolvedAccountId };
+  }
+
   const response = await requestJson(config, {
     method: 'POST',
     path: `/platform/v1/integrations/actions/${actionId}/configure_prop`,

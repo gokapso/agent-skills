@@ -15,7 +15,7 @@ run(async () => {
 
   return platformRequest({
     method: 'GET',
-    path: `/whatsapp/flows/${flowId}/responses`,
+    path: `/platform/v1/whatsapp/flows/${flowId}/responses`,
     query
   });
 });

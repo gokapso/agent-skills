@@ -10,6 +10,6 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: `/whatsapp/flows/${flowId}/data_endpoint/deploy`
+    path: `/platform/v1/whatsapp/flows/${flowId}/data_endpoint/deploy`
   });
 });

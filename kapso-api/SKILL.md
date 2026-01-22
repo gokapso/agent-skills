@@ -14,6 +14,11 @@ Use this skill for Platform API navigation, authentication, and multi-tenant onb
 - Connection detection via webhooks or redirect URLs
 - Choosing the correct API (Platform vs Meta proxy)
 
+## Before making changes
+
+- Read the relevant files in `references/` for endpoint maps and onboarding steps.
+- Confirm base URLs and required headers before suggesting a curl request.
+
 ## Workflow decision tree
 
 ### Customers and setup links
@@ -27,7 +32,7 @@ Load `references/platform-api-reference.md`.
 
 ## Quickstart
 
-Base URL: `https://api.kapso.ai/platform/v1` (or `${KAPSO_API_BASE_URL}/platform/v1`)
+Base host: `https://api.kapso.ai` (scripts append `/platform/v1`)
 
 Auth header:
 

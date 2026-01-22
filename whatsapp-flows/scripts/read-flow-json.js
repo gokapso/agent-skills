@@ -12,13 +12,13 @@ run(async () => {
   if (versionId) {
     return platformRequest({
       method: 'GET',
-      path: `/whatsapp/flows/${flowId}/versions/${versionId}`
+      path: `/platform/v1/whatsapp/flows/${flowId}/versions/${versionId}`
     });
   }
 
   const list = await platformRequest({
     method: 'GET',
-    path: `/whatsapp/flows/${flowId}/versions`,
+    path: `/platform/v1/whatsapp/flows/${flowId}/versions`,
     query: {
       page: getNumberFlag(flags, 'page') || 1,
       per_page: getNumberFlag(flags, 'per-page') || 1
@@ -33,7 +33,7 @@ run(async () => {
 
   const detail = await platformRequest({
     method: 'GET',
-    path: `/whatsapp/flows/${flowId}/versions/${latest.id}`
+    path: `/platform/v1/whatsapp/flows/${flowId}/versions/${latest.id}`
   });
 
   return {

@@ -39,7 +39,7 @@ async function main() {
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
       config,
-      `/whatsapp/webhooks/${encodeURIComponent(webhookId)}/test${params.toString() ? `?${params.toString()}` : ''}`,
+      `/platform/v1/whatsapp/webhooks/${encodeURIComponent(webhookId)}/test${params.toString() ? `?${params.toString()}` : ''}`,
       { method: 'POST' }
     );
 

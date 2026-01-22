@@ -46,10 +46,10 @@ async function main() {
     const config = kapsoConfigFromEnv();
     let path = '';
     if (scope === 'project') {
-      path = `/whatsapp/webhooks/${encodeURIComponent(webhookId)}`;
+      path = `/platform/v1/whatsapp/webhooks/${encodeURIComponent(webhookId)}`;
     } else {
       const phoneNumberId = requireFlag(flags, 'phone-number-id');
-      path = `/whatsapp/phone_numbers/${encodeURIComponent(phoneNumberId)}/webhooks/${encodeURIComponent(webhookId)}`;
+      path = `/platform/v1/whatsapp/phone_numbers/${encodeURIComponent(phoneNumberId)}/webhooks/${encodeURIComponent(webhookId)}`;
     }
 
     const data = await kapsoRequest(config, path);

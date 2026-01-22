@@ -31,25 +31,25 @@ async function main() {
 
     const phoneNumbers = await kapsoRequest(
       config,
-      `/whatsapp/phone_numbers?per_page=${perPage}`
+      `/platform/v1/whatsapp/phone_numbers?per_page=${perPage}`
     );
 
     const apiTotals = await kapsoRequest(
       config,
-      `/external_api_logs?period=${encodeURIComponent(period)}&per_page=1`
+      `/platform/v1/external_api_logs?period=${encodeURIComponent(period)}&per_page=1`
     );
     const apiErrors = await kapsoRequest(
       config,
-      `/external_api_logs?period=${encodeURIComponent(period)}&errors_only=true&per_page=1`
+      `/platform/v1/external_api_logs?period=${encodeURIComponent(period)}&errors_only=true&per_page=1`
     );
 
     const webhookTotals = await kapsoRequest(
       config,
-      `/webhook_deliveries?period=${encodeURIComponent(period)}&per_page=1`
+      `/platform/v1/webhook_deliveries?period=${encodeURIComponent(period)}&per_page=1`
     );
     const webhookErrors = await kapsoRequest(
       config,
-      `/webhook_deliveries?period=${encodeURIComponent(period)}&errors_only=true&per_page=1`
+      `/platform/v1/webhook_deliveries?period=${encodeURIComponent(period)}&errors_only=true&per_page=1`
     );
 
     const payload = {

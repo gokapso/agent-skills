@@ -13,6 +13,12 @@ This skill consolidates everything needed to build and run Kapso automation:
 - Function management (Cloudflare Workers only)
 - Project D1 database table and row operations
 
+## Before making changes
+
+- Read the relevant files in `references/` for contracts and rules.
+- Inspect the exact `scripts/` you will run to confirm endpoint paths and flags.
+- Use `assets/` examples as the base for edits and payloads.
+
 ## Workflow decision tree
 
 ### Workflow graphs or triggers
@@ -21,12 +27,15 @@ Use the workflow scripts (get/list/update graph, triggers, executions).
 ### Function nodes, decide nodes, or webhooks
 Use the function scripts (create/update/deploy/invoke/logs) and follow the code rules.
 
+### AI agent with tools (scheduling, CRM, support)
+Use agent nodes + app integrations. Attach tools via `flow_agent_app_integration_tools` and set `provider_model_id`.
+
 ### Workflow data storage
 Use the database scripts (list tables, query rows, create/update/delete).
 
 ## Quickstart
 
-Set env vars: `KAPSO_API_BASE_URL`, `KAPSO_API_KEY`, `PROJECT_ID`.
+Set env vars: `KAPSO_API_BASE_URL` (host only, no `/platform/v1`), `KAPSO_API_KEY`, `PROJECT_ID`.
 
 Start here:
 
@@ -49,6 +58,7 @@ Start here:
 2. Create: `node scripts/create-trigger.js <workflow_id> --trigger-type ...`.
 3. Toggle: `node scripts/update-trigger.js --trigger-id <id> --active true|false`.
 4. Delete: `node scripts/delete-trigger.js --trigger-id <id>`.
+5. For inbound_message triggers, first run `node scripts/list-whatsapp-phone-numbers.js` to get `phone_number_id`.
 
 ### Debug executions
 1. List: `node scripts/list-executions.js <workflow_id>`.
@@ -75,9 +85,20 @@ Start here:
 
 ### App integrations (for nodes or agent tools)
 1. Accounts: `node scripts/list-accounts.js --app-slug <slug>`.
-2. Actions: `node scripts/search-actions.js --query "send slack message"`.
+2. Actions: `node scripts/search-actions.js --query "slack"` (prefer one-word query).
 3. Schema: `node scripts/get-action-schema.js --action-id <id>`.
-4. Create integration: `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <id> --configured-props <json>`.
+4. Create integration: `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <pipedream_account_id> --configured-props <json>`.
+
+### Agent node with tool integrations
+1. Find model: `node scripts/list-provider-models.js` and select `provider_model_id`.
+2. Find account: `node scripts/list-accounts.js --app-slug <slug>` (use `pipedream_account_id`).
+3. Find action_id (same as action key): `node scripts/search-actions.js --query <one-word> --app-slug <slug>`.
+4. Create integration(s): `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <pipedream_account_id> --configured-props <json> --variable-definitions <json>`.
+   - Use `{{placeholders}}` in configured_props for tool inputs.
+   - `variable_definitions` defines required input names and types.
+5. Add tools on the agent node: `flow_agent_app_integration_tools` in the node config.
+6. Create inbound trigger: `node scripts/create-trigger.js <workflow_id> --trigger-type inbound_message --phone-number-id <id>`.
+   - Example asset: `assets/agent-app-integration-example.json`.
 
 ## Code rules for functions
 
@@ -121,6 +142,9 @@ Never use `variables` internally.
 - Run scripts with `node` or `bun`; each file performs a single operation.
 - The Platform API does not enforce `lock_version` yet; edit/update scripts precheck and warn on conflicts.
 - Blocked commands return `blocked: true` with the missing endpoint details.
+- `action_id` is the same as the `key` returned by `search-actions`.
+- `--account-id` should use `pipedream_account_id` from `list-accounts`.
+- Tool inputs come from `variable_definitions` and `{{placeholders}}` in configured_props (see `references/app-integrations.md`).
 
 ## Blocked operations
 
@@ -151,6 +175,7 @@ Never use `variables` internally.
 - `node scripts/create-trigger.js <workflow-id> --trigger-type <inbound_message|api_call|whatsapp_event> [--phone-number-id <id>] [--event <whatsapp.event>] [--active true|false] [--triggerable-attributes <json>]`
 - `node scripts/update-trigger.js --trigger-id <id> --active true|false`
 - `node scripts/delete-trigger.js --trigger-id <id>`
+- `node scripts/list-whatsapp-phone-numbers.js [--per-page <n>] [--page <n>]`
 
 ### Executions and variables
 - `node scripts/list-executions.js <workflow-id> [--status <status>] [--waiting-reason <value>] [--whatsapp-conversation-id <id>] [--created-after <iso>] [--created-before <iso>]`
@@ -168,10 +193,10 @@ Never use `variables` internally.
 - `node scripts/get-action-schema.js --action-id <id>`
 - `node scripts/list-accounts.js [--app-slug <slug>]`
 - `node scripts/create-connect-token.js`
-- `node scripts/configure-prop.js --action-id <id> --prop-name <name> --account-id <id>`
-- `node scripts/reload-props.js --action-id <id> --account-id <id>`
+- `node scripts/configure-prop.js --action-id <id> --prop-name <name> --account-id <pipedream_account_id>`
+- `node scripts/reload-props.js --action-id <id> --account-id <pipedream_account_id>`
 - `node scripts/list-integrations.js`
-- `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <id> --configured-props <json> [--name <text>]`
+- `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <pipedream_account_id> --configured-props <json> [--name <text>]`
 - `node scripts/update-integration.js --integration-id <id> [--configured-props <json>]`
 - `node scripts/delete-integration.js --integration-id <id>`
 

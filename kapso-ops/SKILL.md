@@ -14,6 +14,12 @@ This skill covers operational diagnostics and support workflows:
 - External API and webhook delivery logs
 - WhatsApp configuration health checks
 
+## Before making changes
+
+- Read the relevant files in `references/` for event catalogs and troubleshooting steps.
+- Inspect the exact `scripts/` you will run to confirm endpoint paths and flags.
+- Use `assets/` examples to verify expected response shapes.
+
 ## Workflow decision tree
 
 ### Webhook setup or failures
@@ -30,7 +36,7 @@ Use health check scripts and `references/health-reference.md`.
 
 ## Quickstart
 
-Set env vars: `KAPSO_API_BASE_URL`, `KAPSO_API_KEY`, `PROJECT_ID`.
+Set env vars: `KAPSO_API_BASE_URL` (host only, no `/platform/v1`), `KAPSO_API_KEY`, `PROJECT_ID`.
 
 Start here:
 

@@ -6,6 +6,9 @@ import { parseArgs, getFlag, getBooleanFlag } from './lib/workflows/args.js';
 function usage() {
   return ok({
     usage: 'node scripts/update-integration.js --integration-id <id> [--configured-props <json>] [--name <text>] [--variable-definitions <json>] [--dynamic-props-id <id>]',
+    notes: [
+      'Use --variable-definitions to update required tool input fields.'
+    ],
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
   });
 }

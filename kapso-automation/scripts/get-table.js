@@ -32,7 +32,7 @@ async function main() {
     const limit = parseNumber(flags.limit, 'limit');
     const query = limit !== undefined ? `?limit=${encodeURIComponent(String(limit))}` : '';
     const config = kapsoConfigFromEnv();
-    const data = await kapsoRequest(config, `/database_tables/${encodeURIComponent(table)}${query}`);
+    const data = await kapsoRequest(config, `/platform/v1/database_tables/${encodeURIComponent(table)}${query}`);
     console.log(JSON.stringify(ok(data), null, 2));
     return 0;
   } catch (error) {

@@ -15,7 +15,7 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: `/whatsapp/flows/${flowId}/versions`,
+    path: `/platform/v1/whatsapp/flows/${flowId}/versions`,
     body: {
       flow_json: flowJson
     }

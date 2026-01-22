@@ -6,6 +6,11 @@ import { parseArgs, getFlag, getBooleanFlag } from './lib/workflows/args.js';
 function usage() {
   return ok({
     usage: 'node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <id> [--configured-props <json>] [--name <text>] [--app-name <text>] [--variable-definitions <json>] [--dynamic-props-id <id>]',
+    notes: [
+      'Use accounts[].pipedream_account_id for --account-id.',
+      'If you pass an internal account UUID, the script will try to resolve it.',
+      'Use --variable-definitions to define agent tool inputs (placeholders in configured_props become inputs).'
+    ],
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
   });
 }
@@ -27,6 +32,33 @@ function ensureAccountId(props, accountId) {
     return { ...props, account_id: accountId };
   }
   return props;
+}
+
+function normalizeAccounts(payload) {
+  if (Array.isArray(payload?.accounts)) return payload.accounts;
+  if (Array.isArray(payload?.accounts?.accounts)) return payload.accounts.accounts;
+  if (Array.isArray(payload)) return payload;
+  return [];
+}
+
+async function resolveAccountId(config, appSlug, accountId) {
+  if (accountId.startsWith('apn_')) return accountId;
+
+  const response = await requestJson(config, {
+    method: 'GET',
+    path: '/platform/v1/integrations/accounts',
+    query: { app_slug: appSlug }
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to resolve account id. Use list-accounts and pass pipedream_account_id.');
+  }
+
+  const accounts = normalizeAccounts(response.data);
+  const match = accounts.find((account) => account.id === accountId);
+  if (match?.pipedream_account_id) return match.pipedream_account_id;
+
+  throw new Error('account-id must be pipedream_account_id (use list-accounts output).');
 }
 
 async function main() {
@@ -56,12 +88,22 @@ async function main() {
     return 2;
   }
 
-  configuredProps = ensureAccountId(configuredProps, accountId);
+  const config = loadConfig();
+  let resolvedAccountId = accountId;
+
+  try {
+    resolvedAccountId = await resolveAccountId(config, appSlug, accountId);
+  } catch (error) {
+    printJson(err('Failed to resolve account-id', { message: error.message }));
+    return 2;
+  }
+
+  configuredProps = ensureAccountId(configuredProps, resolvedAccountId);
 
   const payload = {
     action_id: actionId,
     app_slug: appSlug,
-    account_id: accountId,
+    account_id: resolvedAccountId,
     configured_props: configuredProps
   };
 
@@ -74,7 +116,6 @@ async function main() {
   if (dynamicPropsId) payload.dynamic_props_id = dynamicPropsId;
   if (variableDefinitions) payload.variable_definitions = variableDefinitions;
 
-  const config = loadConfig();
   const response = await requestJson(config, {
     method: 'POST',
     path: '/platform/v1/integrations',

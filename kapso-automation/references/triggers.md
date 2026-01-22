@@ -12,6 +12,7 @@ Use these scripts:
 - `scripts/create-trigger.js <workflow-id> --trigger-type <inbound_message|api_call|whatsapp_event> ...`
 - `scripts/update-trigger.js --trigger-id <id> --active true|false`
 - `scripts/delete-trigger.js --trigger-id <id>`
+- `scripts/list-whatsapp-phone-numbers.js` (to find `phone_number_id`)
 
 Notes:
 - For inbound message triggers, use `phone_number_id` (Meta ID).

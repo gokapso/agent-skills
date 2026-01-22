@@ -34,7 +34,7 @@ async function main() {
     const filters = resolveFilters(flags);
     const query = filtersToQuery(filters);
     const config = kapsoConfigFromEnv();
-    const data = await kapsoRequest(config, `/db/${encodeURIComponent(table)}${query}`, {
+    const data = await kapsoRequest(config, `/platform/v1/db/${encodeURIComponent(table)}${query}`, {
       method: 'DELETE'
     });
     console.log(JSON.stringify(ok(data), null, 2));

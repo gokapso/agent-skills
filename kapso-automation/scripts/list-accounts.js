@@ -6,8 +6,19 @@ import { parseArgs, getFlag, getBooleanFlag } from './lib/workflows/args.js';
 function usage() {
   return ok({
     usage: 'node scripts/list-accounts.js [--app-slug <slug>]',
+    notes: [
+      'Use accounts[].pipedream_account_id for any --account-id flag.',
+      'The internal accounts[].id will not work for integrations.'
+    ],
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
   });
+}
+
+function normalizeAccounts(payload) {
+  if (Array.isArray(payload?.accounts)) return payload.accounts;
+  if (Array.isArray(payload?.accounts?.accounts)) return payload.accounts.accounts;
+  if (Array.isArray(payload)) return payload;
+  return [];
 }
 
 async function main() {
@@ -31,7 +42,18 @@ async function main() {
     return 2;
   }
 
-  printJson(ok({ accounts: response.data, project_id: config.projectId }));
+  const raw = response.data;
+  const accounts = normalizeAccounts(raw).map((account) => ({
+    ...account,
+    preferred_account_id: account.pipedream_account_id
+  }));
+  const payload = Array.isArray(raw) ? accounts : { ...raw, accounts };
+
+  printJson(ok({
+    accounts: payload,
+    project_id: config.projectId,
+    note: 'Use preferred_account_id (pipedream_account_id) for create-integration/configure-prop.'
+  }));
   return 0;
 }
 

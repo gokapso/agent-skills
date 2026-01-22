@@ -6,6 +6,11 @@ import { parseArgs, getFlag, getBooleanFlag } from './lib/workflows/args.js';
 function usage() {
   return ok({
     usage: 'node scripts/search-actions.js --query <text> [--app-slug <slug>]',
+    notes: [
+      'Prefer one-word queries (ex: "calendar", "slack", "hubspot").',
+      'Use --app-slug to narrow results to a single app.',
+      'action_id equals the action key returned in results.'
+    ],
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
   });
 }
@@ -38,7 +43,19 @@ async function main() {
     return 2;
   }
 
-  printJson(ok({ actions: response.data, project_id: config.projectId }));
+  const raw = response.data;
+  const actions = Array.isArray(raw?.actions) ? raw.actions : (Array.isArray(raw) ? raw : []);
+  const mapped = actions.map((action) => ({
+    ...action,
+    action_id: action.action_id || action.key
+  }));
+  const payload = Array.isArray(raw) ? mapped : { ...raw, actions: mapped };
+
+  printJson(ok({
+    actions: payload,
+    project_id: config.projectId,
+    note: 'Use action_id (same as key) with get-action-schema/create-integration.'
+  }));
   return 0;
 }
 

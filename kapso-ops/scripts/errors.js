@@ -42,7 +42,7 @@ async function main() {
       params.set('page', String(page));
       if (phoneNumber) params.set('phone_number', phoneNumber);
 
-      const path = `/whatsapp/messages?${params.toString()}`;
+      const path = `/platform/v1/whatsapp/messages?${params.toString()}`;
       result.sources.message_delivery = await kapsoRequest(config, path);
       result.notes.push('Message failures use outbound status=failed and do not support period filtering.');
     }
@@ -54,7 +54,7 @@ async function main() {
       params.set('per_page', String(limit));
       params.set('page', String(page));
 
-      const path = `/external_api_logs?${params.toString()}`;
+      const path = `/platform/v1/external_api_logs?${params.toString()}`;
       result.sources.api_call = await kapsoRequest(config, path);
     }
 
@@ -65,7 +65,7 @@ async function main() {
       params.set('per_page', String(limit));
       params.set('page', String(page));
 
-      const path = `/webhook_deliveries?${params.toString()}`;
+      const path = `/platform/v1/webhook_deliveries?${params.toString()}`;
       result.sources.webhook_delivery = await kapsoRequest(config, path);
     }
 

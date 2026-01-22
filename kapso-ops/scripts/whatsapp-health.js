@@ -33,7 +33,7 @@ async function main() {
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
       config,
-      `/whatsapp/phone_numbers/${encodeURIComponent(phoneNumberId)}/health`
+      `/platform/v1/whatsapp/phone_numbers/${encodeURIComponent(phoneNumberId)}/health`
     );
 
     console.log(JSON.stringify(ok(data), null, 2));

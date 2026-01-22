@@ -9,6 +9,6 @@ run(async () => {
 
   return platformRequest({
     method: 'GET',
-    path: `/whatsapp/phone_numbers/${phoneNumberId}`
+    path: `/platform/v1/whatsapp/phone_numbers/${phoneNumberId}`
   });
 });

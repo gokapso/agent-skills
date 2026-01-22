@@ -23,7 +23,7 @@ If you want TypeScript, compile to JS before execution.
 
 Expected env vars (provided by Kapso Agent sandbox runner):
 
-- `KAPSO_API_BASE_URL` (root, e.g. `https://api.kapso.ai`)
+- `KAPSO_API_BASE_URL` (host only, no `/platform/v1`, e.g. `https://api.kapso.ai`)
 - `KAPSO_API_KEY` (project API key)
 - `PROJECT_ID`
 - `KAPSO_META_BASE_URL` (optional, Meta proxy base; defaults to `${KAPSO_API_BASE_URL}/meta`)

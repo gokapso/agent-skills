@@ -39,7 +39,7 @@ async function main() {
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
       config,
-      `/webhook_deliveries${suffix ? `?${suffix}` : ''}`
+      `/platform/v1/webhook_deliveries${suffix ? `?${suffix}` : ''}`
     );
 
     console.log(JSON.stringify({ ok: true, data }, null, 2));

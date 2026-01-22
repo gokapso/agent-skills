@@ -60,10 +60,10 @@ async function main() {
       if (phoneNumberId && phoneNumberId !== true) {
         body.whatsapp_webhook.phone_number_id = phoneNumberId;
       }
-      path = '/whatsapp/webhooks';
+      path = '/platform/v1/whatsapp/webhooks';
     } else {
       const phoneNumberId = requireFlag(flags, 'phone-number-id');
-      path = `/whatsapp/phone_numbers/${encodeURIComponent(phoneNumberId)}/webhooks`;
+      path = `/platform/v1/whatsapp/phone_numbers/${encodeURIComponent(phoneNumberId)}/webhooks`;
     }
 
     const data = await kapsoRequest(config, path, {

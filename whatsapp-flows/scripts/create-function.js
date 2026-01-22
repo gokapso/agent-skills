@@ -25,7 +25,7 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: '/functions',
+    path: '/platform/v1/functions',
     body
   });
 });

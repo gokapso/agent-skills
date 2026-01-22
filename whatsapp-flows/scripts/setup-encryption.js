@@ -16,7 +16,7 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: `/whatsapp/flows/${flowId}/setup_encryption`,
+    path: `/platform/v1/whatsapp/flows/${flowId}/setup_encryption`,
     body: Object.keys(body).length > 0 ? body : undefined
   });
 });

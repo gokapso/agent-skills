@@ -9,6 +9,6 @@ run(async () => {
 
   return platformRequest({
     method: 'GET',
-    path: `/functions/${functionId}`
+    path: `/platform/v1/functions/${functionId}`
   });
 });

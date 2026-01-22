@@ -8,6 +8,12 @@ description: "Manage WhatsApp Flows via Kapso Platform API: list/create/update/p
 ## Overview
 Use this skill to manage WhatsApp Flows end-to-end: discover flows, edit flow JSON via versions, publish/test, attach data endpoints, and inspect responses/logs. Scripts are single-operation JS files runnable with Node or Bun and print JSON to stdout.
 
+## Before making changes
+
+- Read `references/whatsapp-flows-spec.md` before editing Flow JSON.
+- Inspect the exact `scripts/` you will run to confirm endpoint paths and flags.
+- Use `assets/sample-flow.json` as the base for new Flow JSON.
+
 ## Before editing Flow JSON
 
 - Always use Flow JSON `version: "7.3"` with `data_api_version: "3.0"`.
@@ -21,7 +27,7 @@ Run scripts directly:
 
 Required env vars:
 
-- `KAPSO_API_BASE_URL` (root, e.g. `https://api.kapso.ai`)
+- `KAPSO_API_BASE_URL` (host only, no `/platform/v1`, e.g. `https://api.kapso.ai`)
 - `KAPSO_API_KEY`
 - `PROJECT_ID`
 - `META_GRAPH_VERSION` (optional, default `v24.0`)
@@ -66,21 +72,21 @@ Platform API (Kapso data endpoint + logs):
 - `scripts/list-flow-responses.js`
 
 ## Platform API endpoints (reference)
-These scripts call the Platform API endpoints below (base: `.../platform/v1`):
+These scripts call the Platform API endpoints below (host only; paths include `/platform/v1`):
 
-- `GET /whatsapp/flows`
-- `POST /whatsapp/flows`
-- `GET /whatsapp/flows/:id`
-- `POST /whatsapp/flows/:id/versions`
-- `GET /whatsapp/flows/:id/versions`
-- `GET /whatsapp/flows/:id/versions/:version_id`
-- `POST /whatsapp/flows/:id/publish`
-- `GET /whatsapp/flows/:id/data_endpoint`
-- `POST /whatsapp/flows/:id/data_endpoint`
-- `POST /whatsapp/flows/:id/data_endpoint/deploy`
-- `POST /whatsapp/flows/:id/data_endpoint/register`
-- `POST /whatsapp/flows/:id/setup_encryption`
-- `GET /whatsapp/phone_numbers/:id`
+- `GET /platform/v1/whatsapp/flows`
+- `POST /platform/v1/whatsapp/flows`
+- `GET /platform/v1/whatsapp/flows/:id`
+- `POST /platform/v1/whatsapp/flows/:id/versions`
+- `GET /platform/v1/whatsapp/flows/:id/versions`
+- `GET /platform/v1/whatsapp/flows/:id/versions/:version_id`
+- `POST /platform/v1/whatsapp/flows/:id/publish`
+- `GET /platform/v1/whatsapp/flows/:id/data_endpoint`
+- `POST /platform/v1/whatsapp/flows/:id/data_endpoint`
+- `POST /platform/v1/whatsapp/flows/:id/data_endpoint/deploy`
+- `POST /platform/v1/whatsapp/flows/:id/data_endpoint/register`
+- `POST /platform/v1/whatsapp/flows/:id/setup_encryption`
+- `GET /platform/v1/whatsapp/phone_numbers/:id`
 
 ## Meta proxy endpoints (reference)
 These scripts call the Meta proxy endpoints below (base: `.../meta/whatsapp/vXX.X`):

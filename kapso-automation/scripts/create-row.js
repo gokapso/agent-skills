@@ -31,7 +31,7 @@ async function main() {
     const table = requireFlag(flags, 'table');
     const dataPayload = parseJsonObject(flags.data, 'data');
     const config = kapsoConfigFromEnv();
-    const data = await kapsoRequest(config, `/db/${encodeURIComponent(table)}`, {
+    const data = await kapsoRequest(config, `/platform/v1/db/${encodeURIComponent(table)}`, {
       method: 'POST',
       body: JSON.stringify(dataPayload)
     });

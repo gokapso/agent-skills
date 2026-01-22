@@ -24,7 +24,7 @@ run(async () => {
 
   return platformRequest({
     method: 'POST',
-    path: '/whatsapp/flows',
+    path: '/platform/v1/whatsapp/flows',
     body
   });
 });

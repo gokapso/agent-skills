@@ -208,6 +208,10 @@ Use `kapso-automation` function scripts to find function IDs and update code.
 }
 ```
 
+Notes:
+- `provider_model_id` is required. Use `scripts/list-provider-models.js` to find it.
+- Agent tool arrays live inside `data.config` (not at the `data` root).
+
 Default tools (toggle on/off only):
 - complete_task (required)
 - handoff_to_human (required)
@@ -224,6 +228,125 @@ Custom tools:
 - `flow_agent_app_integration_tools[]` (app integrations)
 - `flow_agent_webhooks[]` (webhook tools)
 - `flow_agent_mcp_servers[]` (MCP tools)
+
+### Agent tools: exact placement and structure
+
+All tool arrays go under `data.config` of the agent node:
+
+```json
+{
+  "id": "agent_1730000000000",
+  "type": "flow-node",
+  "position": { "x": 120, "y": 320 },
+  "data": {
+    "node_type": "agent",
+    "config": {
+      "system_prompt": "You can schedule appointments and use calendar tools.",
+      "provider_model_id": "uuid",
+      "max_iterations": 10,
+      "temperature": 0.7,
+      "flow_agent_app_integration_tools": [],
+      "flow_agent_webhooks": [],
+      "flow_agent_mcp_servers": []
+    }
+  }
+}
+```
+
+Example asset: `assets/agent-app-integration-example.json`
+
+#### App integration tools (preferred for agent nodes)
+
+Use pre-configured integrations and attach them as tools:
+
+```json
+{
+  "flow_agent_app_integration_tools": [
+    {
+      "name": "check_calendar",
+      "description": "Check availability in Google Calendar",
+      "app_integration_id": "integration_uuid"
+    }
+  ]
+}
+```
+
+Rules:
+- `app_integration_id` is the integration UUID from `scripts/list-integrations.js`.
+- Do not include headers or URLs here; the integration handles auth.
+- Inputs are defined by the integration's `variable_definitions` (or `{{placeholders}}`).
+
+Tool input payload (runtime):
+```json
+{
+  "input": {
+    "calendar_id": "primary",
+    "time_min": "2025-01-01T10:00:00Z",
+    "time_max": "2025-01-01T12:00:00Z"
+  }
+}
+```
+
+#### Webhook tools (custom HTTP tools)
+
+Use when the agent needs to call arbitrary HTTP endpoints:
+
+```json
+{
+  "flow_agent_webhooks": [
+    {
+      "name": "lookup_customer",
+      "description": "Fetch customer data from internal API",
+      "url": "https://api.example.com/customers/lookup",
+      "http_method": "POST",
+      "headers": {
+        "Authorization": "Bearer {{vars.api_token}}",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "phone_number": "{{context.phone_number}}"
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {
+          "phone_number": { "type": "string" }
+        },
+        "required": ["phone_number"]
+      },
+      "jmespath_query": null
+    }
+  ]
+}
+```
+
+Rules:
+- `body_schema` must be valid JSON Schema.
+- `headers` and `body` must be JSON objects (not strings).
+- Tool inputs are defined by `body_schema` and are sent as the webhook JSON body.
+
+#### MCP server tools
+
+Use to attach MCP servers the agent can call:
+
+```json
+{
+  "flow_agent_mcp_servers": [
+    {
+      "name": "files",
+      "description": "Local file access",
+      "url": "https://mcp.example.com",
+      "headers": {
+        "Authorization": "Bearer {{vars.mcp_token}}"
+      }
+    }
+  ]
+}
+```
+
+Rules:
+- `url` is required.
+- `headers` must be a JSON object.
+- MCP tool inputs are defined by the MCP server's tool schemas (not configured here).
 
 ## handoff
 

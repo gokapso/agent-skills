@@ -37,7 +37,7 @@ async function main() {
     if (conversationId && conversationId !== true) {
       const data = await kapsoRequest(
         config,
-        `/whatsapp/conversations/${encodeURIComponent(conversationId)}`
+        `/platform/v1/whatsapp/conversations/${encodeURIComponent(conversationId)}`
       );
       console.log(JSON.stringify(ok(data), null, 2));
       return 0;
@@ -56,7 +56,7 @@ async function main() {
 
     const data = await kapsoRequest(
       config,
-      `/whatsapp/conversations?${params.toString()}`
+      `/platform/v1/whatsapp/conversations?${params.toString()}`
     );
 
     console.log(JSON.stringify(ok(data), null, 2));

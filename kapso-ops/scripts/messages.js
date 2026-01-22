@@ -47,7 +47,7 @@ async function main() {
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
       config,
-      `/whatsapp/messages${params.toString() ? `?${params.toString()}` : ''}`
+      `/platform/v1/whatsapp/messages${params.toString() ? `?${params.toString()}` : ''}`
     );
 
     console.log(JSON.stringify(ok(data), null, 2));

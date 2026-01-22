@@ -13,6 +13,12 @@ Use this skill to send WhatsApp messages, manage templates, and upload media usi
 - The `@kapso/whatsapp-cloud-api` SDK
 - Template management scripts bundled here
 
+## Before making changes
+
+- Read the relevant files in `references/` for payload rules and SDK usage.
+- Inspect the exact `scripts/` you will run to confirm endpoint paths and flags.
+- Use `assets/` examples as the base for templates and send-time payloads.
+
 ## Workflow decision tree
 
 ### Create or update a template
@@ -31,7 +37,7 @@ Use `scripts/upload-media.mjs` for send-time headers.
 
 Set env vars:
 
-- `KAPSO_API_BASE_URL`
+- `KAPSO_API_BASE_URL` (host only, no `/platform/v1`)
 - `KAPSO_API_KEY`
 - `PROJECT_ID`
 - `KAPSO_META_GRAPH_VERSION` (optional, default: `v24.0`)

@@ -67,7 +67,8 @@ When customers complete WhatsApp setup, they're redirected to your `success_redi
 When creating a setup link, provide redirect URLs:
 
 ```javascript
-const setupLink = await fetch('https://api.kapso.ai/platform/v1/customers/customer-123/setup_links', {
+const KAPSO_API_BASE_URL = 'https://api.kapso.ai';
+const setupLink = await fetch(`${KAPSO_API_BASE_URL}/platform/v1/customers/customer-123/setup_links`, {
   method: 'POST',
   headers: {
     'X-API-Key': 'YOUR_API_KEY',
