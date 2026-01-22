@@ -1,5 +1,5 @@
-const { kapsoConfigFromEnv, kapsoRequest } = require('./lib/functions/kapso-api');
-const { hasHelpFlag, parseFlags, requireFlag } = require('./lib/functions/args');
+import { kapsoConfigFromEnv, kapsoRequest } from './lib/functions/kapso-api.js';
+import { hasHelpFlag, parseFlags, requireFlag } from './lib/functions/args.js';
 
 function ok(data) {
   return { ok: true, data };

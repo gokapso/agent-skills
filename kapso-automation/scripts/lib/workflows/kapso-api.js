@@ -10,12 +10,33 @@ function normalizeBaseUrl(raw) {
   return raw.replace(/\/+$/, '');
 }
 
+function isLocalhost(hostname) {
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+function validateBaseUrl(baseUrl) {
+  if (!baseUrl) return;
+  let parsed;
+  try {
+    parsed = new URL(baseUrl);
+  } catch (error) {
+    throw new Error(`Invalid KAPSO_API_BASE_URL: ${baseUrl}`);
+  }
+  if (!process.env.KAPSO_API_ALLOW_LOCALHOST && isLocalhost(parsed.hostname)) {
+    throw new Error(
+      `KAPSO_API_BASE_URL points to localhost (${parsed.hostname}). ` +
+      'Set KAPSO_API_ALLOW_LOCALHOST=true if this is intentional.'
+    );
+  }
+}
+
 export function loadConfig(options = {}) {
   const requireApi = options.requireApi !== false;
   const requireProjectId = options.requireProjectId !== false;
 
   const rawBaseUrl = requireApi ? requireEnv('KAPSO_API_BASE_URL') : (process.env.KAPSO_API_BASE_URL || '');
   const baseUrl = rawBaseUrl ? normalizeBaseUrl(rawBaseUrl) : '';
+  validateBaseUrl(baseUrl);
   const apiKey = requireApi ? requireEnv('KAPSO_API_KEY') : (process.env.KAPSO_API_KEY || '');
   const projectId = requireProjectId ? requireEnv('PROJECT_ID') : (process.env.PROJECT_ID || '');
 
@@ -52,11 +73,21 @@ export async function requestJson(config, options) {
     body = JSON.stringify(options.body);
   }
 
-  const response = await fetch(url.toString(), {
-    method: options.method,
-    headers,
-    body
-  });
+  let response;
+  try {
+    response = await fetch(url.toString(), {
+      method: options.method,
+      headers,
+      body
+    });
+  } catch (error) {
+    return {
+      ok: false,
+      status: 0,
+      error: 'Network error while calling Kapso API',
+      raw: { message: String(error?.message || error), url: url.toString() }
+    };
+  }
 
   const text = await response.text();
   let parsed = text;

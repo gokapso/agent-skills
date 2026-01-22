@@ -1,4 +1,4 @@
-const { parseJsonObjectOptional } = require('./args');
+import { parseJsonObjectOptional } from './args.js';
 
 function resolveFilters(flags) {
   const filters = parseJsonObjectOptional(flags.filters, 'filters');
@@ -24,7 +24,7 @@ function filtersToQuery(filters) {
   return query ? `?${query}` : '';
 }
 
-module.exports = {
+export {
   resolveFilters,
   filtersToQuery
 };

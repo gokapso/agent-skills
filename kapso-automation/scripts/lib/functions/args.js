@@ -47,7 +47,7 @@ function parseJsonValue(value, name) {
   }
 }
 
-module.exports = {
+export {
   hasHelpFlag,
   parseFlags,
   requireFlag,

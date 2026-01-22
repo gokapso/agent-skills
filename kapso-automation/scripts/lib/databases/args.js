@@ -77,7 +77,7 @@ function parseNumber(value, name) {
   return parsed;
 }
 
-module.exports = {
+export {
   hasHelpFlag,
   parseFlags,
   requireFlag,
