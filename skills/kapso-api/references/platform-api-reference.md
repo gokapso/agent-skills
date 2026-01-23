@@ -32,7 +32,8 @@ Endpoints:
 - `GET /customers`
 - `GET /customers/:id`
 - `POST /customers/:customer_id/setup_links`
-- `GET /customers/:customer_id/phone_numbers`
+- `POST /customers/:customer_id/whatsapp/phone_numbers`
+- `GET /whatsapp/phone_numbers?customer_id=<uuid>` (filter phone numbers by customer)
 
 If you are only sending from your own WhatsApp number, skip Customers.
 
