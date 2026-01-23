@@ -1,13 +1,13 @@
 ---
 name: whatsapp-messaging
-description: Send WhatsApp messages via Kapso Meta proxy or the whatsapp-cloud-api-js library, and manage WhatsApp templates (create/update/submit/status/send) with media uploads.
+description: Send and read WhatsApp messages via Kapso Meta proxy or the whatsapp-cloud-api-js library, and manage WhatsApp templates (create/update/submit/status/send) with media uploads.
 ---
 
 # WhatsApp Messaging
 
 ## Overview
 
-Use this skill to send WhatsApp messages, manage templates, and upload media using:
+Use this skill to send and read WhatsApp messages, manage templates, and upload media using:
 
 - Kapso Meta proxy endpoints (`/meta/whatsapp/vXX.X`)
 - The `@kapso/whatsapp-cloud-api` SDK
@@ -27,7 +27,7 @@ Set env vars:
 - `KAPSO_API_KEY`
 - `PROJECT_ID`
 - `KAPSO_META_GRAPH_VERSION` (optional, default: `v24.0`)
-- `KAPSO_META_BASE_URL` (optional, defaults to `${KAPSO_API_BASE_URL}/meta`)
+- `KAPSO_META_BASE_URL` (optional, defaults to `${KAPSO_API_BASE_URL}/meta/whatsapp`)
 
 Run scripts with Node or Bun:
 
@@ -61,6 +61,15 @@ Interactive messages are session messages (typically within WhatsApp's 24-hour w
 1. Discover `phone_number_id`: `node scripts/list-platform-phone-numbers.mjs`
 2. Pick an interactive payload from `assets/send-interactive-*.json` and customize `to`/content.
 3. Send: `node scripts/send-interactive.mjs --phone-number-id <PHONE_NUMBER_ID> --file assets/send-interactive-buttons.json`
+
+## Read inbox data (preferred: Meta proxy + SDK)
+
+Preferred path: use Meta proxy message/conversation endpoints or the SDK. This mirrors Meta's Cloud API and is the source of truth for inbox history.
+
+- Meta proxy API: `GET /{phone_number_id}/messages`, `GET /{phone_number_id}/conversations`, `GET /{phone_number_id}/conversations/{conversation_id}`.
+- SDK: `client.messages.query` / `client.messages.listByConversation`, `client.conversations.list`, `client.conversations.get`.
+
+Alternate path (Platform API): `GET /platform/v1/whatsapp/messages` and `GET /platform/v1/whatsapp/conversations`. Use this if you're already in Platform API workflows or ops scripts. For params, see `kapso-api/references/platform-api-reference.md`, or run `node /agent-skills/kapso-ops/scripts/messages.js` and `node /agent-skills/kapso-ops/scripts/lookup-conversation.js`.
 
 ## Template workflow (general)
 
@@ -117,8 +126,8 @@ Interactive messages are session messages (typically within WhatsApp's 24-hour w
 ## References (read when you need detail)
 
 - `references/templates-reference.md`: Template creation rules + components cheat sheet + send-time components (includes ID discovery notes).
-- `references/whatsapp-api-reference.md`: Raw Meta proxy payloads for sending text/image/template/interactive messages.
-- `references/whatsapp-cloud-api-js.md`: SDK usage for sending text/templates (typed client, camelCase helpers).
+- `references/whatsapp-api-reference.md`: Meta proxy payloads for sending and listing messages/conversations (with query params).
+- `references/whatsapp-cloud-api-js.md`: SDK usage for sending + reading message history (Kapso proxy only; camelCase helpers).
 
 ## Assets (copy/paste starting points)
 

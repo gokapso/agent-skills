@@ -1,5 +1,5 @@
 import { kapsoConfigFromEnv, kapsoRequest } from './lib/functions/kapso-api.js';
-import { hasHelpFlag } from './lib/functions/args.js';
+import { hasHelpFlag, parseFlags, requireFlag } from './lib/functions/args.js';
 
 function ok(data) {
   return { ok: true, data };
@@ -16,7 +16,7 @@ async function main() {
       JSON.stringify(
         {
           ok: true,
-          usage: 'node /agent-skills/kapso-automation/scripts/list.js',
+          usage: 'node /agent-skills/kapso-automation/scripts/deploy-function.js --function-id <id>',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
         },
         null,
@@ -27,8 +27,14 @@ async function main() {
   }
 
   try {
+    const flags = parseFlags(argv);
+    const functionId = requireFlag(flags, 'function-id');
     const config = kapsoConfigFromEnv();
-    const data = await kapsoRequest(config, '/platform/v1/functions');
+    const data = await kapsoRequest(config, `/platform/v1/functions/${encodeURIComponent(functionId)}/deploy`, {
+      method: 'POST',
+      body: JSON.stringify({})
+    });
+
     console.log(JSON.stringify(ok(data), null, 2));
     return 0;
   } catch (error) {

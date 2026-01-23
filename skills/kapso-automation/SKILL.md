@@ -48,7 +48,7 @@ Start here:
 
 - List workflows (metadata only): `node scripts/list-workflows.js`
 - Get a workflow graph (definition): `node scripts/get-graph.js <workflow_id>`
-- Create function: `node scripts/create.js --name <name> --code-file <path>`
+- Create function: `node scripts/create-function.js --name <name> --code-file <path>`
 - List tables: `node scripts/list-tables.js`
 
 ## Core workflows
@@ -88,13 +88,13 @@ If you get a conflict error from `edit-graph` or `update-graph`:
 ### Create and deploy a function
 1. Read `references/functions-reference.md` and `references/functions-payloads.md`.
 2. Write code in a file (use the required handler signature).
-3. Create: `node scripts/create.js --name <name> --code-file <path>`.
-4. Deploy: `node scripts/deploy.js --function-id <id>`.
-5. Verify: `node scripts/get.js --function-id <id>`.
+3. Create: `node scripts/create-function.js --name <name> --code-file <path>`.
+4. Deploy: `node scripts/deploy-function.js --function-id <id>`.
+5. Verify: `node scripts/get-function.js --function-id <id>`.
 
 ### Update a function
-1. Fetch: `node scripts/get.js --function-id <id>`.
-2. Update: `node scripts/update.js --function-id <id> --name <name> --code-file <path>`.
+1. Fetch: `node scripts/get-function.js --function-id <id>`.
+2. Update: `node scripts/update-function.js --function-id <id> --name <name> --code-file <path>`.
 3. Deploy and verify.
 
 ### Database CRUD
@@ -224,16 +224,16 @@ Never use `variables` internally.
 - `node scripts/delete-integration.js --integration-id <id>` - Delete an integration.
 
 ### Functions
-- `node scripts/list.js` - List project functions.
-- `node scripts/get.js --function-id <id>` - Fetch one function (metadata + current code).
-- `node scripts/create.js --name <name> --code <js> [--description <text>]` - Create a new function from inline code.
-- `node scripts/create.js --name <name> --code-file <path> [--description <text>]` - Create a new function from a file.
-- `node scripts/update.js --function-id <id> --name <name> --code <js> [--description <text>]` - Update function metadata/code from inline code.
-- `node scripts/update.js --function-id <id> --name <name> --code-file <path> [--description <text>]` - Update function metadata/code from a file.
-- `node scripts/deploy.js --function-id <id>` - Deploy a function to runtime.
-- `node scripts/invoke.js --function-id <id> --payload <json>` - Invoke a function with an inline JSON payload.
-- `node scripts/invoke.js --function-id <id> --payload-file <path>` - Invoke a function with a JSON payload file.
-- `node scripts/logs.js --function-id <id>` - Fetch recent function logs.
+- `node scripts/list-functions.js` - List project functions.
+- `node scripts/get-function.js --function-id <id>` - Fetch one function (metadata + current code).
+- `node scripts/create-function.js --name <name> --code <js> [--description <text>]` - Create a new function from inline code.
+- `node scripts/create-function.js --name <name> --code-file <path> [--description <text>]` - Create a new function from a file.
+- `node scripts/update-function.js --function-id <id> --name <name> --code <js> [--description <text>]` - Update function metadata/code from inline code.
+- `node scripts/update-function.js --function-id <id> --name <name> --code-file <path> [--description <text>]` - Update function metadata/code from a file.
+- `node scripts/deploy-function.js --function-id <id>` - Deploy a function to runtime.
+- `node scripts/invoke-function.js --function-id <id> --payload <json>` - Invoke a function with an inline JSON payload.
+- `node scripts/invoke-function.js --function-id <id> --payload-file <path>` - Invoke a function with a JSON payload file.
+- `node scripts/list-function-invocations.js --function-id <id>` - Fetch recent function invocations (logs).
 
 ### Databases
 - `node scripts/list-tables.js` - List D1 tables for the project.

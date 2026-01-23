@@ -9,13 +9,17 @@ function requireEnv(name) {
 function normalizeMetaBase(raw) {
   const trimmed = raw.replace(/\/+$/, '');
   if (trimmed.endsWith('/platform/v1')) {
-    return `${trimmed.slice(0, -'/platform/v1'.length)}/meta`;
+    return `${trimmed.slice(0, -'/platform/v1'.length)}/meta/whatsapp`;
   }
-  const metaMatch = trimmed.match(/^(.*)\/meta(?:\/whatsapp(?:\/v\d+\.\d+)?)?$/);
+  const metaMatch = trimmed.match(/^(.*)\/meta\/whatsapp(?:\/v\d+\.\d+)?$/);
   if (metaMatch) {
-    return `${metaMatch[1]}/meta`;
+    return `${metaMatch[1]}/meta/whatsapp`;
   }
-  return `${trimmed}/meta`;
+  const rawMetaMatch = trimmed.match(/^(.*)\/meta$/);
+  if (rawMetaMatch) {
+    return `${rawMetaMatch[1]}/meta/whatsapp`;
+  }
+  return `${trimmed}/meta/whatsapp`;
 }
 
 function normalizeGraphVersion(value) {

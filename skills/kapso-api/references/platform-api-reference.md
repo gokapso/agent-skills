@@ -49,6 +49,23 @@ Messages and conversations:
 - `GET /whatsapp/conversations`
 - `GET /whatsapp/conversations/:id`
 
+Message list query params (use `GET /whatsapp/messages`):
+- `phone_number_id`, `conversation_id`, `phone_number`
+- `direction` (inbound|outbound), `status` (pending|sent|delivered|read|failed)
+- `message_type` (text|image|audio|video|document), `has_media` (true|false)
+- `page`, `per_page`
+
+Example:
+`GET /whatsapp/messages?conversation_id=<uuid>&phone_number_id=<id>&direction=inbound&per_page=50`
+
+Conversation list query params (use `GET /whatsapp/conversations`):
+- `phone_number_id`, `phone_number`
+- `status` (active|ended)
+- `page`, `per_page`
+
+Example:
+`GET /whatsapp/conversations?phone_number_id=<id>&status=active&per_page=50`
+
 Workflows:
 - `GET /workflows`
 - `POST /workflows`

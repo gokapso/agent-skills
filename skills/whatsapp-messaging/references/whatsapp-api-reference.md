@@ -6,7 +6,7 @@ title: WhatsApp Cloud API via Kapso Proxy
 
 ## Base URL and auth
 
-- Base URL: `${KAPSO_API_BASE_URL}/meta/whatsapp/v24.0` (override with `KAPSO_META_BASE_URL`)
+- Base URL: `${KAPSO_API_BASE_URL}/meta/whatsapp/v24.0` (override with `KAPSO_META_BASE_URL`, which should point to `${KAPSO_API_BASE_URL}/meta/whatsapp`)
 - Auth header: `X-API-Key: <api_key>`
 
 All requests are routed through Kapso, but payloads mirror the Meta Cloud API.
@@ -163,6 +163,55 @@ Catalog message:
     }
   }
 }
+```
+
+## List messages (history)
+
+Endpoint:
+
+```
+GET /{phone_number_id}/messages
+```
+
+Query params (all optional):
+
+- `conversation_id`
+- `direction` (inbound|outbound)
+- `status` (pending|sent|delivered|read|failed)
+- `since` / `until` (ISO 8601)
+- `limit` (max 100)
+- `before` / `after` (cursor pagination)
+- `fields` (use `kapso()` to include Kapso extensions)
+
+Example:
+
+```
+GET /{phone_number_id}/messages?conversation_id=<uuid>&limit=50
+```
+
+## List conversations
+
+Endpoint:
+
+```
+GET /{phone_number_id}/conversations
+```
+
+Query params (all optional):
+
+- `status` (active|ended)
+- `last_active_since` / `last_active_until` (ISO 8601)
+- `phone_number` (E.164)
+- `limit` (max 100)
+- `before` / `after` (cursor pagination)
+- `fields` (use `kapso()` to include Kapso extensions)
+
+## Get a conversation
+
+Endpoint:
+
+```
+GET /{phone_number_id}/conversations/{conversation_id}
 ```
 
 ## Upload media

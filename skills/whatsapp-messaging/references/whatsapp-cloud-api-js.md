@@ -78,8 +78,48 @@ await client.messages.sendInteractiveButtons({
 });
 ```
 
+## List conversations
+
+```ts
+const conversations = await client.conversations.list({
+  phoneNumberId: "<PHONE_NUMBER_ID>",
+  status: "active",
+  limit: 20
+});
+```
+
+## Get a conversation
+
+```ts
+const conversation = await client.conversations.get({
+  conversationId: "123e4567-e89b-12d3-a456-426614174000"
+});
+```
+
+## List messages
+
+```ts
+const messages = await client.messages.query({
+  phoneNumberId: "<PHONE_NUMBER_ID>",
+  conversationId: "123e4567-e89b-12d3-a456-426614174000",
+  limit: 50
+});
+```
+
+## List messages for a conversation (shortcut)
+
+```ts
+const messages = await client.messages.listByConversation({
+  phoneNumberId: "<PHONE_NUMBER_ID>",
+  conversationId: "123e4567-e89b-12d3-a456-426614174000",
+  limit: 50
+});
+```
+
 ## Notes
 
 - Use `phoneNumberId` from the connected WhatsApp number (discover via `node scripts/list-platform-phone-numbers.mjs`).
 - With Kapso proxy, keep `baseUrl` and `kapsoApiKey` set.
 - Template rules still apply (examples, button ordering, media headers).
+- History endpoints (`messages.query`, `messages.listByConversation`, `conversations.list/get`) require Kapso proxy; they are not available with a direct Meta access token.
+- Requests use camelCase keys and the SDK converts to snake_case for the API; responses come back camelCase.

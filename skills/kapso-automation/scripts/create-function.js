@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { kapsoConfigFromEnv, kapsoRequest } from './lib/functions/kapso-api.js';
-import { hasHelpFlag, parseFlags, requireFlag, parseJsonValue } from './lib/functions/args.js';
+import { hasHelpFlag, parseFlags, requireFlag } from './lib/functions/args.js';
 
 function ok(data) {
   return { ok: true, data };
@@ -10,14 +10,14 @@ function err(message, details) {
   return { ok: false, error: { message, details } };
 }
 
-function resolvePayload(flags) {
-  if (typeof flags.payload === 'string' && flags.payload.length > 0) {
-    return parseJsonValue(flags.payload, 'payload');
+function resolveCode(flags) {
+  if (typeof flags.code === 'string' && flags.code.length > 0) {
+    return flags.code;
   }
-  if (typeof flags['payload-file'] === 'string' && flags['payload-file'].length > 0) {
-    return JSON.parse(readFileSync(flags['payload-file'], 'utf8'));
+  if (typeof flags['code-file'] === 'string' && flags['code-file'].length > 0) {
+    return readFileSync(flags['code-file'], 'utf8');
   }
-  throw new Error('Provide --payload or --payload-file');
+  throw new Error('Provide --code or --code-file');
 }
 
 async function main() {
@@ -28,7 +28,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-automation/scripts/invoke.js --function-id <id> (--payload <json> | --payload-file <path>)',
+            'node /agent-skills/kapso-automation/scripts/create-function.js --name <name> (--code <js> | --code-file <path>) [--description <text>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'PROJECT_ID']
         },
         null,
@@ -40,12 +40,16 @@ async function main() {
 
   try {
     const flags = parseFlags(argv);
-    const functionId = requireFlag(flags, 'function-id');
-    const payload = resolvePayload(flags);
+    const name = requireFlag(flags, 'name');
+    const code = resolveCode(flags);
+    const payload = { name, code };
+    if (typeof flags.description === 'string' && flags.description.length > 0) {
+      payload.description = flags.description;
+    }
     const config = kapsoConfigFromEnv();
-    const data = await kapsoRequest(config, `/platform/v1/functions/${encodeURIComponent(functionId)}/invoke`, {
+    const data = await kapsoRequest(config, '/platform/v1/functions', {
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ function: payload })
     });
 
     console.log(JSON.stringify(ok(data), null, 2));
