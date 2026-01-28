@@ -123,7 +123,7 @@ Respond with:
 ```
 
 For full Flow JSON details and gotchas, load:
-- `../whatsapp-flows/references/whatsapp-flows-spec.md`
+- `../integrate-whatsapp/references/whatsapp-flows-spec.md`
 
 ## Best practices
 

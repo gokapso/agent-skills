@@ -1,13 +1,13 @@
 ---
-name: kapso-automation
-description: Manage Kapso workflows, AI agents, functions, and databases. Edit workflow graphs, configure triggers, manage executions, create functions, and perform database CRUD. Use when building automations, editing workflows, or managing project data.
+name: automate-whatsapp
+description: Build WhatsApp automations with Kapso workflows: configure WhatsApp triggers, edit workflow graphs, manage executions, deploy functions, and use databases/integrations for state. Use when automating WhatsApp conversations and event handling.
 ---
 
-# Kapso Automation
+# Automate WhatsApp
 
 ## When to use
 
-Use this skill to build and run Kapso automation: workflow CRUD, graph edits, triggers, executions, function management, and D1 database operations.
+Use this skill to build and run WhatsApp automations: workflow CRUD, graph edits, triggers, executions, function management, app integrations, and D1 database operations.
 
 ## Setup
 
@@ -237,6 +237,19 @@ Other references:
 
 ## Related skills
 
-- `whatsapp-messaging` - WhatsApp messaging and templates
-- `whatsapp-flows` - WhatsApp Flows
-- `kapso-api` - Platform API and customers
+- `integrate-whatsapp` - Onboarding, webhooks, messaging, templates, flows
+- `observe-whatsapp` - Debugging, logs, health checks
+
+<!-- FILEMAP:BEGIN -->
+```text
+[automate-whatsapp file map]|root: .
+|.:{package.json,SKILL.md}
+|assets:{agent-app-integration-example.json,databases-example.json,function-decide-route-interactive-buttons.json,functions-example.json,workflow-agent-simple.json,workflow-api-template-wait-agent.json,workflow-customer-support-intake-agent.json,workflow-decision.json,workflow-interactive-buttons-decide-ai.json,workflow-interactive-buttons-decide-function.json,workflow-linear.json}
+|references:{app-integrations.md,databases-reference.md,execution-context.md,function-contracts.md,functions-payloads.md,functions-reference.md,graph-contract.md,node-types.md,triggers.md,workflow-overview.md,workflow-reference.md}
+|scripts:{configure-prop.js,create-connect-token.js,create-function.js,create-integration.js,create-row.js,create-trigger.js,create-workflow.js,delete-integration.js,delete-row.js,delete-trigger.js,deploy-function.js,edit-graph.js,get-action-schema.js,get-context-value.js,get-execution-event.js,get-execution.js,get-function.js,get-graph.js,get-table.js,get-workflow.js,invoke-function.js,list-accounts.js,list-apps.js,list-execution-events.js,list-executions.js,list-function-invocations.js,list-functions.js,list-integrations.js,list-provider-models.js,list-tables.js,list-triggers.js,list-whatsapp-phone-numbers.js,list-workflows.js,openapi-explore.mjs,query-rows.js,reload-props.js,resume-execution.js,search-actions.js,update-execution-status.js,update-function.js,update-graph.js,update-integration.js,update-row.js,update-trigger.js,update-workflow-settings.js,upsert-row.js,validate-graph.js,variables-delete.js,variables-list.js,variables-set.js}
+|scripts/lib/databases:{args.js,filters.js,kapso-api.js}
+|scripts/lib/functions:{args.js,kapso-api.js}
+|scripts/lib/workflows:{args.js,kapso-api.js,result.js}
+```
+<!-- FILEMAP:END -->
+

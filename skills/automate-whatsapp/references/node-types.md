@@ -69,7 +69,7 @@ Optional: `whatsapp_config_id`, `to_phone_number`.
 ```
 
 Optional: `whatsapp_config_id`, `to_phone_number`.
-Use the `whatsapp-messaging` skill to find template IDs and parameter formats.
+Use the `integrate-whatsapp` skill to find template IDs and parameter formats.
 
 ## send_interactive (buttons)
 
@@ -251,7 +251,7 @@ Notes:
 { "node_type": "function", "config": { "function_id": "uuid", "save_response_to": "fn_result" } }
 ```
 
-Use `kapso-automation` function scripts to find function IDs and update code.
+Use `automate-whatsapp` function scripts to find function IDs and update code.
 
 ## agent
 

@@ -28,11 +28,9 @@ Skills use **progressive disclosure**: agents load only the name and description
 
 ## Available skills
 
-- **kapso-automation**: Manage workflows, functions, databases, and integrations
-- **whatsapp-messaging**: Send messages, create templates, handle interactive messages
-- **whatsapp-flows**: Build and deploy WhatsApp Flows with data endpoints
-- **kapso-api**: Customer management and WhatsApp connection setup
-- **kapso-ops**: Debug and troubleshoot Kapso projects
+- **integrate-whatsapp**: Connect WhatsApp, set up webhooks, send messages/templates, manage flows
+- **automate-whatsapp**: Build WhatsApp automations with workflows, agents, functions, and databases
+- **observe-whatsapp**: Debug delivery issues, inspect webhook deliveries, triage errors, run health checks
 
 Each skill contains detailed documentation in its `SKILL.md` file.
 

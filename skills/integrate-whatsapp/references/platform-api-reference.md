@@ -115,6 +115,6 @@ Provider models:
 
 ## Guidance
 
-- For template creation/sending, use the Meta proxy endpoints (see `whatsapp-messaging` skill).
-- For WhatsApp Flows, use Platform API flow endpoints (see `whatsapp-flows` skill).
-- For workflow graph edits, use workflow definition endpoints (see `kapso-automation` skill).
+- For template creation/sending, use the Meta proxy endpoints (see `integrate-whatsapp` skill).
+- For WhatsApp Flows, use Platform API flow endpoints (see `integrate-whatsapp` skill).
+- For workflow graph edits, use workflow definition endpoints (see `automate-whatsapp` skill).
