@@ -17,7 +17,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/messages.js [--direction <inbound|outbound>] [--status <pending|sent|delivered|read|failed>] [--phone-number <e164>] [--conversation-id <uuid>] [--message-type <text|image|audio|video|document>] [--phone-number-id <id>] [--has-media true|false] [--page <n>] [--per-page <n>]',
+            'node scripts/messages.js [--direction <inbound|outbound>] [--status <pending|sent|delivered|read|failed>] [--phone-number <e164>] [--conversation-id <uuid>] [--message-type <text|image|audio|video|document>] [--phone-number-id <id>] [--has-media true|false] [--page <n>] [--per-page <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

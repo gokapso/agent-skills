@@ -43,7 +43,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-automation/scripts/query-rows.js --table <name> [--filters <json>] [--select <cols>] [--order <col.asc|desc>] [--limit <n>] [--offset <n>]',
+            'node scripts/query-rows.js --table <name> [--filters <json>] [--select <cols>] [--order <col.asc|desc>] [--limit <n>] [--offset <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

@@ -30,7 +30,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/create.js --url <https://...> --events <csv|json-array> [--phone-number-id <id>] [--scope config|project] [--kind <kapso|meta>] [--payload-version v1|v2] [--buffer-enabled true|false] [--buffer-window-seconds <n>] [--max-buffer-size <n>] [--inactivity-minutes <n>] [--headers <json>] [--active true|false]',
+            'node scripts/create.js --url <https://...> --events <csv|json-array> [--phone-number-id <id>] [--scope config|project] [--kind <kapso|meta>] [--payload-version v1|v2] [--buffer-enabled true|false] [--buffer-window-seconds <n>] [--max-buffer-size <n>] [--inactivity-minutes <n>] [--headers <json>] [--active true|false]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

@@ -29,7 +29,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/get.js --webhook-id <id> [--phone-number-id <id>] [--scope config|project]',
+            'node scripts/get.js --webhook-id <id> [--phone-number-id <id>] [--scope config|project]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

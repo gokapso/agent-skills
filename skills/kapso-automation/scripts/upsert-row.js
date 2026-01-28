@@ -18,7 +18,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-automation/scripts/upsert-row.js --table <name> --data <json> [--upsert-key <column>] [--filters <json> | --id <row-id>]',
+            'node scripts/upsert-row.js --table <name> --data <json> [--upsert-key <column>] [--filters <json> | --id <row-id>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

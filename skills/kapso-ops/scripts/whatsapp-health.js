@@ -17,7 +17,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/whatsapp-health.js --phone-number-id <id>',
+            'node scripts/whatsapp-health.js --phone-number-id <id>',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

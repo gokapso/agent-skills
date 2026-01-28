@@ -29,7 +29,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/list.js --phone-number-id <id> [--scope config|project] [--kind <kapso|meta>] [--page <n>] [--per-page <n>]',
+            'node scripts/list.js --phone-number-id <id> [--scope config|project] [--kind <kapso|meta>] [--page <n>] [--per-page <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

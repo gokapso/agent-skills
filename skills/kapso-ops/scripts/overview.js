@@ -13,7 +13,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/overview.js [--period <24h|7d|30d>] [--per-page <n>]',
+            'node scripts/overview.js [--period <24h|7d|30d>] [--per-page <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

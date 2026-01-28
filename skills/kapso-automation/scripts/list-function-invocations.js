@@ -17,7 +17,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-automation/scripts/list-function-invocations.js --function-id <id> [--status <success|failed>] [--limit <n>]',
+            'node scripts/list-function-invocations.js --function-id <id> [--status <success|failed>] [--limit <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

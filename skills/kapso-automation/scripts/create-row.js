@@ -16,7 +16,7 @@ async function main() {
       JSON.stringify(
         {
           ok: true,
-          usage: 'node /agent-skills/kapso-automation/scripts/create-row.js --table <name> --data <json>',
+          usage: 'node scripts/create-row.js --table <name> --data <json>',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

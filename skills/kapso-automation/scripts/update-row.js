@@ -18,7 +18,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-automation/scripts/update-row.js --table <name> --data <json> (--id <row-id> | --filters <json>)',
+            'node scripts/update-row.js --table <name> --data <json> (--id <row-id> | --filters <json>)',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

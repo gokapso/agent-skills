@@ -16,7 +16,7 @@ async function main() {
       JSON.stringify(
         {
           ok: true,
-          usage: 'node /agent-skills/kapso-automation/scripts/get-function.js --function-id <id>',
+          usage: 'node scripts/get-function.js --function-id <id>',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

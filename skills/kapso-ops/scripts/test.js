@@ -16,7 +16,7 @@ async function main() {
       JSON.stringify(
         {
           ok: true,
-          usage: 'node /agent-skills/kapso-ops/scripts/test.js --webhook-id <id> [--event-type <value>]',
+          usage: 'node scripts/test.js --webhook-id <id> [--event-type <value>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

@@ -13,7 +13,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-ops/scripts/errors.js [--period <24h|7d|30d>] [--source <message_delivery|api_call|webhook_delivery>] [--limit <n>] [--page <n>] [--phone-number <e164>]',
+            'node scripts/errors.js [--period <24h|7d|30d>] [--source <message_delivery|api_call|webhook_delivery>] [--limit <n>] [--page <n>] [--phone-number <e164>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,

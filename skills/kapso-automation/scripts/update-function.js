@@ -28,7 +28,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node /agent-skills/kapso-automation/scripts/update-function.js --function-id <id> --name <name> (--code <js> | --code-file <path>) [--description <text>]',
+            'node scripts/update-function.js --function-id <id> --name <name> (--code <js> | --code-file <path>) [--description <text>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
