@@ -104,6 +104,19 @@ Send-time:
 | `send-template.mjs` | Send template message | phone_number_id |
 | `send-interactive.mjs` | Send interactive message | phone_number_id |
 | `upload-media.mjs` | Upload media for send-time headers | phone_number_id |
+| `openapi-explore.mjs` | Explore OpenAPI (search/op/schema/where) | — |
+
+Install deps (once):
+```bash
+npm i
+```
+
+Examples:
+```bash
+node scripts/openapi-explore.mjs --spec whatsapp search "template"
+node scripts/openapi-explore.mjs --spec whatsapp op sendMessage
+node scripts/openapi-explore.mjs --spec whatsapp schema TemplateMessage
+```
 
 ## Assets
 

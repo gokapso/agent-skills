@@ -113,6 +113,24 @@ async function handler(request, env) {
 | `list-function-logs.js` | List function logs |
 | `list-function-invocations.js` | List function invocations |
 
+### OpenAPI
+
+| Script | Purpose |
+|--------|---------|
+| `openapi-explore.mjs` | Explore OpenAPI (search/op/schema/where) |
+
+Install deps (once):
+```bash
+npm i
+```
+
+Examples:
+```bash
+node scripts/openapi-explore.mjs --spec platform ops --tag "WhatsApp Flows"
+node scripts/openapi-explore.mjs --spec platform op setupWhatsappFlowEncryption
+node scripts/openapi-explore.mjs --spec platform search "data endpoint"
+```
+
 ## Troubleshooting
 
 - **Preview shows "flow_token is missing"**: Flow is dynamic without a data endpoint. Attach one and refresh.

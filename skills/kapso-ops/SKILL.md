@@ -84,6 +84,24 @@ Common flags for create/update:
 | `overview.js` | Project overview |
 | `whatsapp-health.js` | Phone number health check |
 
+### OpenAPI
+
+| Script | Purpose |
+|--------|---------|
+| `openapi-explore.mjs` | Explore OpenAPI (search/op/schema/where) |
+
+Install deps (once):
+```bash
+npm i
+```
+
+Examples:
+```bash
+node scripts/openapi-explore.mjs --spec platform search "webhook deliveries"
+node scripts/openapi-explore.mjs --spec platform op listWebhookDeliveries
+node scripts/openapi-explore.mjs --spec platform schema WebhookDelivery
+```
+
 ## Notes
 
 - Use config-level webhooks for `whatsapp.message.*` events

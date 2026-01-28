@@ -54,6 +54,20 @@ When creating a setup link, set:
 - Meta proxy base: `/meta/whatsapp/v24.0` (use for messaging and templates)
 - Use `phone_number_id` as the primary WhatsApp identifier
 
+## Scripts
+
+Install deps (once):
+```bash
+npm i
+```
+
+OpenAPI explorer:
+```bash
+node scripts/openapi-explore.mjs --spec platform search "setup link"
+node scripts/openapi-explore.mjs --spec platform op createCustomerSetupLink
+node scripts/openapi-explore.mjs --spec platform schema SetupLink
+```
+
 ## References
 
 - [references/platform-api-reference.md](references/platform-api-reference.md) - Full endpoint reference

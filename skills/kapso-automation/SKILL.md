@@ -180,6 +180,24 @@ Always use this structure:
 | `upsert-row.js` | Upsert a row |
 | `delete-row.js` | Delete rows |
 
+### OpenAPI
+
+| Script | Purpose |
+|--------|---------|
+| `openapi-explore.mjs` | Explore OpenAPI (search/op/schema/where) |
+
+Install deps (once):
+```bash
+npm i
+```
+
+Examples:
+```bash
+node scripts/openapi-explore.mjs --spec workflows search "variables"
+node scripts/openapi-explore.mjs --spec workflows op getWorkflowVariables
+node scripts/openapi-explore.mjs --spec platform op queryDatabaseRows
+```
+
 ## Notes
 
 - Prefer file paths over inline JSON (`--definition-file`, `--code-file`)
