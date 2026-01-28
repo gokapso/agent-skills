@@ -5,7 +5,7 @@ import { err, ok, printResult } from './lib/output.mjs';
 function usage() {
   return {
     usage: 'node scripts/create-template.mjs --business-account-id <WABA_ID> --json <payload> | --file <path>',
-    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'KAPSO_META_GRAPH_VERSION (optional)'],
+    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'META_GRAPH_VERSION (optional)'],
     hints: [
       'To discover business_account_id (WABA), run: node scripts/list-platform-phone-numbers.mjs',
       'Start from an asset payload in assets/ (template definitions) and adjust name/text/examples.'

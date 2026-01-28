@@ -14,7 +14,7 @@ Use this skill when working with WhatsApp messaging via Kapso: sending messages,
 Env vars:
 - `KAPSO_API_BASE_URL` (host only, no `/platform/v1`)
 - `KAPSO_API_KEY`
-- `KAPSO_META_GRAPH_VERSION` (optional, default `v24.0`)
+- `META_GRAPH_VERSION` (optional, default `v24.0`)
 
 ## Discover IDs first
 

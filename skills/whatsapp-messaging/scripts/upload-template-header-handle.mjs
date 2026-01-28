@@ -3,7 +3,7 @@ import { err, blocked, printResult } from './lib/output.mjs';
 function usage() {
   return {
     usage: 'node scripts/upload-template-header-handle.mjs --file <path> --mime-type <mime> --resumable-app-id <app_id>',
-    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'KAPSO_META_GRAPH_VERSION (optional)']
+    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'META_GRAPH_VERSION (optional)']
   };
 }
 

@@ -630,4 +630,4 @@ Common fields: `direction`, `status`, `media_url`, `contact_name`, `flow_respons
 
 - Discover `phone_number_id` + `business_account_id` via `node scripts/list-platform-phone-numbers.mjs`
 - All send payloads require `messaging_product: "whatsapp"`
-- Graph version controlled by `KAPSO_META_GRAPH_VERSION` (default `v24.0`)
+- Graph version controlled by `META_GRAPH_VERSION` (default `v24.0`)

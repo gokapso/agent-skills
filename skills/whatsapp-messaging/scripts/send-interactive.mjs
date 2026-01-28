@@ -5,7 +5,7 @@ import { err, ok, printResult } from './lib/output.mjs';
 function usage() {
   return {
     usage: 'node scripts/send-interactive.mjs --phone-number-id <PHONE_NUMBER_ID> --json <payload> | --file <path>',
-    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'KAPSO_META_GRAPH_VERSION (optional)'],
+    env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY', 'META_GRAPH_VERSION (optional)'],
     notes: ['Payload must include messaging_product: "whatsapp" and type: "interactive".'],
     hints: [
       'To discover phone_number_id (Meta phone number id), run: node scripts/list-platform-phone-numbers.mjs',
