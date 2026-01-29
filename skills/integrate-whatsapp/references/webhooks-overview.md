@@ -8,9 +8,12 @@ title: Webhooks Overview (Kapso)
 
 ### Project webhooks
 Project-wide events (for example, `whatsapp.phone_number.created`).
+Use **project webhooks** for connection lifecycle and workflow events only.
 
 ### WhatsApp webhooks
 Message and conversation events for a specific `phone_number_id`.
+Use **phone-number webhooks** for `whatsapp.message.*` and `whatsapp.conversation.*` events only.
+WhatsApp message events cannot be delivered via project webhooks.
 
 Kinds:
 

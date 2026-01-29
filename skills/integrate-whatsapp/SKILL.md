@@ -56,6 +56,11 @@ Use webhooks to receive:
 - Project events (connection lifecycle, workflow events)
 - Phone-number events (messages, conversations, delivery status)
 
+Scope rules:
+- **Project webhooks**: only project-level events (connection lifecycle, workflow events)
+- **Phone-number webhooks**: only WhatsApp message + conversation events for that `phone_number_id`
+- WhatsApp message/conversation events (`whatsapp.message.*`, `whatsapp.conversation.*`) are **phone-number only**
+
 Create a webhook:
 - Project-level: `node scripts/create.js --scope project --url <https://...> --events <csv>`
 - Phone-number: `node scripts/create.js --phone-number-id <id> --url <https://...> --events <csv>`
@@ -324,3 +329,4 @@ node scripts/openapi-explore.mjs --spec platform search "setup link"
 |scripts/lib/webhooks:{args.js,kapso-api.js,webhook.js}
 ```
 <!-- FILEMAP:END -->
+

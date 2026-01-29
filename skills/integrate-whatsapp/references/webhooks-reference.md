@@ -4,7 +4,8 @@
 
 - Config-level: attach to a specific WhatsApp phone number (use `phone_number_id`).
 - Project-level: receive lifecycle/workflow events across all numbers.
-- Use config-level for any `whatsapp.message.*` events.
+- Use config-level for any `whatsapp.message.*` and `whatsapp.conversation.*` events.
+- WhatsApp message/conversation events are **not** delivered via project webhooks.
 
 ## Signature verification
 

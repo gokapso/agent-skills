@@ -15,6 +15,8 @@ Webhook payloads separate message data from conversation data:
 
 ## Project webhook events
 
+Use project webhooks for connection lifecycle and workflow events only.
+
 ### whatsapp.phone_number.created
 
 Fires when a customer successfully connects their WhatsApp through a setup link.
@@ -88,6 +90,7 @@ Fires when a workflow execution fails due to an error.
 ```
 
 ## WhatsApp webhook events
+Use phone-number webhooks for `whatsapp.message.*` and `whatsapp.conversation.*` events only.
 
 <CardGroup cols={2}>
   <Card title="Message received" icon="message">
