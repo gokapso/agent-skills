@@ -54,6 +54,28 @@ Configure where customers land after completing or failing setup:
 
 Both URLs receive query parameters with setup details. See [Connection detection](/docs/platform/detecting-whatsapp-connection) for handling redirects and available parameters.
 
+## Language
+
+Set the setup page language instead of auto-detecting from browser:
+
+```json
+{
+  "setup_link": {
+    "language": "es"
+  }
+}
+```
+
+Supported languages:
+- `en` - English
+- `es` - Spanish
+- `pt` - Portuguese
+- `hi` - Hindi
+- `id` - Indonesian
+- `ar` - Arabic
+
+When omitted, language is auto-detected from the customer's browser.
+
 ## Connection type control
 
 ### Show both options (default)
@@ -149,6 +171,7 @@ const setupLink = await fetch(
     },
     body: JSON.stringify({
       setup_link: {
+        language: 'es',
         success_redirect_url: 'https://app.example.com/onboarding/complete',
         failure_redirect_url: 'https://app.example.com/onboarding/error',
         allowed_connection_types: ['dedicated'],
