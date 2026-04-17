@@ -1,5 +1,12 @@
 #!/usr/bin/env node
-const { parseArgs, requireStringFlag, getStringFlag, readFlagText, readFlagJson } = require('./lib/cli');
+const {
+  parseArgs,
+  requireStringFlag,
+  getStringFlag,
+  getBooleanFlag,
+  readFlagText,
+  readFlagJson
+} = require('./lib/cli');
 const { platformRequest } = require('./lib/http');
 const { run } = require('./lib/run');
 
@@ -13,6 +20,7 @@ run(async () => {
   }
 
   const runtimeConfig = await readFlagJson(flags, 'runtime-config', 'runtime-config-file');
+  const publicEndpoint = getBooleanFlag(flags, 'public-endpoint');
 
   const body = {
     function: {
@@ -22,6 +30,10 @@ run(async () => {
       runtime_config: runtimeConfig
     }
   };
+
+  if (publicEndpoint !== undefined) {
+    body.function.public_endpoint = publicEndpoint;
+  }
 
   return platformRequest({
     method: 'PATCH',

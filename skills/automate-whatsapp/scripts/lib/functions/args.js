@@ -36,6 +36,26 @@ function requireFlag(flags, name) {
   return value;
 }
 
+function parseBooleanFlag(flags, name) {
+  const value = flags[name];
+  if (value === undefined) {
+    return undefined;
+  }
+  if (value === true) {
+    return true;
+  }
+
+  const normalized = String(value).toLowerCase();
+  if (['true', '1', 'yes'].includes(normalized)) {
+    return true;
+  }
+  if (['false', '0', 'no'].includes(normalized)) {
+    return false;
+  }
+
+  throw new Error(`Invalid boolean for --${name}: ${String(value)}`);
+}
+
 function parseJsonValue(value, name) {
   if (value === undefined || value === true) {
     throw new Error(`Missing required JSON for --${name}`);
@@ -51,5 +71,6 @@ export {
   hasHelpFlag,
   parseFlags,
   requireFlag,
+  parseBooleanFlag,
   parseJsonValue
 };

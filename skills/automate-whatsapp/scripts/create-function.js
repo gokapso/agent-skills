@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { kapsoConfigFromEnv, kapsoRequest } from './lib/functions/kapso-api.js';
-import { hasHelpFlag, parseFlags, requireFlag } from './lib/functions/args.js';
+import { hasHelpFlag, parseBooleanFlag, parseFlags, requireFlag } from './lib/functions/args.js';
 
 function ok(data) {
   return { ok: true, data };
@@ -28,7 +28,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node scripts/create-function.js --name <name> (--code <js> | --code-file <path>) [--description <text>]',
+            'node scripts/create-function.js --name <name> (--code <js> | --code-file <path>) [--description <text>] [--public-endpoint <true|false>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
@@ -43,8 +43,12 @@ async function main() {
     const name = requireFlag(flags, 'name');
     const code = resolveCode(flags);
     const payload = { name, code };
+    const publicEndpoint = parseBooleanFlag(flags, 'public-endpoint');
     if (typeof flags.description === 'string' && flags.description.length > 0) {
       payload.description = flags.description;
+    }
+    if (publicEndpoint !== undefined) {
+      payload.public_endpoint = publicEndpoint;
     }
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(config, '/platform/v1/functions', {

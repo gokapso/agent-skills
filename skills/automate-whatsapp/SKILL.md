@@ -63,9 +63,11 @@ For inbound_message triggers, prefer `kapso whatsapp numbers resolve --phone-num
 ### Create and deploy a function
 
 1. Write code with handler signature (see function rules below)
-2. Create: `node scripts/create-function.js --name <name> --code-file <path>`
+2. Create: `node scripts/create-function.js --name <name> --code-file <path> [--public-endpoint true]`
 3. Deploy: `node scripts/deploy-function.js --function-id <id>`
 4. Verify: `node scripts/get-function.js --function-id <id>`
+
+Use `--public-endpoint true` when the function should be callable without `X-API-Key` via the Kapso-hosted invoke URL. This is only supported for Cloudflare functions.
 
 ### Set up agent node with app integrations
 
@@ -161,8 +163,8 @@ Always use this structure:
 |--------|---------|
 | `list-functions.js` | List project functions |
 | `get-function.js` | Get function details + code |
-| `create-function.js` | Create a function |
-| `update-function.js` | Update function code |
+| `create-function.js` | Create a function, optionally with a public invoke endpoint |
+| `update-function.js` | Update function code or public endpoint setting |
 | `deploy-function.js` | Deploy function to runtime |
 | `invoke-function.js` | Invoke function with payload |
 | `list-function-invocations.js` | List function invocations |

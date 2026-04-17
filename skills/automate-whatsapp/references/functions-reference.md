@@ -21,15 +21,28 @@ Do not use `export` or arrow functions. Return a `Response` object.
 
 1. Create function with `code` that follows the contract.
 2. Deploy the function (required before use).
-3. Use the returned `function_url` for webhook destinations.
+3. Read `endpoint_url` from the function record after deploy.
+4. If the function should accept anonymous callers, set `public_endpoint: true` when creating or updating it. This is only supported for Cloudflare functions.
 
 ## Platform API payload envelope
 
 When calling the Platform API directly (not via scripts), wrap attributes under `function`:
 
 ```json
-{ "function": { "name": "...", "description": "...", "code": "..." } }
+{
+  "function": {
+    "name": "...",
+    "description": "...",
+    "code": "...",
+    "public_endpoint": false
+  }
+}
 ```
+
+Notes:
+- `endpoint_url` for deployed Cloudflare functions is `https://api.kapso.ai/platform/v1/functions/{function_id}/invoke`
+- Private functions require `X-API-Key`
+- Public Cloudflare functions (`public_endpoint=true`) can be invoked without an API key
 
 ## Workflow node payload (Function / Decide)
 
