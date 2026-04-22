@@ -80,23 +80,30 @@ New functions default to `invoke_response_mode=passthrough`, which returns the f
 
 ### Set up agent node with remote sandbox repositories
 
-1. Find model: `node scripts/list-provider-models.js`
-2. Edit the agent node under `data.config`
-3. Set `sandbox_enabled: true`
-4. Set `sandbox_network_mode` to `allow_all` or `allow_list`
-5. If using `allow_list`, add extra outbound hosts in `sandbox_allowed_outbound_hosts`
-6. Add GitHub repositories to `flow_agent_resources` with:
+Use this when the agent needs a remote ephemeral workspace to inspect or modify repository files during a workflow run.
+
+1. Read `references/agent-remote-sandbox.md` for the execution model and field rules
+2. Find model: `node scripts/list-provider-models.js`
+3. Copy `assets/agent-remote-sandbox-github-repo-example.json` as a starting point, or edit the agent node under `data.config`
+4. Set `sandbox_enabled: true`
+5. Set `sandbox_network_mode` to `allow_all` or `allow_list`
+6. If using `allow_list`, add extra outbound hosts in `sandbox_allowed_outbound_hosts`
+7. Add GitHub repositories to `flow_agent_resources` with:
    - `resource_type: "github_repository"`
    - `repo_url`
    - `branch`
    - `pat`
-7. Validate and update the graph
+8. Write the system prompt so it explicitly reads from `/workspace/repos/<repo-slug>` before making changes
+9. Validate and update the graph
 
 Notes:
+- Remote sandbox is beta and free during the beta
+- `sandbox_enabled` controls whether the remote workspace and sandbox tools are available
+- Repository resources stay configured even if sandbox access is turned off later
 - v1 supports GitHub repositories only
 - Use a repository root URL, not a GitHub file URL or `tree/...` URL
 - Repositories are mounted into `/workspace/repos/<repo-slug>` inside the remote sandbox
-- Use `references/node-types.md` for the exact agent resource shape
+- Use `references/agent-remote-sandbox.md` and `references/node-types.md` for the exact shape
 
 ### Database CRUD
 
@@ -255,6 +262,7 @@ Other references:
 - [references/execution-context.md](references/execution-context.md) - Context structure and variable substitution
 - [references/triggers.md](references/triggers.md) - Trigger types and setup
 - [references/app-integrations.md](references/app-integrations.md) - App integration and variable_definitions
+- [references/agent-remote-sandbox.md](references/agent-remote-sandbox.md) - Remote sandbox behavior, repo resources, mounted paths
 - [references/functions-reference.md](references/functions-reference.md) - Function management
 - [references/functions-payloads.md](references/functions-payloads.md) - Payload shapes for functions
 - [references/databases-reference.md](references/databases-reference.md) - Database operations
@@ -272,6 +280,7 @@ Other references:
 | `workflow-api-template-wait-agent.json` | API trigger + template + agent |
 | `function-decide-route-interactive-buttons.json` | Function for button routing |
 | `agent-app-integration-example.json` | Agent node with app integrations |
+| `agent-remote-sandbox-github-repo-example.json` | Agent node with remote sandbox + GitHub repo resource |
 
 ## Related skills
 
@@ -282,8 +291,8 @@ Other references:
 ```text
 [automate-whatsapp file map]|root: .
 |.:{package.json,SKILL.md}
-|assets:{agent-app-integration-example.json,databases-example.json,function-decide-route-interactive-buttons.json,functions-example.json,workflow-agent-simple.json,workflow-api-template-wait-agent.json,workflow-customer-support-intake-agent.json,workflow-decision.json,workflow-interactive-buttons-decide-ai.json,workflow-interactive-buttons-decide-function.json,workflow-linear.json}
-|references:{app-integrations.md,databases-reference.md,execution-context.md,function-contracts.md,functions-payloads.md,functions-reference.md,graph-contract.md,node-types.md,triggers.md,workflow-overview.md,workflow-reference.md}
+|assets:{agent-app-integration-example.json,agent-remote-sandbox-github-repo-example.json,databases-example.json,function-decide-route-interactive-buttons.json,functions-example.json,workflow-agent-simple.json,workflow-api-template-wait-agent.json,workflow-customer-support-intake-agent.json,workflow-decision.json,workflow-interactive-buttons-decide-ai.json,workflow-interactive-buttons-decide-function.json,workflow-linear.json}
+|references:{agent-remote-sandbox.md,app-integrations.md,databases-reference.md,execution-context.md,function-contracts.md,functions-payloads.md,functions-reference.md,graph-contract.md,node-types.md,triggers.md,workflow-overview.md,workflow-reference.md}
 |scripts:{configure-prop.js,create-connect-token.js,create-function.js,create-integration.js,create-row.js,create-trigger.js,create-workflow.js,delete-integration.js,delete-row.js,delete-trigger.js,deploy-function.js,edit-graph.js,get-action-schema.js,get-context-value.js,get-execution-event.js,get-execution.js,get-function.js,get-graph.js,get-table.js,get-workflow.js,invoke-function.js,list-accounts.js,list-apps.js,list-execution-events.js,list-executions.js,list-function-invocations.js,list-functions.js,list-integrations.js,list-provider-models.js,list-tables.js,list-triggers.js,list-whatsapp-phone-numbers.js,list-workflows.js,openapi-explore.mjs,query-rows.js,reload-props.js,resume-execution.js,search-actions.js,update-execution-status.js,update-function.js,update-graph.js,update-integration.js,update-row.js,update-trigger.js,update-workflow-settings.js,upsert-row.js,validate-graph.js,variables-delete.js,variables-list.js,variables-set.js}
 |scripts/lib/databases:{args.js,filters.js,kapso-api.js}
 |scripts/lib/functions:{args.js,kapso-api.js}
