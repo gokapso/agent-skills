@@ -60,6 +60,32 @@ For inbound_message triggers, first run `node scripts/list-whatsapp-phone-number
 4. Create integration: `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <id> --configured-props <json>`
 5. Add tools to agent node via `flow_agent_app_integration_tools`
 
+### Set up agent node with GitHub repository sandbox
+
+To give an agent node read/write access to a GitHub repository (bash, read, write, list_dir, edit tools):
+
+1. Add `flow_agent_resources` to the agent node config in the workflow definition:
+
+```json
+{
+  "type": "agent",
+  "sandbox_enabled": true,
+  "sandbox_network_mode": "allow_all",
+  "flow_agent_resources": [
+    {
+      "resource_type": "github_repository",
+      "repo_url": "https://github.com/your-org/your-repo",
+      "branch": "main",
+      "pat": "ghp_..."
+    }
+  ]
+}
+```
+
+2. `pat` is write-only — `has_pat: true` in GET responses means credentials are stored.
+3. Use `sandbox_network_mode: "allow_list"` + `sandbox_allowed_outbound_hosts` to restrict outbound access.
+4. Repositories are cloned at `/workspace/repos/<owner>-<repo>-<branch>` before tool use.
+
 ### Database CRUD
 
 1. List tables: `node scripts/list-tables.js`
