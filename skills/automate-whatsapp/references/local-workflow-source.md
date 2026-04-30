@@ -5,10 +5,11 @@ Use the Kapso CLI source-sync workflow when the user wants workflows and functio
 ## Setup
 
 ```bash
-npm install --save-dev @kapso/cli @kapso/workflows
-npx kapso login
-npx kapso link --project <project-id>
-npx kapso pull
+npm install -g @kapso/cli
+npm install --save-dev @kapso/workflows
+kapso login
+kapso link --project <project-id>
+kapso pull
 ```
 
 `kapso link` binds the current directory to one Kapso project. `kapso pull` writes the local source tree.
@@ -62,12 +63,12 @@ Use `rawConfig` as an escape hatch for fields not yet covered by typed helpers. 
 ## Build and push
 
 ```bash
-npx kapso build
-npx kapso push --dry-run
-npx kapso push workflow <workflow-slug>
+kapso build
+kapso push --dry-run
+kapso push workflow <workflow-slug>
 ```
 
-Use `npx kapso push` to push every changed local function and workflow. Use `npx kapso push function <function-slug>` for one function.
+Use `kapso push` to push every changed local function and workflow. Use `kapso push function <function-slug>` for one function.
 
 If a workflow source file exists and changed, `kapso push` compiles it before uploading. If no workflow code file exists, the CLI uses `workflow.yaml` and `definition.json` directly, so JSON-only editing still works.
 

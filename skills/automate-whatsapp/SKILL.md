@@ -28,10 +28,11 @@ Env vars:
 Use this path first when the user is working in, or can create, a local repo.
 
 ```bash
-npm install --save-dev @kapso/cli @kapso/workflows
-npx kapso login
-npx kapso link --project <project-id>
-npx kapso pull
+npm install -g @kapso/cli
+npm install --save-dev @kapso/workflows
+kapso login
+kapso link --project <project-id>
+kapso pull
 ```
 
 Edit `workflows/<workflow-slug>/workflow.js` or `workflow.ts` with `@kapso/workflows`:
@@ -66,12 +67,12 @@ export default workflow;
 Build and push:
 
 ```bash
-npx kapso build
-npx kapso push --dry-run
-npx kapso push workflow <workflow-slug>
+kapso build
+kapso push --dry-run
+kapso push workflow <workflow-slug>
 ```
 
-Use `npx kapso push` to push every local function and workflow. See `references/local-workflow-source.md` for repo layout, source-file behavior, and JSON-only editing.
+Use `kapso push` to push every local function and workflow. See `references/local-workflow-source.md` for repo layout, source-file behavior, and JSON-only editing.
 
 ### Discover phone numbers first
 
