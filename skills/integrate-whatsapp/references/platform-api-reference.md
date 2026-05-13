@@ -50,6 +50,19 @@ Messages and conversations:
 - `GET /whatsapp/conversations`
 - `GET /whatsapp/conversations/:id`
 
+Inbox embeds:
+- `GET /inbox_embeds`
+- `POST /inbox_embeds`
+- `GET /inbox_embeds/:id`
+- `PATCH /inbox_embeds/:id`
+- `DELETE /inbox_embeds/:id` (revokes)
+
+Inbox embed request shape:
+- Envelope: `inbox_embed`
+- `scope_type`: `project`, `customer`, or `phone_number`
+- `scope_id`: blank for `project`, customer UUID for `customer`, WhatsApp `phone_number_id` for `phone_number`
+- Create returns `token` and `embed_url` once. Store `embed_url`; list/get/update omit secrets.
+
 Message list query params (use `GET /whatsapp/messages`):
 - `phone_number_id`, `conversation_id`, `phone_number`
 - `direction` (inbound|outbound), `status` (pending|sent|delivered|read|failed)

@@ -184,6 +184,36 @@ Fallback path:
 - Proxy: `GET /{phone_number_id}/messages`, `GET /{phone_number_id}/conversations`
 - SDK: `client.messages.query()`, `client.messages.get()`, `client.conversations.list()`, `client.conversations.get()`, `client.templates.get()`
 
+### Embed the inbox
+
+Use Platform API inbox embeds when the user wants to place Kapso's inbox inside their own app.
+
+Create:
+- `POST /platform/v1/inbox_embeds`
+- Envelope: `inbox_embed`
+- Public scopes: `project`, `customer`, `phone_number`
+- `scope_id` is blank for `project`, a customer UUID for `customer`, and WhatsApp `phone_number_id` for `phone_number`
+- Create returns `token` and `embed_url` once. Store `embed_url`; list/get/update omit secrets.
+
+Example:
+```json
+{
+  "inbox_embed": {
+    "name": "Support inbox",
+    "scope_type": "phone_number",
+    "scope_id": "1234567890",
+    "allowed_origins": ["https://app.example.com"],
+    "default_mode": "system"
+  }
+}
+```
+
+Manage:
+- `GET /platform/v1/inbox_embeds`
+- `GET /platform/v1/inbox_embeds/:id`
+- `PATCH /platform/v1/inbox_embeds/:id`
+- `DELETE /platform/v1/inbox_embeds/:id` (revokes)
+
 ### Template rules
 
 Creation:
