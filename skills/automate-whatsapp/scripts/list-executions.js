@@ -5,7 +5,7 @@ import { parseArgs, getFlag, getBooleanFlag, getNumberFlag } from './lib/workflo
 
 function usage() {
   return ok({
-    usage: 'node scripts/list-executions.js <workflow-id> [--status <status>] [--waiting-reason <value>] [--whatsapp-conversation-id <id>] [--created-after <iso>] [--created-before <iso>] [--page <n>] [--per-page <n>]',
+    usage: 'node scripts/list-executions.js <workflow-id> [--status <status>] [--waiting-reason <value>] [--whatsapp-conversation-id <id>] [--created-after <iso>] [--created-before <iso>] [--limit <n>] [--after <cursor>] [--before <cursor>]',
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
   });
 }
@@ -33,8 +33,9 @@ async function main() {
       whatsapp_conversation_id: getFlag(parsed.flags, 'whatsapp-conversation-id'),
       created_after: getFlag(parsed.flags, 'created-after'),
       created_before: getFlag(parsed.flags, 'created-before'),
-      page: getNumberFlag(parsed.flags, 'page'),
-      per_page: getNumberFlag(parsed.flags, 'per-page')
+      limit: getNumberFlag(parsed.flags, 'limit'),
+      after: getFlag(parsed.flags, 'after'),
+      before: getFlag(parsed.flags, 'before')
     }
   });
 
@@ -43,7 +44,7 @@ async function main() {
     return 2;
   }
 
-  printJson(ok({ executions: response.data }));
+  printJson(ok({ executions: response.data, paging: response.raw?.paging }));
   return 0;
 }
 

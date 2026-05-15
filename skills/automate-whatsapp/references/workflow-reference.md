@@ -89,6 +89,10 @@ Implemented calls:
 
 Variables CRUD endpoints are not defined for Platform API. Scripts intentionally return blocked for create/update/delete operations.
 
+Workflow execution list endpoints use cursor pagination. Prefer `limit`, `after`, and `before`;
+responses include a `paging` object. Do not use `page` / `per_page` for new workflow execution
+or execution event queries.
+
 ## Workflow graphs: endpoints, shapes, and roundtrips
 
 - `GET /platform/v1/workflows/:id` returns workflow metadata (including `lock_version`) but does NOT include `definition`.

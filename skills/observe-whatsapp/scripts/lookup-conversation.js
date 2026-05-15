@@ -17,7 +17,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node scripts/lookup-conversation.js [--phone-number <e164>] [--phone-number-id <id>] [--conversation-id <uuid>] [--status <active|ended>] [--page <n>] [--per-page <n>]',
+            'node scripts/lookup-conversation.js [--phone-number <e164>] [--phone-number-id <id>] [--conversation-id <uuid>] [--status <active|ended>] [--limit <n>] [--after <cursor>] [--before <cursor>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
@@ -54,8 +54,9 @@ async function main() {
     }
     if (phoneNumberId) params.set('phone_number_id', phoneNumberId);
     if (flags.status) params.set('status', flags.status);
-    if (flags.page) params.set('page', flags.page);
-    if (flags['per-page']) params.set('per_page', flags['per-page']);
+    if (flags.limit) params.set('limit', flags.limit);
+    if (flags.after) params.set('after', flags.after);
+    if (flags.before) params.set('before', flags.before);
 
     const data = await kapsoRequest(
       config,
