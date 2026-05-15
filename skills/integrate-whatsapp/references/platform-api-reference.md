@@ -67,18 +67,18 @@ Message list query params (use `GET /whatsapp/messages`):
 - `phone_number_id`, `conversation_id`, `phone_number`
 - `direction` (inbound|outbound), `status` (pending|sent|delivered|read|failed)
 - `message_type` (text|image|audio|video|document), `has_media` (true|false)
-- `limit` (max 100), `after`, `before` for cursor pagination
+- `page`, `per_page`
 
 Example:
-`GET /whatsapp/messages?conversation_id=<uuid>&phone_number_id=<id>&direction=inbound&limit=50`
+`GET /whatsapp/messages?conversation_id=<uuid>&phone_number_id=<id>&direction=inbound&per_page=50`
 
 Conversation list query params (use `GET /whatsapp/conversations`):
 - `phone_number_id`, `phone_number`
 - `status` (active|ended)
-- `limit` (max 100), `after`, `before` for cursor pagination
+- `page`, `per_page`
 
 Example:
-`GET /whatsapp/conversations?phone_number_id=<id>&status=active&limit=50`
+`GET /whatsapp/conversations?phone_number_id=<id>&status=active&per_page=50`
 
 Workflows:
 - `GET /workflows`
@@ -92,15 +92,10 @@ Workflows:
 - `GET /workflow_executions/:id`
 - `PATCH /workflow_executions/:id`
 - `POST /workflow_executions/:id/resume`
-- `GET /workflow_executions/:id/events`
 - `GET /workflows/:workflow_id/triggers`
 - `POST /workflows/:workflow_id/triggers`
 - `PATCH /triggers/:id`
 - `DELETE /triggers/:id`
-
-Workflow execution lists use cursor pagination:
-- `limit` (max 100), `after`, `before`
-- Responses include `paging.cursors.before`, `paging.cursors.after`, `paging.next`, and `paging.previous`
 
 Functions:
 - `GET /functions`
@@ -127,10 +122,6 @@ Integrations:
 Logs:
 - `GET /api_logs`
 - `GET /webhook_deliveries`
-
-Use cursor pagination on log and delivery lists:
-- `limit` (max 100), `after`, `before`
-- Responses include `paging.cursors.before`, `paging.cursors.after`, `paging.next`, and `paging.previous`
 
 Provider models:
 - `GET /provider_models`

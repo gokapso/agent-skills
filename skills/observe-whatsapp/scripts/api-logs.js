@@ -13,7 +13,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node scripts/api-logs.js [--period <24h|7d|30d>] [--endpoint <value>] [--status-code <code>] [--errors-only true|false] [--limit <n>] [--after <cursor>] [--before <cursor>]',
+            'node scripts/api-logs.js [--period <24h|7d|30d>] [--endpoint <value>] [--status-code <code>] [--errors-only true|false] [--page <n>] [--per-page <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
@@ -31,9 +31,8 @@ async function main() {
     if (flags.endpoint) params.set('endpoint', flags.endpoint);
     if (flags['status-code']) params.set('status_code', flags['status-code']);
     if (flags['errors-only'] !== undefined) params.set('errors_only', flags['errors-only']);
-    if (flags.limit) params.set('limit', flags.limit);
-    if (flags.after) params.set('after', flags.after);
-    if (flags.before) params.set('before', flags.before);
+    if (flags.page) params.set('page', flags.page);
+    if (flags['per-page']) params.set('per_page', flags['per-page']);
 
     const suffix = params.toString();
     const config = kapsoConfigFromEnv();

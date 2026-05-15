@@ -6,7 +6,7 @@ import { parseArgs, getFlag, getBooleanFlag, getNumberFlag } from './lib/workflo
 function usage() {
   return ok({
     usage:
-      'node scripts/list-execution-events.js <execution-id> [--event-type <type>] [--limit <n>] [--after <cursor>] [--before <cursor>]',
+      'node scripts/list-execution-events.js <execution-id> [--event-type <type>] [--page <n>] [--per-page <n>]',
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
   });
 }
@@ -30,9 +30,8 @@ async function main() {
     path: `/platform/v1/workflow_executions/${executionId}/events`,
     query: {
       event_type: getFlag(parsed.flags, 'event-type'),
-      limit: getNumberFlag(parsed.flags, 'limit'),
-      after: getFlag(parsed.flags, 'after'),
-      before: getFlag(parsed.flags, 'before')
+      page: getNumberFlag(parsed.flags, 'page') ?? getNumberFlag(parsed.flags, 'offset'),
+      per_page: getNumberFlag(parsed.flags, 'per-page') ?? getNumberFlag(parsed.flags, 'limit')
     }
   });
 
@@ -50,8 +49,7 @@ async function main() {
 
   printJson(ok({
     execution_id: executionId,
-    events: response.data,
-    paging: response.raw?.paging
+    events: response.data
   }));
 
   return 0;

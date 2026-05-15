@@ -13,7 +13,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node scripts/errors.js [--period <24h|7d|30d>] [--source <message_delivery|api_call|webhook_delivery>] [--limit <n>] [--phone-number <e164>]',
+            'node scripts/errors.js [--period <24h|7d|30d>] [--source <message_delivery|api_call|webhook_delivery>] [--limit <n>] [--page <n>] [--phone-number <e164>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
@@ -27,6 +27,7 @@ async function main() {
     const flags = parseFlags(argv);
     const source = normalizeSource(flags.source);
     const limit = parseNumber(flags.limit, 20, 'limit');
+    const page = parseNumber(flags.page, 1, 'page');
     const period = flags.period || '24h';
     const phoneNumber = flags['phone-number'];
 
@@ -37,7 +38,8 @@ async function main() {
       const params = new URLSearchParams();
       params.set('status', 'failed');
       params.set('direction', 'outbound');
-      params.set('limit', String(limit));
+      params.set('per_page', String(limit));
+      params.set('page', String(page));
       if (phoneNumber) params.set('phone_number', phoneNumber);
 
       const path = `/platform/v1/whatsapp/messages?${params.toString()}`;
@@ -49,7 +51,8 @@ async function main() {
       const params = new URLSearchParams();
       params.set('period', period);
       params.set('errors_only', 'true');
-      params.set('limit', String(limit));
+      params.set('per_page', String(limit));
+      params.set('page', String(page));
 
       const path = `/platform/v1/api_logs?${params.toString()}`;
       result.sources.api_call = await kapsoRequest(config, path);
@@ -59,7 +62,8 @@ async function main() {
       const params = new URLSearchParams();
       params.set('period', period);
       params.set('errors_only', 'true');
-      params.set('limit', String(limit));
+      params.set('per_page', String(limit));
+      params.set('page', String(page));
 
       const path = `/platform/v1/webhook_deliveries?${params.toString()}`;
       result.sources.webhook_delivery = await kapsoRequest(config, path);

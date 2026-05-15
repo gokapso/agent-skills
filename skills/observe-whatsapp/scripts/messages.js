@@ -17,7 +17,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node scripts/messages.js [--direction <inbound|outbound>] [--status <pending|sent|delivered|read|failed>] [--phone-number <e164>] [--conversation-id <uuid>] [--message-type <text|image|audio|video|document>] [--phone-number-id <id>] [--has-media true|false] [--limit <n>] [--after <cursor>] [--before <cursor>]',
+            'node scripts/messages.js [--direction <inbound|outbound>] [--status <pending|sent|delivered|read|failed>] [--phone-number <e164>] [--conversation-id <uuid>] [--message-type <text|image|audio|video|document>] [--phone-number-id <id>] [--has-media true|false] [--page <n>] [--per-page <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
@@ -42,9 +42,8 @@ async function main() {
     const hasMedia = parseBoolean(flags['has-media']);
     if (hasMedia !== undefined) params.set('has_media', String(hasMedia));
 
-    if (flags.limit) params.set('limit', flags.limit);
-    if (flags.after) params.set('after', flags.after);
-    if (flags.before) params.set('before', flags.before);
+    if (flags.page) params.set('page', flags.page);
+    if (flags['per-page']) params.set('per_page', flags['per-page']);
 
     const config = kapsoConfigFromEnv();
     const data = await kapsoRequest(
