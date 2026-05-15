@@ -13,7 +13,7 @@ async function main() {
         {
           ok: true,
           usage:
-            'node scripts/overview.js [--period <24h|7d|30d>] [--per-page <n>]',
+            'node scripts/overview.js [--period <24h|7d|30d>] [--limit <n>]',
           env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
         },
         null,
@@ -26,30 +26,30 @@ async function main() {
   try {
     const flags = parseFlags(argv);
     const period = flags.period || '24h';
-    const perPage = parseNumber(flags['per-page'], 50, 'per-page');
+    const limit = parseNumber(flags.limit, 50, 'limit');
     const config = kapsoConfigFromEnv();
 
     const phoneNumbers = await kapsoRequest(
       config,
-      `/platform/v1/whatsapp/phone_numbers?per_page=${perPage}`
+      `/platform/v1/whatsapp/phone_numbers?per_page=${limit}`
     );
 
     const apiTotals = await kapsoRequest(
       config,
-      `/platform/v1/api_logs?period=${encodeURIComponent(period)}&per_page=1`
+      `/platform/v1/api_logs?period=${encodeURIComponent(period)}&limit=1`
     );
     const apiErrors = await kapsoRequest(
       config,
-      `/platform/v1/api_logs?period=${encodeURIComponent(period)}&errors_only=true&per_page=1`
+      `/platform/v1/api_logs?period=${encodeURIComponent(period)}&errors_only=true&limit=1`
     );
 
     const webhookTotals = await kapsoRequest(
       config,
-      `/platform/v1/webhook_deliveries?period=${encodeURIComponent(period)}&per_page=1`
+      `/platform/v1/webhook_deliveries?period=${encodeURIComponent(period)}&limit=1`
     );
     const webhookErrors = await kapsoRequest(
       config,
-      `/platform/v1/webhook_deliveries?period=${encodeURIComponent(period)}&errors_only=true&per_page=1`
+      `/platform/v1/webhook_deliveries?period=${encodeURIComponent(period)}&errors_only=true&limit=1`
     );
 
     const payload = {
@@ -57,16 +57,17 @@ async function main() {
       period,
       phone_numbers: phoneNumbers.data || [],
       api_calls: {
-        total: extractCount(apiTotals),
-        failed: extractCount(apiErrors)
+        has_recent_activity: hasRecords(apiTotals),
+        has_recent_errors: hasRecords(apiErrors)
       },
       webhook_deliveries: {
-        total: extractCount(webhookTotals),
-        failed: extractCount(webhookErrors)
+        has_recent_activity: hasRecords(webhookTotals),
+        has_recent_errors: hasRecords(webhookErrors)
       },
       notes: [
         'Plan and subscription details are not exposed via the Platform API.',
-        'Use whatsapp-health.js per phone number for detailed WhatsApp checks.'
+        'Use whatsapp-health.js per phone number for detailed WhatsApp checks.',
+        'Cursor-paginated API log and webhook delivery checks report presence, not exact totals.'
       ]
     };
 
@@ -88,11 +89,9 @@ function parseNumber(value, fallback, name) {
   return parsed;
 }
 
-function extractCount(response) {
+function hasRecords(response) {
   if (!response || typeof response !== 'object') return null;
-  return response.meta && typeof response.meta.total_count === 'number'
-    ? response.meta.total_count
-    : null;
+  return Array.isArray(response.data) && response.data.length > 0;
 }
 
 main().then((code) => process.exit(code));
