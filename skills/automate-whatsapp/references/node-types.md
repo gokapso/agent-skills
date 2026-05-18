@@ -270,6 +270,7 @@ Use `automate-whatsapp` function scripts to find function IDs and update code.
 Notes:
 - `provider_model_id` is required. Use `scripts/list-provider-models.js` to find it.
 - Agent tool arrays live inside `data.config` (not at the `data` root).
+- For reasoning-capable models, pass `reasoning_effort` in `config`. Allowed values come from the model's `supported_reasoning_efforts` (`none`, `minimal`, `low`, `medium`, `high`, `xhigh`). Unsupported values fall back to the model's `default_reasoning_effort`.
 
 Default tools (toggle on/off only):
 - complete_task (required)
