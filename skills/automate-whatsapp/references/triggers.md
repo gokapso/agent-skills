@@ -16,5 +16,5 @@ Use these scripts:
 
 Notes:
 - For inbound message triggers, use `phone_number_id` (Meta ID).
-- For whatsapp_event triggers, use `event` like `whatsapp.message.delivered`.
+- For whatsapp_event triggers, use `event` like `whatsapp.message.received`. Supported events: `whatsapp.message.received`, `whatsapp.message.sent`, `whatsapp.message.failed`, `whatsapp.conversation.created`, `whatsapp.conversation.ended`. `whatsapp.message.delivered` and `whatsapp.message.read` are not available for new triggers — use webhooks for delivery and read receipts.
 - For API triggers, no extra fields are required.
