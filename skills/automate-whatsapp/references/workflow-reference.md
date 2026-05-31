@@ -2,7 +2,7 @@
 
 ## Overview
 
-This skill manages workflow graphs, triggers, executions, and app integrations. Prefer the Kapso CLI local source workflow for normal workflow/function edits; use these Platform API scripts as fallback tools for debugging, unsupported CLI tasks, and API-only environments. Variables CRUD is not supported and will return blocked responses.
+This skill manages workflow graphs, triggers, executions, and functions. Prefer the Kapso CLI local source workflow for normal workflow/function edits; use these Platform API scripts as fallback tools for debugging, unsupported CLI tasks, and API-only environments. Variables CRUD is not supported and will return blocked responses.
 
 For the CLI source-sync workflow and `@kapso/workflows`, read `references/local-workflow-source.md`.
 
@@ -40,17 +40,6 @@ Each script is a single operation. Run with `node` or `bun`.
 - `scripts/list-provider-models.js`
 - `scripts/list-execution-events.js`
 - `scripts/get-execution-event.js`
-- `scripts/list-apps.js`
-- `scripts/search-actions.js`
-- `scripts/get-action-schema.js`
-- `scripts/list-accounts.js`
-- `scripts/create-connect-token.js`
-- `scripts/configure-prop.js`
-- `scripts/reload-props.js`
-- `scripts/list-integrations.js`
-- `scripts/create-integration.js`
-- `scripts/update-integration.js`
-- `scripts/delete-integration.js`
 - `scripts/list-whatsapp-phone-numbers.js`
 
 ## Platform API endpoints
@@ -74,17 +63,6 @@ Implemented calls:
 - `GET /platform/v1/workflow_executions/:id/events`
 - `GET /platform/v1/workflow_events/:id`
 - `GET /platform/v1/provider_models`
-- `GET /platform/v1/integrations`
-- `POST /platform/v1/integrations`
-- `PATCH /platform/v1/integrations/:id`
-- `DELETE /platform/v1/integrations/:id`
-- `GET /platform/v1/integrations/apps`
-- `GET /platform/v1/integrations/actions`
-- `GET /platform/v1/integrations/accounts`
-- `POST /platform/v1/integrations/connect_token`
-- `GET /platform/v1/integrations/actions/:action_id/schema`
-- `POST /platform/v1/integrations/actions/:action_id/configure_prop`
-- `POST /platform/v1/integrations/actions/:action_id/reload_props`
 - `GET /platform/v1/whatsapp/phone_numbers` (for inbound_message triggers)
 
 Variables CRUD endpoints are not defined for Platform API. Scripts intentionally return blocked for create/update/delete operations.

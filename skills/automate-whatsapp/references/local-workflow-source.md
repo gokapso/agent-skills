@@ -89,4 +89,4 @@ Use `scripts/get-graph.js`, `scripts/update-graph.js`, and related Platform API 
 - the user cannot use the local CLI source-sync repo,
 - you need direct graph inspection for debugging,
 - a task is not yet supported by `kapso pull/build/push`,
-- or you need one-off API operations such as execution inspection or app integration setup.
+- or you need one-off API operations such as execution inspection.

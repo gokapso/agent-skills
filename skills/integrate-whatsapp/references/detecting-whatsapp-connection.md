@@ -11,8 +11,8 @@ Configure a project webhook to receive the `whatsapp.phone_number.created` event
 
 ### Setup
 
-1. Open the sidebar and click **Webhooks**
-2. Go to the **Project webhooks** tab
+1. Open the sidebar and click **API & Webhooks**
+2. Go to the **Platform webhooks** tab
 3. Click **Add Webhook**
 4. Enter your HTTPS endpoint URL
 5. Copy the auto-generated secret key

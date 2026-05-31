@@ -13,7 +13,6 @@ Do not use `export` or arrow functions. Return a `Response` object.
 ## Runtime APIs
 
 - `request`: Fetch API Request; use `await request.json()` for JSON.
-- `env.DB`: D1 database access (if enabled for the project).
 - `env.KV`: KV storage with `.get(key)`, `.put(key, value)`, `.delete(key)`.
 - `env.SECRET_NAME`: Secrets configured in the function settings.
 

@@ -106,19 +106,6 @@ Functions:
 - `POST /functions/:id/invoke`
 - `GET /functions/:id/invocations`
 
-Integrations:
-- `GET /integrations`
-- `POST /integrations`
-- `PATCH /integrations/:id`
-- `DELETE /integrations/:id`
-- `GET /integrations/apps`
-- `GET /integrations/actions`
-- `GET /integrations/accounts`
-- `POST /integrations/connect_token`
-- `GET /integrations/actions/:action_id/schema`
-- `POST /integrations/actions/:action_id/configure_prop`
-- `POST /integrations/actions/:action_id/reload_props`
-
 Logs:
 - `GET /api_logs`
 - `GET /webhook_deliveries`
