@@ -14,7 +14,6 @@ const SUPPORTED_NODE_TYPES = new Set([
   'decide',
   'call',
   'webhook',
-  'pipedream',
   'function',
   'agent',
   'handoff'

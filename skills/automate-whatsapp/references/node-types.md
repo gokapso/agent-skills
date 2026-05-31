@@ -13,7 +13,6 @@ These are the `data.node_type` values supported by the Platform API and validate
 - `decide`
 - `call`
 - `webhook`
-- `pipedream`
 - `function`
 - `agent`
 - `handoff`
@@ -222,29 +221,6 @@ Rules:
 
 `headers` and `body_template` must be valid JSON objects.
 
-## pipedream (apps)
-
-```json
-{
-  "node_type": "pipedream",
-  "config": {
-    "action_id": "slack-send_message_to_channel",
-    "app_slug": "slack",
-    "account_id": "apn_example",
-    "configured_props": {
-      "channel": "#general",
-      "text": "Hello {{vars.user_name}}!"
-    },
-    "dynamic_props_id": "dp_optional",
-    "save_response_to": "app_result"
-  }
-}
-```
-
-Notes:
-- Use `references/app-integrations.md` for how to find `action_id`, `account_id`, and build `configured_props`.
-- `configured_props` may include `{{vars.*}}`, `{{system.*}}`, `{{context.*}}` runtime variables.
-
 ## function
 
 ```json
@@ -284,7 +260,6 @@ Default tools (toggle on/off only):
 - ask_about_file
 
 Custom tools:
-- `flow_agent_app_integration_tools[]` (app integrations)
 - `flow_agent_webhooks[]` (webhook tools)
 - `flow_agent_mcp_servers[]` (MCP tools)
 
@@ -304,44 +279,9 @@ All tool arrays go under `data.config` of the agent node:
       "provider_model_id": "uuid",
       "max_iterations": 10,
       "temperature": 0.7,
-      "flow_agent_app_integration_tools": [],
       "flow_agent_webhooks": [],
       "flow_agent_mcp_servers": []
     }
-  }
-}
-```
-
-Example asset: `assets/agent-app-integration-example.json`
-
-#### App integration tools (preferred for agent nodes)
-
-Use pre-configured integrations and attach them as tools:
-
-```json
-{
-  "flow_agent_app_integration_tools": [
-    {
-      "name": "check_calendar",
-      "description": "Check availability in Google Calendar",
-      "app_integration_id": "integration_uuid"
-    }
-  ]
-}
-```
-
-Rules:
-- `app_integration_id` is the integration UUID from `scripts/list-integrations.js`.
-- Do not include headers or URLs here; the integration handles auth.
-- Inputs are defined by the integration's `variable_definitions` (or `{{placeholders}}`).
-
-Tool input payload (runtime):
-```json
-{
-  "input": {
-    "calendar_id": "primary",
-    "time_min": "2025-01-01T10:00:00Z",
-    "time_max": "2025-01-01T12:00:00Z"
   }
 }
 ```

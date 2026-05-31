@@ -1,13 +1,13 @@
 ---
 name: automate-whatsapp
-description: "Build WhatsApp automations with Kapso workflows: configure WhatsApp triggers, edit workflow graphs, manage executions, deploy functions, and use databases/integrations for state. Use when automating WhatsApp conversations and event handling."
+description: "Build WhatsApp automations with Kapso workflows: configure WhatsApp triggers, edit workflow graphs, manage executions, deploy functions, and debug automation behavior. Use when automating WhatsApp conversations and event handling."
 ---
 
 # Automate WhatsApp
 
 ## When to use
 
-Use this skill to build and run WhatsApp automations: workflow CRUD, graph edits, triggers, executions, function management, app integrations, and D1 database operations.
+Use this skill to build and run WhatsApp automations: workflow CRUD, graph edits, triggers, executions, function management, webhook tools, and MCP tools.
 
 ## Setup
 
@@ -124,14 +124,6 @@ For inbound_message triggers, prefer `kapso whatsapp numbers resolve --phone-num
 Use `--public-endpoint true` when the function should be callable without `X-API-Key` via the Kapso-hosted invoke URL. This is only supported for Cloudflare functions.
 New functions default to `invoke_response_mode=passthrough`, which returns the function body directly on successful invoke. Legacy wrapped functions can be migrated later with `update-function.js`.
 
-### Set up agent node with app integrations
-
-1. Find model: `node scripts/list-provider-models.js`
-2. Find account: `node scripts/list-accounts.js --app-slug <slug>` (use `pipedream_account_id`)
-3. Find action: `node scripts/search-actions.js --query <word> --app-slug <slug>` (action_id = key)
-4. Create integration: `node scripts/create-integration.js --action-id <id> --app-slug <slug> --account-id <id> --configured-props <json>`
-5. Add tools to agent node via `flow_agent_app_integration_tools`
-
 ### Set up agent node with remote sandbox repositories
 
 Use this when the agent needs a remote ephemeral workspace to inspect or modify repository files during a workflow run.
@@ -158,12 +150,6 @@ Notes:
 - Use a repository root URL, not a GitHub file URL or `tree/...` URL
 - Repositories are mounted into `/workspace/repos/<repo-slug>` inside the remote sandbox
 - Use `references/agent-remote-sandbox.md` and `references/node-types.md` for the exact shape
-
-### Database CRUD
-
-1. List tables: `node scripts/list-tables.js`
-2. Query: `node scripts/query-rows.js --table <name> --filters <json>`
-3. Create/update/delete with row scripts
 
 ## Graph rules
 
@@ -251,34 +237,6 @@ Always use this structure:
 | `invoke-function.js` | Invoke function with payload |
 | `list-function-invocations.js` | List function invocations |
 
-### App integrations
-
-| Script | Purpose |
-|--------|---------|
-| `list-apps.js` | Search integration apps |
-| `search-actions.js` | Search actions (action_id = key) |
-| `get-action-schema.js` | Get action JSON schema |
-| `list-accounts.js` | List connected accounts |
-| `create-connect-token.js` | Create OAuth connect link |
-| `configure-prop.js` | Resolve remote_options for a prop |
-| `reload-props.js` | Reload dynamic props |
-| `list-integrations.js` | List saved integrations |
-| `create-integration.js` | Create an integration |
-| `update-integration.js` | Update an integration |
-| `delete-integration.js` | Delete an integration |
-
-### Databases
-
-| Script | Purpose |
-|--------|---------|
-| `list-tables.js` | List D1 tables |
-| `get-table.js` | Get table schema + sample rows |
-| `query-rows.js` | Query rows with filters |
-| `create-row.js` | Create a row |
-| `update-row.js` | Update rows |
-| `upsert-row.js` | Upsert a row |
-| `delete-row.js` | Delete rows |
-
 ### OpenAPI
 
 | Script | Purpose |
@@ -294,16 +252,12 @@ Examples:
 ```bash
 node scripts/openapi-explore.mjs --spec workflows search "variables"
 node scripts/openapi-explore.mjs --spec workflows op getWorkflowVariables
-node scripts/openapi-explore.mjs --spec platform op queryDatabaseRows
 ```
 
 ## Notes
 
 - Prefer file paths over inline JSON (`--definition-file`, `--code-file`)
-- `action_id` is the same as `key` from `search-actions`
-- `--account-id` uses `pipedream_account_id` from `list-accounts`
 - Variable CRUD (`variables-set.js`, `variables-delete.js`) is blocked - Platform API doesn't support it
-- Raw SQL execution is not supported via Platform API
 
 ## References
 
@@ -316,11 +270,9 @@ Read before editing:
 Other references:
 - [references/execution-context.md](references/execution-context.md) - Context structure and variable substitution
 - [references/triggers.md](references/triggers.md) - Trigger types and setup
-- [references/app-integrations.md](references/app-integrations.md) - App integration and variable_definitions
 - [references/agent-remote-sandbox.md](references/agent-remote-sandbox.md) - Remote sandbox behavior, repo resources, mounted paths
 - [references/functions-reference.md](references/functions-reference.md) - Function management
 - [references/functions-payloads.md](references/functions-payloads.md) - Payload shapes for functions
-- [references/databases-reference.md](references/databases-reference.md) - Database operations
 
 ## Assets
 
@@ -334,7 +286,6 @@ Other references:
 | `workflow-interactive-buttons-decide-ai.json` | Interactive buttons + decide (AI) |
 | `workflow-api-template-wait-agent.json` | API trigger + template + agent |
 | `function-decide-route-interactive-buttons.json` | Function for button routing |
-| `agent-app-integration-example.json` | Agent node with app integrations |
 | `agent-remote-sandbox-github-repo-example.json` | Agent node with remote sandbox + GitHub repo resource |
 
 ## Related skills
@@ -346,10 +297,9 @@ Other references:
 ```text
 [automate-whatsapp file map]|root: .
 |.:{package.json,SKILL.md}
-|assets:{agent-app-integration-example.json,agent-remote-sandbox-github-repo-example.json,databases-example.json,function-decide-route-interactive-buttons.json,functions-example.json,workflow-agent-simple.json,workflow-api-template-wait-agent.json,workflow-customer-support-intake-agent.json,workflow-decision.json,workflow-interactive-buttons-decide-ai.json,workflow-interactive-buttons-decide-function.json,workflow-linear.json}
-|references:{agent-remote-sandbox.md,app-integrations.md,databases-reference.md,execution-context.md,function-contracts.md,functions-payloads.md,functions-reference.md,graph-contract.md,local-workflow-source.md,node-types.md,triggers.md,workflow-overview.md,workflow-reference.md}
-|scripts:{configure-prop.js,create-connect-token.js,create-function.js,create-integration.js,create-row.js,create-trigger.js,create-workflow.js,delete-integration.js,delete-row.js,delete-trigger.js,deploy-function.js,edit-graph.js,get-action-schema.js,get-context-value.js,get-execution-event.js,get-execution.js,get-function.js,get-graph.js,get-table.js,get-workflow.js,invoke-function.js,list-accounts.js,list-apps.js,list-execution-events.js,list-executions.js,list-function-invocations.js,list-functions.js,list-integrations.js,list-provider-models.js,list-tables.js,list-triggers.js,list-whatsapp-phone-numbers.js,list-workflows.js,openapi-explore.mjs,query-rows.js,reload-props.js,resume-execution.js,search-actions.js,update-execution-status.js,update-function.js,update-graph.js,update-integration.js,update-row.js,update-trigger.js,update-workflow-settings.js,upsert-row.js,validate-graph.js,variables-delete.js,variables-list.js,variables-set.js}
-|scripts/lib/databases:{args.js,filters.js,kapso-api.js}
+|assets:{agent-remote-sandbox-github-repo-example.json,function-decide-route-interactive-buttons.json,functions-example.json,workflow-agent-simple.json,workflow-api-template-wait-agent.json,workflow-customer-support-intake-agent.json,workflow-decision.json,workflow-interactive-buttons-decide-ai.json,workflow-interactive-buttons-decide-function.json,workflow-linear.json}
+|references:{agent-remote-sandbox.md,execution-context.md,function-contracts.md,functions-payloads.md,functions-reference.md,graph-contract.md,local-workflow-source.md,node-types.md,triggers.md,workflow-overview.md,workflow-reference.md}
+|scripts:{create-function.js,create-trigger.js,create-workflow.js,delete-trigger.js,deploy-function.js,edit-graph.js,get-context-value.js,get-execution-event.js,get-execution.js,get-function.js,get-graph.js,get-workflow.js,invoke-function.js,list-execution-events.js,list-executions.js,list-function-invocations.js,list-functions.js,list-provider-models.js,list-triggers.js,list-whatsapp-phone-numbers.js,list-workflows.js,openapi-explore.mjs,resume-execution.js,update-execution-status.js,update-function.js,update-graph.js,update-trigger.js,update-workflow-settings.js,validate-graph.js,variables-delete.js,variables-list.js,variables-set.js}
 |scripts/lib/functions:{args.js,kapso-api.js}
 |scripts/lib/workflows:{args.js,kapso-api.js,result.js}
 ```

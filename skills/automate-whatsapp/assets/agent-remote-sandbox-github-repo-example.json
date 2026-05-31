@@ -22,7 +22,6 @@
       ],
       "flow_agent_webhooks": [],
       "flow_agent_function_tools": [],
-      "flow_agent_app_integration_tools": [],
       "flow_agent_mcp_servers": []
     }
   }
