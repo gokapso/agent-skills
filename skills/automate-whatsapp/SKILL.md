@@ -168,7 +168,7 @@ For full schema details, see `references/graph-contract.md`.
 async function handler(request, env) {
   // Parse input
   const body = await request.json();
-  // Use env.KV and env.DB as needed
+  // Use env.KV and secrets as needed
   return new Response(JSON.stringify({ result: "ok" }));
 }
 ```
