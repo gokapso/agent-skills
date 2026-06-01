@@ -67,6 +67,10 @@ Recommended Kapso setup-link defaults:
 Notes:
 - `kapso setup` and `kapso whatsapp numbers new` use dedicated plus provisioning by default.
 - Keep `phone_number_country_isos`, `phone_number_area_code`, `language`, and redirect URLs as optional overrides.
+- Use normal delete for Kapso-only teardown. Use WABA delete only when the user explicitly asks to remove the number from the Meta WhatsApp Business Account too.
+  - Kapso-only: `DELETE /platform/v1/whatsapp/phone_numbers/:phone_number_id`
+  - Kapso + WABA: `DELETE /platform/v1/whatsapp/phone_numbers/:phone_number_id/with_waba`
+  - <!-- TODO: Confirm public availability and project eligibility requirements before recommending WABA deletion broadly. -->
 
 - Platform API base: `/platform/v1`
 - Meta proxy base: `/meta/whatsapp/v24.0` (messaging, templates, media)
