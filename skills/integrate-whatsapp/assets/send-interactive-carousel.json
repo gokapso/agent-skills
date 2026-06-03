@@ -1,0 +1,53 @@
+{
+  "messaging_product": "whatsapp",
+  "to": "15551234567",
+  "type": "interactive",
+  "interactive": {
+    "type": "carousel",
+    "body": {
+      "text": "Choose an option"
+    },
+    "action": {
+      "cards": [
+        {
+          "card_index": 0,
+          "header": {
+            "type": "image",
+            "image": {
+              "link": "https://example.com/one.jpg"
+            }
+          },
+          "body": {
+            "text": "First card"
+          },
+          "action": {
+            "name": "cta_url",
+            "parameters": {
+              "display_text": "View",
+              "url": "https://example.com/one"
+            }
+          }
+        },
+        {
+          "card_index": 1,
+          "header": {
+            "type": "image",
+            "image": {
+              "link": "https://example.com/two.jpg"
+            }
+          },
+          "body": {
+            "text": "Second card"
+          },
+          "action": {
+            "name": "cta_url",
+            "parameters": {
+              "display_text": "View",
+              "url": "https://example.com/two"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

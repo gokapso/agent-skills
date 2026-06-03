@@ -362,6 +362,7 @@ node scripts/openapi-explore.mjs --spec platform search "setup link"
 | `send-interactive-buttons.json` | Interactive button message |
 | `send-interactive-list.json` | Interactive list message |
 | `send-interactive-cta-url.json` | Interactive CTA URL message |
+| `send-interactive-carousel.json` | Interactive carousel message |
 | `send-interactive-location-request.json` | Location request message |
 | `send-interactive-catalog-message.json` | Catalog message |
 | `sample-flow.json` | Static flow example (no endpoint) |
