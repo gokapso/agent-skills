@@ -214,6 +214,11 @@ Manage:
 - `PATCH /platform/v1/inbox_embeds/:id`
 - `DELETE /platform/v1/inbox_embeds/:id` (revokes)
 
+State events:
+- Embedded inbox iframes post `window.parent.postMessage` events with `source: "kapso-inbox"`, `version: 1`, and `type: "inbox.state"`.
+- Listen for `payload.reason` values: `ready`, `conversation_selected`, `filters_changed`, `conversation_updated`, `workflow_execution_changed`, `read_state_changed`.
+- Use `payload.selectedConversation`, `payload.visibleConversationIds`, `payload.hasUnreadConversations`, `payload.filters`, and `payload.resources` to keep the host app in sync.
+
 ### Template rules
 
 Creation:
