@@ -205,6 +205,27 @@ Example (send-time URL button param):
 
 ## Send-time components
 
+Text header and body values must be sent as separate components. Do not put the header value in the body parameter list.
+
+Text header + body:
+
+```json
+[
+  {
+    "type": "header",
+    "parameters": [
+      { "type": "text", "parameter_name": "sale_name", "text": "Black Friday Sale" }
+    ]
+  },
+  {
+    "type": "body",
+    "parameters": [
+      { "type": "text", "parameter_name": "discount_code", "text": "BF2026" }
+    ]
+  }
+]
+```
+
 Named parameters:
 
 ```json
