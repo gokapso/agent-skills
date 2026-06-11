@@ -14,6 +14,7 @@ Use this skill for operational diagnostics: message delivery investigation, webh
 Preferred path:
 - Kapso CLI installed and authenticated (`kapso login`)
 - Start with `kapso status` to confirm project access and available WhatsApp numbers
+- If an MCP client is connected to Project MCP, prefer `diagnostic_investigations` for anchored message, API-send, and conversation-history investigations.
 
 Fallback path:
 Env vars:
@@ -23,6 +24,12 @@ Env vars:
 ## How to
 
 ### Investigate message delivery
+
+Project MCP path:
+1. Call `diagnostic_investigations` with `action="message_delivery"` when you have a `message_id`, `whatsapp_message_id`, `conversation_id`, `phone_number`, approximate time, or message text.
+2. Call `diagnostic_investigations` with `action="api_send_trace"` when the issue started from a backend/API send. If it returns `message_delivery_params`, call `message_delivery` with those params.
+3. Call `diagnostic_investigations` with `action="conversation_history"` to build a bounded timeline from `phone_number`, `conversation_id`, or `business_scoped_user_id`.
+4. Do not call `conversation_history` with only `message_text`. Find a message or ask for a phone number, conversation ID, message ID, or WhatsApp message ID first.
 
 Preferred path:
 1. Resolve the number: `kapso whatsapp numbers resolve --phone-number "<display-number>" --output json`
