@@ -47,6 +47,12 @@ Fallback path:
 2. API logs: `node scripts/api-logs.js`
 3. Webhook deliveries: `node scripts/webhook-deliveries.js`
 
+MCP path:
+- If Project MCP is connected, use the `logs` tool to search operational logs by message text, webhook status, response body text, or trace identifiers.
+- Start with a narrow query and pass `since`, `until`, and `limit` when the incident window is known.
+
+<!-- TODO: Add CLI command examples when operational log search is available in the Kapso CLI. -->
+
 ### Run health checks
 
 Preferred path:
@@ -105,6 +111,7 @@ node scripts/openapi-explore.mjs --spec platform schema WebhookDelivery
 - For webhook setup (create/update/delete, signature verification, event types), use `integrate-whatsapp`.
 - Prefer resolving a display phone number to the canonical `phone_number_id` before deep debugging.
 - Keep the scripts as the fallback path when the CLI is unavailable or when you need API-log or webhook-delivery inspection.
+- Prefer Project MCP `logs` for cross-resource webhook delivery searches when MCP is available.
 
 ## References
 
