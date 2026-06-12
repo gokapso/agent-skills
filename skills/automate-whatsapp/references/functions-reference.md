@@ -44,8 +44,13 @@ Notes:
 - `endpoint_url` for deployed Cloudflare functions is `https://api.kapso.ai/platform/v1/functions/{function_id}/invoke`
 - Private functions require `X-API-Key`
 - Public Cloudflare functions (`public_endpoint=true`) can be invoked without an API key
+- Public Cloudflare functions receive sanitized inbound request headers, including common webhook signature headers such as `Stripe-Signature`, `X-Slack-Signature`, `X-Hub-Signature-256`, `Svix-Signature`, `X-Shopify-Hmac-Sha256`, and `X-Twilio-Signature`
+- Public Cloudflare functions do not receive credential, infrastructure, hop-by-hop, or Kapso-internal headers such as `Authorization`, `Cookie`, `X-API-Key`, `X-Forwarded-*`, `CF-*`, `Host`, or client-provided `X-Request-ID`
+- Sensitive forwarded header values are redacted in invocation logs
 - `invoke_response_mode=passthrough` forwards the successful function response body directly
 - `invoke_response_mode=wrapped` is a legacy mode for older wrapped functions
+
+<!-- TODO: Add complete provider-specific webhook verification snippets for public functions. -->
 
 ## Workflow node payload (Function / Decide)
 
