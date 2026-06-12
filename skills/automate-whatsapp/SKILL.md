@@ -122,6 +122,7 @@ For inbound_message triggers, prefer `kapso whatsapp numbers resolve --phone-num
 4. Verify: `node scripts/get-function.js --function-id <id>`
 
 Use `--public-endpoint true` when the function should be callable without `X-API-Key` via the Kapso-hosted invoke URL. This is only supported for Cloudflare functions.
+Public Cloudflare functions receive sanitized webhook headers, including common provider signature headers. Credential, infrastructure, hop-by-hop, Kapso-reserved, and client-supplied `X-Request-ID` headers are not forwarded.
 New functions default to `invoke_response_mode=passthrough`, which returns the function body directly on successful invoke. Legacy wrapped functions can be migrated later with `update-function.js`.
 
 ### Set up agent node with remote sandbox repositories
