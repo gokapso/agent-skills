@@ -214,6 +214,31 @@ Manage:
 - `PATCH /platform/v1/inbox_embeds/:id`
 - `DELETE /platform/v1/inbox_embeds/:id` (revokes)
 
+Theme:
+- Set the initial mode with `default_mode` on the embed token or `?mode=system|light|dark` on the embed URL.
+- To update the iframe after it loads, send a `postMessage` command to the embedded inbox window.
+
+```js
+iframe.contentWindow.postMessage(
+  {
+    source: "kapso-desktop",
+    version: 1,
+    type: "inbox.theme",
+    timestamp: new Date().toISOString(),
+    payload: {
+      mode: "dark",
+      resolvedMode: "dark",
+      requestedAt: new Date().toISOString(),
+    },
+  },
+  "https://inbox.kapso.ai"
+);
+```
+
+- `payload.mode` accepts `system`, `light`, or `dark`.
+- The embedded inbox persists the selected mode in localStorage.
+- TODO: Confirm whether `source: "kapso-desktop"`, `resolvedMode`, and `requestedAt` are stable public fields or compatibility details for desktop hosts.
+
 ### Template rules
 
 Creation:
