@@ -238,7 +238,8 @@ Use `automate-whatsapp` function scripts to find function IDs and update code.
     "system_prompt": "You are a helpful assistant...",
     "provider_model_id": "uuid",
     "max_iterations": 10,
-    "temperature": 0.7
+    "temperature": 0.7,
+    "message_delivery_mode": "auto_send_assistant_text"
   }
 }
 ```
@@ -246,6 +247,9 @@ Use `automate-whatsapp` function scripts to find function IDs and update code.
 Notes:
 - `provider_model_id` is required. Use `scripts/list-provider-models.js` to find it.
 - Agent tool arrays live inside `data.config` (not at the `data` root).
+- `message_delivery_mode` defaults to `auto_send_assistant_text`. Use `tool_only` when visible WhatsApp messages must be sent only through `send_notification_to_user`.
+- With `message_delivery_mode: "tool_only"`, keep `send_notification_to_user` and `enter_waiting` enabled. Kapso also enforces these tools when saving the node.
+- TODO: Confirm whether public workflow helper libraries expose a camelCase alias for this field.
 
 Default tools (toggle on/off only):
 - complete_task (required)
@@ -279,6 +283,8 @@ All tool arrays go under `data.config` of the agent node:
       "provider_model_id": "uuid",
       "max_iterations": 10,
       "temperature": 0.7,
+      "message_delivery_mode": "tool_only",
+      "enabled_default_tools": ["complete_task", "handoff_to_human", "send_notification_to_user", "enter_waiting"],
       "flow_agent_webhooks": [],
       "flow_agent_mcp_servers": []
     }
