@@ -138,6 +138,22 @@ Notes:
 - `flow_id` is the Meta Flow ID (string).
 - `flow_action_payload.screen` must be a valid first screen.
 
+## send_interactive (catalog_message)
+
+```json
+{
+  "node_type": "send_interactive",
+  "config": {
+    "interactive_type": "catalog_message",
+    "body_text": "Browse our catalog",
+    "thumbnail_product_retailer_id": "SKU_THUMBNAIL"
+  }
+}
+```
+
+Notes:
+- `thumbnail_product_retailer_id` is required and should match a product retailer ID in the connected WhatsApp catalog.
+
 ## wait_for_response
 
 ```json
