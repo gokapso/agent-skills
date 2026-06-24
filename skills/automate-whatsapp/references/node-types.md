@@ -138,6 +138,28 @@ Notes:
 - `flow_id` is the Meta Flow ID (string).
 - `flow_action_payload.screen` must be a valid first screen.
 
+## send_interactive (catalog_message)
+
+```json
+{
+  "node_type": "send_interactive",
+  "config": {
+    "interactive_type": "catalog_message",
+    "body_text": "Browse our catalog",
+    "action_config": {
+      "name": "catalog_message",
+      "parameters": {
+        "thumbnail_product_retailer_id": "SKU_THUMBNAIL"
+      }
+    }
+  }
+}
+```
+
+Notes:
+- `thumbnail_product_retailer_id` is required under `action_config.parameters`.
+- <!-- TODO: Replace SKU_THUMBNAIL with a real catalog product retailer ID from the developer's Meta catalog. -->
+
 ## wait_for_response
 
 ```json
