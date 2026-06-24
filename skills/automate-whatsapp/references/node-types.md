@@ -138,6 +138,37 @@ Notes:
 - `flow_id` is the Meta Flow ID (string).
 - `flow_action_payload.screen` must be a valid first screen.
 
+## send_interactive (catalog_message)
+
+```json
+{
+  "node_type": "send_interactive",
+  "config": {
+    "interactive_type": "catalog_message",
+    "body_text": "Browse our catalog",
+    "thumbnail_product_retailer_id": "SKU_THUMBNAIL"
+  }
+}
+```
+
+Use `thumbnail_product_retailer_id` for generated or edited workflow definitions. Kapso also accepts Meta-style `action_config.parameters.thumbnail_product_retailer_id` when importing definitions:
+
+```json
+{
+  "node_type": "send_interactive",
+  "config": {
+    "interactive_type": "catalog_message",
+    "body_text": "Browse our catalog",
+    "action_config": {
+      "name": "catalog_message",
+      "parameters": {
+        "thumbnail_product_retailer_id": "SKU_THUMBNAIL"
+      }
+    }
+  }
+}
+```
+
 ## wait_for_response
 
 ```json
