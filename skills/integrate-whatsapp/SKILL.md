@@ -184,6 +184,24 @@ Fallback path:
 - Proxy: `GET /{phone_number_id}/messages`, `GET /{phone_number_id}/conversations`
 - SDK: `client.messages.query()`, `client.messages.get()`, `client.conversations.list()`, `client.conversations.get()`, `client.templates.get()`
 
+### Manage business usernames
+
+Use Meta proxy endpoints for production WhatsApp Business usernames:
+- `GET /{phone_number_id}/username` - refresh the current username
+- `POST /{phone_number_id}/username` - reserve or transfer a username
+- `DELETE /{phone_number_id}/username` - remove the current username
+- `GET /{phone_number_id}/username_suggestions` - list Meta username suggestions
+
+Set requests use:
+```json
+{
+  "username": "kapso_support",
+  "transfer_action": "none"
+}
+```
+
+Use `transfer_action: "force_transfer"` only when moving an existing username to this phone number.
+
 ### Embed the inbox
 
 Use Platform API inbox embeds when the user wants to place Kapso's inbox inside their own app.
