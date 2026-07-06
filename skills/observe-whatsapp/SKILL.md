@@ -15,6 +15,11 @@ Preferred path:
 - Kapso CLI installed and authenticated (`kapso login`)
 - Start with `kapso status` to confirm project access and available WhatsApp numbers
 
+MCP path:
+- Kapso Project MCP configured at `https://api.kapso.ai/mcp`
+- Browser sign-in or a project API key
+- Use `search_logs` for redacted project log search when the MCP client is available
+
 Fallback path:
 Env vars:
 - `KAPSO_API_BASE_URL` (host only, no `/platform/v1`)
@@ -41,6 +46,14 @@ Preferred path:
 1. Confirm project and number state: `kapso status`
 2. Run number health: `kapso whatsapp numbers health --phone-number "<display-number>" --output human`
 3. Inspect related templates when relevant: `kapso whatsapp templates list --phone-number "<display-number>" --output json`
+
+MCP path:
+1. Use `status` to confirm project access.
+2. Use `search_logs` with identifiers such as request IDs, `wamid` values, endpoint paths, webhook delivery IDs, Meta event IDs, or workflow execution IDs.
+3. Start with `period: "24h"` and `problems_only: true`; expand to `period: "7d"` when the first search returns no events.
+4. Add exact `filters` when known, for example `response_status`, `endpoint_contains`, `whatsapp_message_id`, `processed`, or `has_status_error`.
+
+<!-- TODO: Confirm the final production filter list for search_logs after rollout. -->
 
 Fallback path:
 1. Message errors: `node scripts/errors.js`
