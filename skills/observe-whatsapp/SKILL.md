@@ -14,6 +14,7 @@ Use this skill for operational diagnostics: message delivery investigation, webh
 Preferred path:
 - Kapso CLI installed and authenticated (`kapso login`)
 - Start with `kapso status` to confirm project access and available WhatsApp numbers
+- If an MCP-capable agent has Project MCP connected, use `search_logs` for anchored log searches before falling back to scripts
 
 Fallback path:
 Env vars:
@@ -29,6 +30,12 @@ Preferred path:
 2. List recent messages: `kapso whatsapp messages list --phone-number "<display-number>" --limit 50 --output json`
 3. Inspect a specific message: `kapso whatsapp messages get <message-id> --phone-number-id <id> --output json`
 4. Inspect the conversation: `kapso whatsapp conversations list --phone-number "<display-number>" --output json`
+
+MCP path:
+1. Use `search_logs` when the user provides a request ID, WhatsApp `wamid`, endpoint, webhook delivery ID, workflow execution ID, phone number ID, or approximate time
+2. Use `period` as `24h`, `7d`, or `30d`
+3. Use `source` to narrow searches: `external_api_log`, `whatsapp_webhook_event`, `flow_event`, or `webhook_delivery`
+4. Keep `problems_only` true for broad searches; set it false when looking for a known successful event
 
 Fallback path:
 1. List messages: `node scripts/messages.js --phone-number-id <id>`
@@ -46,6 +53,35 @@ Fallback path:
 1. Message errors: `node scripts/errors.js`
 2. API logs: `node scripts/api-logs.js`
 3. Webhook deliveries: `node scripts/webhook-deliveries.js`
+
+### Search logs with Project MCP
+
+Use Project MCP `search_logs` for redacted log summaries. Do not ask for raw payloads.
+
+Arguments:
+- `query`: request ID, `wamid`, endpoint, webhook delivery ID, Meta event text, or workflow execution ID
+- `period`: `24h`, `7d`, or `30d`
+- `source`: `all`, `external_api_log`, `whatsapp_webhook_event`, `flow_event`, or `webhook_delivery`
+- `problems_only`: boolean
+- `limit`: max 20
+- `filters`: exact `{ key, value }` entries
+
+Examples:
+```json
+{ "query": "req_123", "period": "24h", "source": "external_api_log", "limit": 10 }
+```
+
+```json
+{
+  "query": "wamid.ABC123",
+  "source": "external_api_log",
+  "filters": [
+    { "key": "whatsapp_message_id", "value": "wamid.ABC123" }
+  ]
+}
+```
+
+<!-- TODO: Expand examples after the public Project MCP log filter list is finalized. -->
 
 ### Run health checks
 
