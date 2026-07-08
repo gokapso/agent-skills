@@ -29,6 +29,7 @@ Preferred path:
 2. List recent messages: `kapso whatsapp messages list --phone-number "<display-number>" --limit 50 --output json`
 3. Inspect a specific message: `kapso whatsapp messages get <message-id> --phone-number-id <id> --output json`
 4. Inspect the conversation: `kapso whatsapp conversations list --phone-number "<display-number>" --output json`
+5. For indexed delivery history, use Project MCP `search_logs` with `source: "whatsapp_message_event"` and filters like `whatsapp_message_id`, `direction`, `processing_status`, `origin`, `agent_execution_id`, `whatsapp_template_id`, or `whatsapp_broadcast_id`. Use `period: "30d"` for longer investigations. <!-- TODO: add a script wrapper if the CLI exposes Platform log search. -->
 
 Fallback path:
 1. List messages: `node scripts/messages.js --phone-number-id <id>`
