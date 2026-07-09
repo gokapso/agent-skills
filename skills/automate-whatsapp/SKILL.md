@@ -107,6 +107,19 @@ If you get a lock_version conflict: re-fetch, re-apply changes, retry with new l
 
 For inbound_message triggers, prefer `kapso whatsapp numbers resolve --phone-number "<display-number>" --output json` to get the exact `phone_number_id`. Fall back to `node scripts/list-whatsapp-phone-numbers.js` when the CLI is unavailable.
 
+### Manage project event definitions
+
+Use the Platform API to define an event before configuring a project-event trigger:
+
+```bash
+curl -X POST "$KAPSO_API_BASE_URL/platform/v1/event-definitions" \
+  -H "X-API-Key: $KAPSO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"conversation.csat_scored","property_schema":{"score":{"type":"number"}}}'
+```
+
+`POST /event-definitions` creates a definition or updates the existing definition with the same name. Read `references/workflow-reference.md` for the list, retrieve, and update endpoints and plan restrictions.
+
 ### Debug executions
 
 1. List: `node scripts/list-executions.js <workflow_id>`

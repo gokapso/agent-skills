@@ -64,6 +64,14 @@ Implemented calls:
 - `GET /platform/v1/workflow_events/:id`
 - `GET /platform/v1/provider_models`
 - `GET /platform/v1/whatsapp/phone_numbers` (for inbound_message triggers)
+- `GET /platform/v1/event-definitions`
+- `POST /platform/v1/event-definitions` (create or update by name)
+- `GET /platform/v1/event-definitions/:id`
+- `PATCH /platform/v1/event-definitions/:id`
+- `GET /platform/v1/events`
+- `POST /platform/v1/events`
+
+Project event writes and `project.event` webhook subscriptions require project events to be available on the project's plan. Event and definition list endpoints remain readable when writes are unavailable. A definition name cannot be changed after events have been recorded for it.
 
 Variables CRUD endpoints are not defined for Platform API. Scripts intentionally return blocked for create/update/delete operations.
 
