@@ -107,6 +107,13 @@ If you get a lock_version conflict: re-fetch, re-apply changes, retry with new l
 
 For inbound_message triggers, prefer `kapso whatsapp numbers resolve --phone-number "<display-number>" --output json` to get the exact `phone_number_id`. Fall back to `node scripts/list-whatsapp-phone-numbers.js` when the CLI is unavailable.
 
+For custom project event triggers, define the event first through the Platform API:
+- `POST /platform/v1/event-definitions` with `name`, optional `description`, and optional typed `property_schema`
+- `GET /platform/v1/event-definitions` to discover existing definitions and `last_seen_at`
+- `POST /platform/v1/events` to emit an event after the definition exists
+
+Use dot-separated lowercase event names like `conversation.csat_scored`. `property_schema` supports `string`, `number`, and `boolean` property types. Event writes can return `402` when project events are unavailable for the project or the monthly allowance is exhausted.
+
 ### Debug executions
 
 1. List: `node scripts/list-executions.js <workflow_id>`
