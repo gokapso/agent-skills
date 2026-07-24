@@ -70,7 +70,21 @@ Notes:
 
 - Platform API base: `/platform/v1`
 - Meta proxy base: `/meta/whatsapp/v24.0` (messaging, templates, media)
+- Meta Business Agent proxy base: `/meta/whatsapp` (unversioned; do not add a Graph API version)
 - Use `phone_number_id` as the primary WhatsApp identifier
+
+### Meta Business Agents
+
+For eligible projects with a connected production number:
+
+- Check eligibility: `GET /meta/whatsapp/{phone_number_id}/agent_eligibility`
+- Onboard: `POST /meta/whatsapp/{phone_number_id}/agent_onboarding`
+- Test: `POST /meta/whatsapp/{phone_number_id}/agent_test`
+- Manage settings and knowledge under `/{phone_number_id}/agent_config/...`
+- Manage connectors and tools under `/{phone_number_id}/agent_connectors/...`
+- Release thread control: `POST /meta/whatsapp/business/whatsapp/phone_numbers/{phone_number_id}/thread_control`
+
+Use `X-API-Key`. Business Agent calls default to `X-API-Version: 2.0.0`; thread control defaults to `1.0.0`. Responses pass through from Meta without a Kapso envelope.
 
 ## Receive events (webhooks)
 
