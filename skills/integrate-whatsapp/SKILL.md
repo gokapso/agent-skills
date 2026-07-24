@@ -72,6 +72,16 @@ Notes:
 - Meta proxy base: `/meta/whatsapp/v24.0` (messaging, templates, media)
 - Use `phone_number_id` as the primary WhatsApp identifier
 
+Limited-rollout projects can manage Meta Business Agents under:
+`/platform/v1/whatsapp/phone_numbers/{phone_number_id}/meta_business_agents`.
+
+Use these endpoints to check eligibility, onboard and configure an agent, manage
+knowledge and connectors, test the agent, and release conversation control back
+to Meta. See the Meta Business Agents Platform documentation for the current
+rollout and available operations.
+
+<!-- TODO: Add executable Meta Business Agent examples after stable schemas are published. -->
+
 ## Receive events (webhooks)
 
 Use webhooks to receive:
