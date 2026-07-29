@@ -69,6 +69,11 @@ Message list query params (use `GET /whatsapp/messages`):
 - `message_type` (text|image|audio|video|document), `has_media` (true|false)
 - `limit` (max 100), `after`, `before` for cursor pagination
 
+On `GET /whatsapp/messages`, pass `phone_number` as a complete international number (`+56912345678`)
+to get an exact match; formatting characters are allowed and country-specific stored variants
+(Argentina, Mexico, Brazil, Cameroon) are matched too. Any other value matches on digits as a
+substring, and a value with no digits returns nothing.
+
 Example:
 `GET /whatsapp/messages?conversation_id=<uuid>&phone_number_id=<id>&direction=inbound&limit=50`
 
