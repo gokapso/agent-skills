@@ -312,11 +312,17 @@ Use when the agent needs to call arbitrary HTTP endpoints:
         },
         "required": ["phone_number"]
       },
-      "jmespath_query": null
+      "jmespath_query": null,
+      "timeout_seconds": 120
     }
   ]
 }
 ```
+
+`timeout_seconds` is optional (1-180) and caps how long Kapso waits for the HTTP
+response. Omit it to use the 45-second default. Definition responses return a stable
+`id` per webhook tool; include that `id` when updating the node so the tool keeps its
+stored settings.
 
 Rules:
 - `body_schema` must be valid JSON Schema.
