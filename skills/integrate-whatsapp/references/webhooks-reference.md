@@ -32,6 +32,12 @@ Conversation events:
 - `whatsapp.conversation.ended`
 - `whatsapp.conversation.inactive`
 
+Meta Business Agent events (config-level):
+
+- `whatsapp.meta_business_agent.handover`
+
+Handovers cannot be project-scoped or buffered. A webhook subscribed to handovers receives its `whatsapp.message.received`, `whatsapp.message.sent`, and handover events in conversation order.
+
 Lifecycle events (project-level only):
 
 - `whatsapp.config.created`

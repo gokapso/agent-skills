@@ -17,6 +17,10 @@ Base URL: `https://api.kapso.ai/meta/whatsapp/v24.0`
 
 Use Meta proxy for WhatsApp Cloud API calls (messages, templates, media, flows). Auth still uses `X-API-Key`.
 
+Meta Business Agent events:
+- `POST /meta/whatsapp/v24.0/:phone_number_id/agent_event` sends an event with `to` and `event`.
+- `GET /meta/whatsapp/v24.0/:phone_number_id/agent_event/:agent_event_id` reads its status.
+
 ## Multi-tenant WhatsApp (Customers)
 
 Use Customers when your end-users connect their own WhatsApp numbers.

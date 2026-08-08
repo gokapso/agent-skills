@@ -77,11 +77,13 @@ Notes:
 Use webhooks to receive:
 - Project events (connection lifecycle, workflow events)
 - Phone-number events (messages, conversations, delivery status)
+- Meta Business Agent handovers (`whatsapp.meta_business_agent.handover`)
 
 Scope rules:
 - **Project webhooks**: only project-level events (connection lifecycle, workflow events)
 - **Phone-number webhooks**: only WhatsApp message + conversation events for that `phone_number_id`
 - WhatsApp message/conversation events (`whatsapp.message.*`, `whatsapp.conversation.*`) are **phone-number only**
+- Meta Business Agent handovers are phone-number only, disable message buffering, and are ordered with subscribed received/sent message events.
 
 Create a webhook:
 - Project-level: `node scripts/create.js --scope project --url <https://...> --events <csv>`
