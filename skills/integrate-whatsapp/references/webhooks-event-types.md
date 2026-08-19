@@ -138,6 +138,11 @@ Use phone-number webhooks for `whatsapp.message.*` and `whatsapp.conversation.*`
 
     Fired when a contact receives a new business-scoped user ID
   </Card>
+  <Card title="Marketing preference changed" icon="ban">
+    `whatsapp.contact.marketing_preference_changed`
+
+    Fired when a contact stops or resumes marketing messages on one of your numbers
+  </Card>
 </CardGroup>
 
 ## Payload structures
@@ -416,6 +421,44 @@ Use phone-number webhooks for `whatsapp.message.*` and `whatsapp.conversation.*`
   "phone_number_id": "123456789012345"
 }
 ```
+
+### whatsapp.contact.marketing_preference_changed
+
+```json
+{
+  "contact": {
+    "id": "contact_123",
+    "wa_id": "15551234567",
+    "profile_name": "John Doe",
+    "display_name": "John Doe",
+    "created_at": "2025-10-28T14:00:00Z",
+    "updated_at": "2025-10-28T15:10:45Z"
+  },
+  "marketing_preference": {
+    "status": "stopped",
+    "previous_status": "resumed",
+    "detail": "User requested to stop marketing messages",
+    "occurred_at": "2025-10-28T15:10:45Z",
+    "sequence": 42
+  },
+  "phone_number_id": "123456789012345"
+}
+```
+
+Fired when a contact tells WhatsApp to stop (`stopped`) or resume (`resumed`) marketing messages
+on one of your numbers. The preference is per phone number.
+
+`previous_status` is `null` when this is the contact's first preference on the number. `detail` is
+Meta's reason string and can be `null`.
+
+Delivery is at-least-once and unordered, and `occurred_at` is only second-granular. Compare
+`sequence` instead: it increases monotonically, and a lower value than one you already applied is a
+stale update to discard.
+
+Marketing template sends to a `stopped` contact are refused. Through the WhatsApp proxy API the
+send returns `422` with `"code": "marketing_preference_stopped"`; in a broadcast the recipient gets
+status `suppressed`, which is not a failure and is not charged. Utility and authentication
+templates are unaffected.
 
 ### whatsapp.contact.identity_changed
 
