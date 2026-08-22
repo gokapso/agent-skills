@@ -68,6 +68,22 @@ Notes:
 - `kapso setup` and `kapso whatsapp numbers new` use dedicated plus provisioning by default.
 - Keep `phone_number_country_isos`, `phone_number_area_code`, `language`, and redirect URLs as optional overrides.
 
+### Embedded onboarding in your own frontend
+
+Instead of the hosted setup page, your frontend can drive Meta embedded signup directly.
+
+1. Create the link with `allowed_origins: ["https://your-app.com"]` and exactly one `allowed_connection_types` value (`provision_phone_number: true` requires `["dedicated"]`). The create response includes `token`.
+2. Browser calls `POST https://app.kapso.ai/api/onboarding/v1/whatsapp/bootstrap` with `Authorization: Bearer <token>` — returns `attempt_id`, `meta_app_id`, `embedded_signup_config_id`, `phone_provisioning`, `expires_at`.
+3. Launch Meta embedded signup with those values.
+4. `POST .../whatsapp/complete` with `attempt_id`, `authorization_code`, and observed `waba_id` / `phone_number_id`.
+5. Poll `GET .../whatsapp/attempts/:attempt_id` until `completed` is `true`; the payload then carries `connection.phone_number_id`.
+
+Notes:
+- The `Origin` header must exactly match a stored origin; responses echo that origin.
+- Config fields (`meta_app_id`, `connection_type`, `meta_billing_mode`, ...) cannot be overridden on complete.
+- Errors are `{"error": {"code", "message", "retryable"}}` with codes `invalid_setup`, `origin_not_allowed`, `setup_expired`, `unsupported_setup`, `phone_provisioning_unavailable`, `processing_failed`.
+- Still use webhooks as the authoritative backend signal.
+
 - Platform API base: `/platform/v1`
 - Meta proxy base: `/meta/whatsapp/v24.0` (messaging, templates, media)
 - Use `phone_number_id` as the primary WhatsApp identifier
