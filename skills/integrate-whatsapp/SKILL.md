@@ -342,7 +342,7 @@ async function handler(request, env) {
 | `get-encryption-status.js` | Check encryption status |
 | `setup-encryption.js` | Set up flow encryption |
 | `send-test-flow.js` | Send a test flow message |
-| `delete-flow.js` | Delete a flow |
+| `delete-flow.js` | Delete a DRAFT flow (requires `--phone-number-id`; published flows cannot be deleted) |
 | `list-flow-responses.js` | List stored flow responses |
 | `list-function-logs.js` | List function logs |
 | `list-function-invocations.js` | List function invocations |
