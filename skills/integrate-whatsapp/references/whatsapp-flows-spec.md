@@ -48,6 +48,8 @@ Flow JSON consists of the following sections:
 - **Version is mandatory:** Every endpoint response must include `"version": "3.0"` or the UI can appear to return empty data (silent failure).
 - **Error responses need full data:** When you stay on the same screen with `error_message`, still include all data the screen expects (lists, init-values, etc.) or components can break.
 - **Carry data forward:** Global references (`${screen.SCREEN.form.field}`) exist, but the safest pattern is to re-send needed values in each response: return them in `data` for the next screen and reference via `${data.field}`.
+- **Carried values keep their component's type:** when you forward `${form.x}` into the next screen's `data`, declare it with the type that component produces, not `string` by default. A `TextInput` with `"input-type": "number"` forwarded as `{"type": "string"}` fails with `INVALID_NAVIGATE_ACTION_PAYLOAD: Schema of dynamic data '${form.x}' is not matching schema of data model field 'x' ... expecting 'string' but got 'number'`. Match `__example__` too (`0`, not `""`).
+- **Screen ids take no digits:** see **Screens → Properties → `id`**. `SCREEN_0` is rejected at publish time.
 - **Routing pattern:** Route primarily on `data_exchange.action` then `data_exchange.screen`; see the example in “Action Routing Pattern” below for a multi-screen skeleton.
 
 ### Mini handler examples
@@ -414,7 +416,9 @@ Screens are the main unit of a Flow. Each screen represents a single node in the
 ```
 
 ### Properties
-*   **`id`** (Required): Unique identifier. `SUCCESS` is a reserved keyword and cannot be used.
+*   **`id`** (Required): Unique identifier. **Letters and underscores only — no digits.** `SUCCESS` is a reserved keyword and cannot be used.
+
+    A generated id like `SCREEN_0` is rejected with `PATTERN_MISMATCH: 'SCREEN_0' should only consist of alphabets and underscores`, reported twice: once for the `routing_model` key and once for `screens[n].id`. Name screens `WELCOME`, `DETAILS`, `SCREEN_A`, `SCREEN_B` — never `SCREEN_1`. Component `name`s are **not** subject to this rule; `form_0` is fine.
 *   **`layout`** (Required): The UI Layout. Can be predefined or a container with custom content using the WhatsApp Flows Library.
 *   **`terminal`** (Optional): If `true`, this screen ends the flow. A Footer component is mandatory on terminal screens.
 *   **`title`** (Optional): Attribute rendered in the top navigation bar.
@@ -1145,6 +1149,60 @@ When the user selects a date, the `on-select-action` triggers `data_exchange`. Y
 ```
 
 ---
+
+## Validation happens AFTER creation, not during it
+
+The single most confusing thing about the Flows API: **a Flow JSON that Meta
+will refuse to publish is still created.** The create call answers `200` with
+a real flow id, `"success": true`, and the reasons in `validation_errors` —
+the draft exists and is unusable. Only the publish step fails, and it fails
+with an opaque message:
+
+```json
+{"error": "Publishing attempt failed"}
+```
+
+That message names nothing. The actual reason was returned earlier, next to
+the id you took as proof of success.
+
+**Never read an id as proof the flow is usable.** After any create or JSON
+update:
+
+```js
+const res = await createFlow(...);
+if (res.validation_errors?.length) {
+  // Meta will refuse to publish this. Fix the JSON; do not publish, and do
+  // not cache the id.
+  throw new Error(res.validation_errors.map(e => e.message).join('; '));
+}
+```
+
+Each entry carries `error`, `error_type`, `message`, `line_start`/`column_start`
+and a `pointers[].path` pointing straight at the offending node
+(`screens[0].layout.children[0].children[5].on-click-action.payload.expectation`).
+
+**Prefer the two-step lifecycle** — `create-flow.js` → `update-flow-json.js` →
+`publish-flow.js` — over `publish: true` on create. One-shot publishing gives
+you the opaque failure with no chance to inspect what came back.
+
+### Flow names are unique per WABA, and a failed attempt keeps its name
+
+Creating a flow whose name already exists in the WABA is rejected:
+
+```json
+{"error": {"message": "Invalid parameter", "error_subcode": 4016019,
+ "error_user_title": "Flow name is not unique",
+ "error_user_msg": "Flow name should be unique within one WhatsApp Business Account..."}}
+```
+
+The generic `message` says "Invalid parameter"; the actionable text is in
+`error_user_title` / `error_user_msg`. **Read those, not just `message`.**
+
+This matters more than it looks, because a rejected publish leaves its draft
+behind holding the name. If you generate names deterministically (say, from a
+schema hash), the first retry after any failure dies on the name collision
+instead of on the real problem. Either give each attempt a unique name, or
+reuse the existing draft (`update-flow-json.js`) rather than creating another.
 
 ## Common Patterns & Gotchas
 

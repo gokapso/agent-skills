@@ -244,6 +244,13 @@ Use Flows to build native WhatsApp forms. Read `references/whatsapp-flows-spec.m
 3. Publish: `node scripts/publish-flow.js --flow-id <id>`
 4. Test: `node scripts/send-test-flow.js --phone-number-id <id> --flow-id <id> --to <phone>`
 
+**Check `validation_errors` after steps 1 and 2, before publishing.** Meta
+creates the flow even when the JSON is invalid: the response carries a real id
+and `"success": true` alongside the errors, and only the publish fails — with
+an opaque `"Publishing attempt failed"` that names nothing. An id is not proof
+the flow is usable. See `references/whatsapp-flows-spec.md` →
+*Validation happens AFTER creation, not during it*.
+
 ### Attach a data endpoint (dynamic flows)
 
 1. Set up encryption: `node scripts/setup-encryption.js --flow-id <id>`
