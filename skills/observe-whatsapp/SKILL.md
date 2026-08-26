@@ -1,13 +1,13 @@
 ---
 name: observe-whatsapp
-description: "Observe and troubleshoot WhatsApp in Kapso: debug message delivery, inspect webhook deliveries/retries, triage API errors, and run health checks. Use when investigating production issues, message failures, or webhook delivery problems."
+description: "Observe and troubleshoot WhatsApp in Kapso: debug message delivery, inspect webhook deliveries/retries, triage API errors, review findings, and run health checks. Use when investigating production issues, message failures, or webhook delivery problems."
 ---
 
 # Observe WhatsApp
 
 ## When to use
 
-Use this skill for operational diagnostics: message delivery investigation, webhook delivery debugging, error triage, and WhatsApp health checks.
+Use this skill for operational diagnostics: message delivery investigation, webhook delivery debugging, error triage, findings review, and WhatsApp health checks.
 
 ## Setup
 
@@ -56,6 +56,43 @@ Preferred path:
 Fallback path:
 1. Project overview: `node scripts/overview.js`
 2. Phone number health: `node scripts/whatsapp-health.js --phone-number-id <id>`
+
+### Review findings
+
+Findings group recurring problems detected across ended conversations. They are exposed on the Platform API under `/platform/v1/findings`, authenticated with `X-API-Key`. The project is taken from the key, so no project ID goes in the path.
+
+1. List what is open:
+   ```bash
+   curl "$KAPSO_API_BASE_URL/platform/v1/findings?limit=20" -H "X-API-Key: $KAPSO_API_KEY"
+   ```
+   `limit` defaults to 20 and caps at 25. Paginate with the opaque `paging.next` / `paging.previous` cursors as `after` or `before` — never both at once. Findings in the same group stay on one page, so a page can exceed `limit`.
+2. Read one finding, including the latest investigation with its causes and suggested fixes:
+   ```bash
+   curl "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>" -H "X-API-Key: $KAPSO_API_KEY"
+   ```
+3. Pull the evidence behind it — daily history, source events, affected and comparison conversation IDs, co-occurring events:
+   ```bash
+   curl "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>/evidence" -H "X-API-Key: $KAPSO_API_KEY"
+   ```
+   The response is bounded; check the `coverage` object to see what was truncated.
+4. Queue an AI investigation. It returns `202` and runs asynchronously, so poll step 2 for the result:
+   ```bash
+   curl -X POST "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>/start_investigation" \
+     -H "X-API-Key: $KAPSO_API_KEY"
+   ```
+   `409` means a dispatch is already in flight; `422` means the finding is not currently eligible.
+5. After a fix ships, start monitoring, or dismiss a finding that is not worth tracking:
+   ```bash
+   curl -X POST "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>/mark_addressed" \
+     -H "X-API-Key: $KAPSO_API_KEY"
+
+   curl -X POST "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>/dismiss" \
+     -H "X-API-Key: $KAPSO_API_KEY" -H "Content-Type: application/json" \
+     -d '{"reason":"already_fixed","note":"Corrected in release 2.4."}'
+   ```
+   `reason` is one of `not_relevant`, `expected_behavior`, `already_fixed`, `incorrect`, `other`. Both `reason` and `note` are required. `mark_addressed` needs a completed investigation covering the finding's current evidence.
+
+Every findings endpoint returns `404` when Findings is not enabled for the project.
 
 ## Scripts
 
