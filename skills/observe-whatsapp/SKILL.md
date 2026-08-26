@@ -47,6 +47,31 @@ Fallback path:
 2. API logs: `node scripts/api-logs.js`
 3. Webhook deliveries: `node scripts/webhook-deliveries.js`
 
+### Review findings
+
+Findings group recurring problems detected across ended conversations. Use the Platform API directly:
+
+```bash
+# List open findings
+curl "$KAPSO_API_BASE_URL/platform/v1/findings?limit=20" -H "X-API-Key: $KAPSO_API_KEY"
+
+# Read one finding, including its investigation result
+curl "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>" -H "X-API-Key: $KAPSO_API_KEY"
+
+# Read the raw evidence behind it
+curl "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>/evidence" -H "X-API-Key: $KAPSO_API_KEY"
+
+# Queue an AI investigation (async, returns 202)
+curl -X POST "$KAPSO_API_BASE_URL/platform/v1/findings/<finding-id>/start_investigation" \
+  -H "X-API-Key: $KAPSO_API_KEY"
+```
+
+After a fix is deployed, `POST .../mark_addressed` starts monitoring; `POST .../dismiss` with
+`{"reason":"already_fixed","note":"..."}` drops it. Valid reasons: `not_relevant`,
+`expected_behavior`, `already_fixed`, `incorrect`, `other`.
+
+All findings endpoints return `404` when Findings is not enabled for the project.
+
 ### Run health checks
 
 Preferred path:
