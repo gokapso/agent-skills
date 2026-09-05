@@ -1,6 +1,6 @@
 ---
 name: automate-whatsapp
-description: "Build WhatsApp automations with Kapso workflows: configure WhatsApp triggers, edit workflow graphs, manage executions, deploy functions, search workflow Logs, and debug automation behavior. Use when automating WhatsApp conversations and event handling."
+description: Build and debug Kapso WhatsApp workflows, triggers, functions, and executions.
 ---
 
 # Automate WhatsApp
@@ -308,13 +308,13 @@ node scripts/openapi-explore.mjs --spec workflows op getWorkflowVariables
 
 ## References
 
-Read before editing:
-- [references/local-workflow-source.md](references/local-workflow-source.md) - CLI source sync, repo layout, and `@kapso/workflows`
-- [references/graph-contract.md](references/graph-contract.md) - Graph schema, computed vs editable fields, lock_version
-- [references/node-types.md](references/node-types.md) - Node types and config shapes
-- [references/workflow-overview.md](references/workflow-overview.md) - Execution flow and states
+Read the references for the operation you are changing:
+- [references/local-workflow-source.md](references/local-workflow-source.md) - Local workflow source edits and CLI sync
+- [references/graph-contract.md](references/graph-contract.md) - Graph edits: schema, computed vs editable fields, and lock_version
+- [references/node-types.md](references/node-types.md) - Adding or changing node configuration
+- [references/workflow-overview.md](references/workflow-overview.md) - Execution behavior, state changes, and resumption
 
-Other references:
+For function-only work, read the function references below; graph/source references are needed only if the workflow changes too. Other task-specific references:
 - [references/execution-context.md](references/execution-context.md) - Context structure and variable substitution
 - [references/triggers.md](references/triggers.md) - Trigger types and setup
 - [references/agent-remote-sandbox.md](references/agent-remote-sandbox.md) - Remote sandbox behavior, repo resources, mounted paths
