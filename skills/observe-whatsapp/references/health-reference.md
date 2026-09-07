@@ -115,3 +115,14 @@ If display name is not approved, it affects cold message limits but is not usual
 ## 12) Special error
 
 If you see error `141000`, tell the user to contact support.
+
+## 13) retry_after (access-error backoff)
+
+If `retry_after` is present, the payload is a repeat of the last check: `phone_number_access`
+kept failing with an access or token error, so Meta is not re-queried until that time. The
+delay grows across consecutive failures of the same error: 5, 15, 30, then 60 minutes.
+
+- Do not poll before `retry_after`; the same payload comes back.
+- `timestamp` is still when the check actually ran, so it will look stale. Say both.
+- A successful check clears `retry_after`. Reconnecting the account is the fix, not retrying.
+- Rate limits, payment errors and transport failures never set this field.
