@@ -32,7 +32,8 @@ See [Connection detection](/docs/platform/detecting-whatsapp-connection) for imp
     "id": "990e8400-e29b-41d4-a716-446655440004"
   },
   "customer": {
-    "id": "880e8400-e29b-41d4-a716-446655440003"
+    "id": "880e8400-e29b-41d4-a716-446655440003",
+    "external_id": "cus_abc123"
   }
 }
 ```
