@@ -67,6 +67,15 @@ Implemented calls:
 
 Variables CRUD endpoints are not defined for Platform API. Scripts intentionally return blocked for create/update/delete operations.
 
+Resuming an execution that is waiting at a call workflow step delivers the input to the child
+execution that is waiting. Always resume the execution ID you started; the response reports the
+execution that received the input in `data.id`, echoes the requested ID in
+`data.requested_execution_id`, and includes `data.parent_flow_execution_id`.
+`GET /platform/v1/workflow_executions/:id` returns `resumable_execution_id` with the execution that
+accepts input next, or `null` when nothing in the chain is waiting. Resume returns `422` with
+`error: "Execution configuration changed"` if the call workflow step was changed to call a
+different workflow while its child was still active.
+
 Workflow execution list endpoints use cursor pagination. Prefer `limit`, `after`, and `before`;
 responses include a `paging` object. Do not use `page` / `per_page` for new workflow execution
 or execution event queries.
