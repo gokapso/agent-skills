@@ -57,6 +57,13 @@ Fallback path:
 1. Project overview: `node scripts/overview.js`
 2. Phone number health: `node scripts/whatsapp-health.js --phone-number-id <id>`
 
+### Check funding and recorded spend
+
+Fallback path (no CLI command exists for these endpoints):
+1. Funding for one account: `node scripts/whatsapp-funding.js --waba-id <meta-waba-id>`
+2. Accounts in a portfolio: `node scripts/whatsapp-funding.js --portfolio-id <meta-portfolio-id>`
+3. Recorded spend: add `--start-time <iso8601> --end-time <iso8601>` (at most 31 days apart)
+
 ## Scripts
 
 ### Messages
@@ -81,6 +88,7 @@ Fallback path:
 |--------|---------|
 | `overview.js` | Project overview |
 | `whatsapp-health.js` | Phone number health check |
+| `whatsapp-funding.js` | WABA or portfolio funding status and recorded spend |
 
 ### OpenAPI
 
@@ -104,6 +112,8 @@ node scripts/openapi-explore.mjs --spec platform schema WebhookDelivery
 
 - For webhook setup (create/update/delete, signature verification, event types), use `integrate-whatsapp`.
 - Prefer resolving a display phone number to the canonical `phone_number_id` before deep debugging.
+- Funding and usage IDs are Meta WABA and Business Portfolio IDs, not Kapso UUIDs, and reads are scoped to the API key's project.
+- Usage amounts are integer micro-USD (`1000000` = USD 1) for charges Kapso recorded; a zero total means zero recorded charges, not zero spend.
 - Keep the scripts as the fallback path when the CLI is unavailable or when you need API-log or webhook-delivery inspection.
 
 ## References
