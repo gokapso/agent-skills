@@ -246,6 +246,12 @@ Use Flows to build native WhatsApp forms. Read `references/whatsapp-flows-spec.m
 3. Deploy: `node scripts/deploy-data-endpoint.js --flow-id <id>`
 4. Register: `node scripts/register-data-endpoint.js --flow-id <id>`
 
+To reuse one deployed function across several flows, skip steps 2-4 and run
+`node scripts/attach-data-endpoint.js --flow-id <id> --function-id <id>` for each flow. The function
+must be deployed and in the same project; each flow keeps its own endpoint secret, so branch on
+`flow.id` in the payload. Published flows are republished automatically; a `warning` in the response
+means you must republish manually.
+
 ### Flow JSON rules
 
 Static flows (no data endpoint):
@@ -326,6 +332,7 @@ async function handler(request, env) {
 | `set-data-endpoint.js` | Create/update data endpoint code |
 | `deploy-data-endpoint.js` | Deploy data endpoint |
 | `register-data-endpoint.js` | Register data endpoint with Meta |
+| `attach-data-endpoint.js` | Attach an existing deployed function as data endpoint |
 | `get-encryption-status.js` | Check encryption status |
 | `setup-encryption.js` | Set up flow encryption |
 | `send-test-flow.js` | Send a test flow message |
@@ -393,7 +400,7 @@ node scripts/openapi-explore.mjs --spec platform search "setup link"
 |.:{package.json,SKILL.md}
 |assets:{dynamic-flow.json,sample-flow.json,send-interactive-buttons.json,send-interactive-catalog-message.json,send-interactive-cta-url.json,send-interactive-list.json,send-interactive-location-request.json,send-template-order-status-update.json,template-authentication-otp.json,template-marketing-media-header.json,template-utility-named.json,template-utility-order-status-update.json,webhooks-example.json}
 |references:{detecting-whatsapp-connection.md,getting-started.md,platform-api-reference.md,setup-links.md,templates-reference.md,webhooks-event-types.md,webhooks-overview.md,webhooks-reference.md,whatsapp-api-reference.md,whatsapp-cloud-api-js.md,whatsapp-flows-spec.md}
-|scripts:{create-flow.js,create-function.js,create-template.mjs,create.js,delete-flow.js,delete.js,deploy-data-endpoint.js,deploy-function.js,get-data-endpoint.js,get-encryption-status.js,get-flow.js,get-function.js,get.js,list-connected-numbers.mjs,list-flow-responses.js,list-flows.js,list-function-invocations.js,list-function-logs.js,list-platform-phone-numbers.mjs,list-templates.mjs,list.js,openapi-explore.mjs,publish-flow.js,read-flow-json.js,register-data-endpoint.js,send-interactive.mjs,send-template.mjs,send-test-flow.js,set-data-endpoint.js,setup-encryption.js,submit-template.mjs,template-status.mjs,test.js,update-flow-json.js,update-function.js,update-template.mjs,update.js,upload-media.mjs,upload-template-header-handle.mjs}
+|scripts:{attach-data-endpoint.js,create-flow.js,create-function.js,create-template.mjs,create.js,delete-flow.js,delete.js,deploy-data-endpoint.js,deploy-function.js,get-data-endpoint.js,get-encryption-status.js,get-flow.js,get-function.js,get.js,list-connected-numbers.mjs,list-flow-responses.js,list-flows.js,list-function-invocations.js,list-function-logs.js,list-platform-phone-numbers.mjs,list-templates.mjs,list.js,openapi-explore.mjs,publish-flow.js,read-flow-json.js,register-data-endpoint.js,send-interactive.mjs,send-template.mjs,send-test-flow.js,set-data-endpoint.js,setup-encryption.js,submit-template.mjs,template-status.mjs,test.js,update-flow-json.js,update-function.js,update-template.mjs,update.js,upload-media.mjs,upload-template-header-handle.mjs}
 |scripts/lib:{args.mjs,cli.js,env.js,env.mjs,http.js,output.js,output.mjs,request.mjs,run.js,whatsapp-flow.js}
 |scripts/lib/webhooks:{args.js,kapso-api.js,webhook.js}
 ```
