@@ -115,3 +115,13 @@ If display name is not approved, it affects cold message limits but is not usual
 ## 12) Special error
 
 If you see error `141000`, tell the user to contact support.
+
+## 13) Rate limit (HTTP 429)
+
+Health checks are limited to 5 requests per second and 60 requests per minute per project, shared across all the project's API keys. Do not poll health in a tight loop or fan out across many numbers at once.
+
+Every response includes the current counters:
+- `X-Health-RateLimit-Second-Limit` / `X-Health-RateLimit-Second-Remaining`
+- `X-Health-RateLimit-Minute-Limit` / `X-Health-RateLimit-Minute-Remaining`
+
+On `429` the body is `{"error": "Rate limit exceeded", "message": "..."}` and `Retry-After` gives the seconds to wait. This is a Kapso-side limit applied before Meta is called, so it is not a Meta rate limit and says nothing about the number's health. Wait for `Retry-After` and retry.
