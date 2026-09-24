@@ -58,7 +58,31 @@ workflow.addEdge(START, "reply");
 export default workflow;
 ```
 
-Use `rawConfig` as an escape hatch for fields not yet covered by typed helpers. Use slugs for local references when possible: `functionSlug` for functions and `workflowSlug` for called workflows.
+Use `rawConfig` for advanced node configuration. Use slugs for local references when possible: `functionSlug` for functions and `workflowSlug` for called workflows.
+
+Project Event triggers and `emit_event` nodes are supported in local source files. Use this source shape when a workflow needs event triggers or event emission.
+
+In `workflow.yaml`, add the trigger:
+
+```yaml
+triggers:
+  - triggerType: project_event
+    triggerableAttributes:
+      event_name: conversation.csat_scored
+      property_key: score
+      operator: gte
+      property_value: 4
+```
+
+In `workflow.js` or `workflow.ts`, add the node with `@kapso/workflows`:
+
+```ts
+workflow.addNode("record_score", {
+  type: "emit_event",
+  eventName: "conversation.csat_scored",
+  properties: { score: "{{vars.score}}", source: "workflow" },
+});
+```
 
 ## Build and push
 

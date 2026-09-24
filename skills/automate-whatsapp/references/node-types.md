@@ -16,6 +16,7 @@ These are the `data.node_type` values supported by the Platform API and validate
 - `function`
 - `agent`
 - `handoff`
+- `emit_event`
 
 Messaging nodes are `send_text`, `send_template`, and `send_interactive`.
 
@@ -248,6 +249,29 @@ Rules:
 
 Use `automate-whatsapp` function scripts to find function IDs and update code.
 
+## emit_event
+
+```json
+{
+  "node_type": "emit_event",
+  "config": {
+    "event_name": "conversation.csat_scored",
+    "properties": {
+      "score": "{{vars.score}}",
+      "source": "workflow"
+    },
+    "occurred_at": "{{vars.scored_at}}"
+  }
+}
+```
+
+Records a Project Event from the workflow execution. `properties` must be a flat JSON object with scalar values only. `occurred_at` is optional; omit it to use current time.
+
+Limits:
+- A workflow execution can emit at most 10 Project Events total.
+- A workflow execution can emit at most 3 events with the same name.
+- Project-event-triggered workflows cannot emit Project Events.
+
 ## agent
 
 ```json
@@ -257,7 +281,8 @@ Use `automate-whatsapp` function scripts to find function IDs and update code.
     "system_prompt": "You are a helpful assistant...",
     "provider_model_id": "uuid",
     "max_iterations": 10,
-    "temperature": 0.7
+    "temperature": 0.7,
+    "message_delivery_mode": "auto_send_assistant_text"
   }
 }
 ```
@@ -265,18 +290,31 @@ Use `automate-whatsapp` function scripts to find function IDs and update code.
 Notes:
 - `provider_model_id` is required. Use `scripts/list-provider-models.js` to find it.
 - Agent tool arrays live inside `data.config` (not at the `data` root).
+- `message_delivery_mode` controls user-visible text:
+  - `auto_send_assistant_text` sends normal assistant text automatically.
+  - `tool_only` keeps normal assistant text internal; the agent must call `send_notification_to_user` for every user-visible message.
+- With `tool_only`, include `send_notification_to_user` and `enter_waiting` in `enabled_default_tools`. Use `enter_waiting` after questions that need a reply.
+
+<!-- TODO: Add a full tool-only agent workflow asset after the API behavior is generally available. -->
 
 Default tools (toggle on/off only):
 - complete_task (required)
 - handoff_to_human (required)
+- enter_waiting
 - send_notification_to_user
 - send_media
 - get_execution_metadata
 - get_whatsapp_context
+- contact_conversations
 - get_current_datetime
 - save_variable
 - get_variable
+- emit_event (default_enabled: false)
 - ask_about_file
+
+Enable `emit_event` only when the agent should decide whether or when to record a Project Event. Configure the tool with allowed event definitions; the agent can only emit those event names. Prefer a deterministic `emit_event` node when the workflow should always record the event at a known step.
+
+Use `contact_conversations` when an agent should list and read older WhatsApp conversations for the same current contact. Call it with `action: "list"` first, then call `action: "read"` with a returned `conversation_id`.
 
 Custom tools:
 - `flow_agent_webhooks[]` (webhook tools)
@@ -298,6 +336,20 @@ All tool arrays go under `data.config` of the agent node:
       "provider_model_id": "uuid",
       "max_iterations": 10,
       "temperature": 0.7,
+      "message_delivery_mode": "tool_only",
+      "enabled_default_tools": [
+        "complete_task",
+        "handoff_to_human",
+        "enter_waiting",
+        "send_notification_to_user",
+        "get_whatsapp_context",
+        "emit_event"
+      ],
+      "default_tool_configs": {
+        "emit_event": {
+          "event_definition_ids": ["uuid"]
+        }
+      },
       "flow_agent_webhooks": [],
       "flow_agent_mcp_servers": []
     }

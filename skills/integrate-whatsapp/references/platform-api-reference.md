@@ -43,6 +43,16 @@ Webhooks:
 - Project-level: `GET/POST /whatsapp/webhooks`
 - Config-level: `GET/POST /whatsapp/phone_numbers/:id/webhooks`
 - Test delivery: `POST /whatsapp/webhooks/:id/test`
+- Project-scoped webhooks can subscribe to `project.event` for emitted Project Events. Phone-number webhooks do not receive Project Events.
+
+Project Events:
+- `POST /events` (emit a Project Event)
+- `GET /events` (list Project Events)
+- `GET /event-definitions` (list Project Event definitions)
+- `POST /event-definitions` (create or update a Project Event definition by name)
+- `PATCH /event-definitions/:id` (update a Project Event definition)
+
+Project Event names must be lowercase dotted snake_case, for example `conversation.csat_scored`. Properties must be a flat object with scalar values only.
 
 Messages and conversations:
 - `GET /whatsapp/messages`
@@ -61,6 +71,7 @@ Inbox embed request shape:
 - Envelope: `inbox_embed`
 - `scope_type`: `project`, `customer`, or `phone_number`
 - `scope_id`: blank for `project`, customer UUID for `customer`, WhatsApp `phone_number_id` for `phone_number`
+- `language`: embedded inbox UI language, currently `en` or `es`
 - Create returns `token` and `embed_url` once. Store `embed_url`; list/get/update omit secrets.
 
 Message list query params (use `GET /whatsapp/messages`):
@@ -127,3 +138,4 @@ Provider models:
 - For template creation/sending, use the Meta proxy endpoints (see `integrate-whatsapp` skill).
 - For WhatsApp Flows, use Platform API flow endpoints (see `integrate-whatsapp` skill).
 - For workflow graph edits, use workflow definition endpoints (see `automate-whatsapp` skill).
+- For durable workflow outcomes, scores, labels, or business facts, use Project Events instead of generic webhooks or ad hoc databases when the user wants Kapso to remember and trigger from those facts.

@@ -1,13 +1,13 @@
 ---
 name: automate-whatsapp
-description: "Build WhatsApp automations with Kapso workflows: configure WhatsApp triggers, edit workflow graphs, manage executions, deploy functions, and debug automation behavior. Use when automating WhatsApp conversations and event handling."
+description: Build and debug Kapso WhatsApp workflows, triggers, functions, and executions.
 ---
 
 # Automate WhatsApp
 
 ## When to use
 
-Use this skill to build and run WhatsApp automations: workflow CRUD, graph edits, triggers, executions, function management, webhook tools, and MCP tools.
+Use this skill to build and run WhatsApp automations: workflow CRUD, graph edits, WhatsApp and Project Event triggers, Project Event emissions, executions, function management, webhook tools, and MCP tools.
 
 ## Setup
 
@@ -107,12 +107,52 @@ If you get a lock_version conflict: re-fetch, re-apply changes, retry with new l
 
 For inbound_message triggers, prefer `kapso whatsapp numbers resolve --phone-number "<display-number>" --output json` to get the exact `phone_number_id`. Fall back to `node scripts/list-whatsapp-phone-numbers.js` when the CLI is unavailable.
 
+For project_event triggers, register or update the Project Event definition first when the user is defining an event type/schema:
+
+```bash
+node scripts/project-event-definitions.js create \
+  --name conversation.csat_scored \
+  --description "Customer satisfaction score for a conversation" \
+  --property-schema '{"score":{"type":"number"},"reason":{"type":"string"}}'
+```
+
+Then create the trigger:
+
+```bash
+node scripts/create-trigger.js <workflow_id> \
+  --trigger-type project_event \
+  --triggerable-attributes '{"event_name":"conversation.csat_scored","property_key":"score","operator":"gte","property_value":4}'
+```
+
+Definitions are metadata only. Do not emit a sample event just to register a name unless the user explicitly accepts that side effect.
+
+### Manage Project Event definitions
+
+Use definitions for event names, descriptions, and flat scalar property schemas. Emitted events are separate records created by `POST /platform/v1/events`, `emit_event` nodes, Function node `project_events`, or Agent node `emit_event`.
+
+1. List: `node scripts/project-event-definitions.js list`
+2. Create/update by name: `node scripts/project-event-definitions.js create --name <event.name> [--description <text>] [--property-schema <json>]`
+3. Update by ID: `node scripts/project-event-definitions.js update --definition-id <id> [--name <event.name>] [--description <text>] [--property-schema <json>]`
+
+### Build workflows with Project Events
+
+Use this checklist when a workflow needs to remember or react to durable business facts:
+
+1. Define the event first when the user is introducing a new event name or schema.
+2. Use `project_event` triggers when a workflow should react to an emitted event.
+3. Use an `emit_event` node for deterministic workflow-step emission.
+4. Use Function node `project_events` when emission depends on function code output.
+5. Use Agent node `emit_event` only when the agent should decide whether/when to record the fact. Enable the `emit_event` default tool and configure allowed event definitions before relying on it.
+
+Project-event-triggered workflows are observers and cannot emit Project Events. Do not add event emission to a workflow that starts from a Project Event trigger.
+
 ### Debug executions
 
-1. List: `node scripts/list-executions.js <workflow_id>`
-2. Inspect: `node scripts/get-execution.js <execution-id>`
-3. Get value: `node scripts/get-context-value.js <execution-id> --variable-path vars.foo`
-4. Events: `node scripts/list-execution-events.js <execution-id>`
+1. Search workflow logs first when you have an execution ID: `kapso logs search --query "<execution-id>" --source flow_event --filter flow_execution_id=<execution-id> --period 7d --limit 20 --output json`
+2. List: `node scripts/list-executions.js <workflow_id>`
+3. Inspect: `node scripts/get-execution.js <execution-id>`
+4. Get value: `node scripts/get-context-value.js <execution-id> --variable-path vars.foo`
+5. Events: `node scripts/list-execution-events.js <execution-id>`
 
 ### Create and deploy a function
 
@@ -214,6 +254,12 @@ Always use this structure:
 | `delete-trigger.js` | Delete a trigger |
 | `list-whatsapp-phone-numbers.js` | List phone numbers for trigger setup |
 
+### Project Events
+
+| Script | Purpose |
+|--------|---------|
+| `project-event-definitions.js` | List, create, or update Project Event definitions |
+
 ### Executions
 
 | Script | Purpose |
@@ -257,17 +303,18 @@ node scripts/openapi-explore.mjs --spec workflows op getWorkflowVariables
 ## Notes
 
 - Prefer file paths over inline JSON (`--definition-file`, `--code-file`)
+- Use `observe-whatsapp` for cross-source Logs search when debugging a workflow alongside API calls, Meta events, or webhook deliveries.
 - Variable CRUD (`variables-set.js`, `variables-delete.js`) is blocked - Platform API doesn't support it
 
 ## References
 
-Read before editing:
-- [references/local-workflow-source.md](references/local-workflow-source.md) - CLI source sync, repo layout, and `@kapso/workflows`
-- [references/graph-contract.md](references/graph-contract.md) - Graph schema, computed vs editable fields, lock_version
-- [references/node-types.md](references/node-types.md) - Node types and config shapes
-- [references/workflow-overview.md](references/workflow-overview.md) - Execution flow and states
+Read the references for the operation you are changing:
+- [references/local-workflow-source.md](references/local-workflow-source.md) - Local workflow source edits and CLI sync
+- [references/graph-contract.md](references/graph-contract.md) - Graph edits: schema, computed vs editable fields, and lock_version
+- [references/node-types.md](references/node-types.md) - Adding or changing node configuration
+- [references/workflow-overview.md](references/workflow-overview.md) - Execution behavior, state changes, and resumption
 
-Other references:
+For function-only work, read the function references below; graph/source references are needed only if the workflow changes too. Other task-specific references:
 - [references/execution-context.md](references/execution-context.md) - Context structure and variable substitution
 - [references/triggers.md](references/triggers.md) - Trigger types and setup
 - [references/agent-remote-sandbox.md](references/agent-remote-sandbox.md) - Remote sandbox behavior, repo resources, mounted paths
@@ -299,7 +346,7 @@ Other references:
 |.:{package.json,SKILL.md}
 |assets:{agent-remote-sandbox-github-repo-example.json,function-decide-route-interactive-buttons.json,functions-example.json,workflow-agent-simple.json,workflow-api-template-wait-agent.json,workflow-customer-support-intake-agent.json,workflow-decision.json,workflow-interactive-buttons-decide-ai.json,workflow-interactive-buttons-decide-function.json,workflow-linear.json}
 |references:{agent-remote-sandbox.md,execution-context.md,function-contracts.md,functions-payloads.md,functions-reference.md,graph-contract.md,local-workflow-source.md,node-types.md,triggers.md,workflow-overview.md,workflow-reference.md}
-|scripts:{create-function.js,create-trigger.js,create-workflow.js,delete-trigger.js,deploy-function.js,edit-graph.js,get-context-value.js,get-execution-event.js,get-execution.js,get-function.js,get-graph.js,get-workflow.js,invoke-function.js,list-execution-events.js,list-executions.js,list-function-invocations.js,list-functions.js,list-provider-models.js,list-triggers.js,list-whatsapp-phone-numbers.js,list-workflows.js,openapi-explore.mjs,resume-execution.js,update-execution-status.js,update-function.js,update-graph.js,update-trigger.js,update-workflow-settings.js,validate-graph.js,variables-delete.js,variables-list.js,variables-set.js}
+|scripts:{create-function.js,create-trigger.js,create-workflow.js,delete-trigger.js,deploy-function.js,edit-graph.js,get-context-value.js,get-execution-event.js,get-execution.js,get-function.js,get-graph.js,get-workflow.js,invoke-function.js,list-execution-events.js,list-executions.js,list-function-invocations.js,list-functions.js,list-provider-models.js,list-triggers.js,list-whatsapp-phone-numbers.js,list-workflows.js,openapi-explore.mjs,project-event-definitions.js,resume-execution.js,update-execution-status.js,update-function.js,update-graph.js,update-trigger.js,update-workflow-settings.js,validate-graph.js,variables-delete.js,variables-list.js,variables-set.js}
 |scripts/lib/functions:{args.js,kapso-api.js}
 |scripts/lib/workflows:{args.js,kapso-api.js,result.js}
 ```

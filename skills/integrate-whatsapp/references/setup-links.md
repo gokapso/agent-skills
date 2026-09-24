@@ -125,6 +125,12 @@ For API-only automation:
 
 When you provide one option, it auto-selects.
 
+## Meta billing policy
+
+Set `meta_billing_mode` to `partner_managed` to have Kapso pay Meta message fees from project credits. This mode requires Kapso's default Meta app or a custom Meta app backed by an active hosted multi-partner solution. If neither is available, setup-link creation returns `422 Unprocessable Entity`.
+
+<!-- TODO: Link to public multi-partner solution setup documentation when available. -->
+
 ## Theme customization
 
 Match your brand colors:

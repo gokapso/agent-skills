@@ -62,6 +62,8 @@ Implemented calls:
 - `POST /platform/v1/workflow_executions/:id/resume`
 - `GET /platform/v1/workflow_executions/:id/events`
 - `GET /platform/v1/workflow_events/:id`
+- `POST /platform/v1/events` (emit a Project Event)
+- `GET /platform/v1/events` (list Project Events)
 - `GET /platform/v1/provider_models`
 - `GET /platform/v1/whatsapp/phone_numbers` (for inbound_message triggers)
 
@@ -83,6 +85,17 @@ Graph shapes:
 - The API accepts a minimal editable definition (`nodes[].id/position/data.node_type/data.config` and `edges[].source/target/label`) and ignores/strips extra fields.
 
 Source of truth: `references/graph-contract.md`.
+
+## Project Events
+
+Use Project Events for durable workflow outcomes, scores, labels, and business facts that Kapso should remember, trigger workflows from, or forward via `project.event` webhooks.
+
+- Emit from API: `POST /platform/v1/events`
+- List from API: `GET /platform/v1/events`
+- Manage definitions with `GET/POST/PATCH /platform/v1/event-definitions`
+- Trigger workflows with `trigger_type: project_event` and `triggerable_attributes: { event_name, property_key?, operator?, property_value? }`
+- Emit inside workflows with an `emit_event` node, a Function node `project_events` response, or an Agent node `emit_event` default tool.
+- Project-event-triggered workflows cannot emit Project Events.
 
 ## Phone number lookup for triggers
 

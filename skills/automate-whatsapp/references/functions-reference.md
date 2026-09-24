@@ -80,6 +80,22 @@ Return `vars` to update context:
 }
 ```
 
+Function nodes can also emit Project Events by returning `project_events` alongside `vars`:
+
+```json
+{
+  "vars": { "csat_score": 5 },
+  "project_events": [
+    {
+      "name": "conversation.csat_scored",
+      "properties": { "score": 5, "source": "workflow" }
+    }
+  ]
+}
+```
+
+Project Event names must be lowercase dotted snake_case. Properties must be a flat object with scalar values only. A Function node response can emit at most 5 Project Events. Workflow test mode validates and logs emitted events without persisting them. Project-event-triggered workflows cannot emit Project Events.
+
 ### Decide node response
 
 Return `next_edge` that matches an outgoing edge label:

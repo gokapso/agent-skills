@@ -50,7 +50,7 @@ Skills use **progressive disclosure**: agents load only the name and description
 
 - **integrate-whatsapp**: Connect WhatsApp, set up webhooks, send messages/templates, manage flows
 - **automate-whatsapp**: Build WhatsApp automations with workflows, agents, functions, and databases
-- **observe-whatsapp**: Debug delivery issues, inspect webhook deliveries, triage errors, run health checks
+- **observe-whatsapp**: Search Logs, debug delivery issues, inspect webhook deliveries, triage errors, run health checks
 
 Each skill contains detailed documentation in its `SKILL.md` file.
 

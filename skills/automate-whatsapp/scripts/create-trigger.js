@@ -5,7 +5,7 @@ import { parseArgs, getFlag, getBooleanFlag } from './lib/workflows/args.js';
 
 function usage() {
   return ok({
-    usage: 'node scripts/create-trigger.js <workflow-id> --trigger-type <inbound_message|api_call|whatsapp_event> [--phone-number-id <id>] [--event <whatsapp.event>] [--active true|false] [--triggerable-attributes <json>]',
+    usage: 'node scripts/create-trigger.js <workflow-id> --trigger-type <inbound_message|api_call|whatsapp_event|project_event> [--phone-number-id <id>] [--event <whatsapp.event>] [--active true|false] [--triggerable-attributes <json>]',
     env: ['KAPSO_API_BASE_URL', 'KAPSO_API_KEY']
   });
 }

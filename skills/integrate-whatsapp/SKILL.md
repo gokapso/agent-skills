@@ -175,6 +175,8 @@ Interactive messages require an active 24-hour session window. For outbound noti
 2. Pick payload from `assets/send-interactive-*.json`
 3. Send: `node scripts/send-interactive.mjs --phone-number-id <ID> --file <payload.json>`
 
+For a contact information request, use `interactive.type: "request_contact_info"` with `action.name: "request_contact_info"`. Include `body`, but omit `header` and `footer`.
+
 ### Read inbox data
 
 Preferred path:
@@ -193,6 +195,7 @@ Create:
 - Envelope: `inbox_embed`
 - Public scopes: `project`, `customer`, `phone_number`
 - `scope_id` is blank for `project`, a customer UUID for `customer`, and WhatsApp `phone_number_id` for `phone_number`
+- `language` controls the embedded inbox UI language; supported values are `en` and `es`
 - Create returns `token` and `embed_url` once. Store `embed_url`; list/get/update omit secrets.
 
 Example:
@@ -203,7 +206,8 @@ Example:
     "scope_type": "phone_number",
     "scope_id": "1234567890",
     "allowed_origins": ["https://app.example.com"],
-    "default_mode": "system"
+    "default_mode": "system",
+    "language": "es"
   }
 }
 ```
@@ -222,6 +226,7 @@ Creation:
 - Use `language` (not `language_code`)
 - Don't interleave QUICK_REPLY with URL/PHONE_NUMBER buttons
 - URL button variables must be at the end of the URL and use positional `{{1}}`
+- For a `REQUEST_CONTACT_INFO` button, omit `text`; WhatsApp supplies the label
 
 Send-time:
 - For NAMED templates, include `parameter_name` in header/body params
@@ -281,6 +286,7 @@ async function handler(request, env) {
 
 ### Troubleshooting
 
+- Search Logs before drilling into per-resource endpoints: `kapso logs search --query "<wamid-flow-id-request-id-or-endpoint>" --period 7d --source all --limit 20 --output json`
 - Preview shows `"flow_token is missing"`: flow is dynamic without a data endpoint. Attach one and refresh.
 - Encryption setup errors: enable encryption in Settings for the phone number/WABA.
 - OAuthException 139000 (Integrity): WABA must be verified in Meta security center.
