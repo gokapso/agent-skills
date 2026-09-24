@@ -178,6 +178,24 @@ Notes:
 }
 ```
 
+## decide (Jev routing)
+
+```json
+{
+  "node_type": "decide",
+  "config": {
+    "decision_type": "jev",
+    "conditions": [
+      { "label": "interested", "description": "User shows interest" },
+      { "label": "not_interested", "description": "User declines" }
+    ]
+  }
+}
+```
+
+Notes:
+- Jev is a TypeSafe choice model. Do not send `provider_model_id`, `llm_temperature`, or `llm_max_tokens`.
+
 ## decide (function routing)
 
 ```json
