@@ -195,6 +195,7 @@ Notes:
 
 Notes:
 - Jev is a TypeSafe choice model. Do not send `provider_model_id`, `llm_temperature`, or `llm_max_tokens`.
+- Jev supports at most 255 conditions per node.
 
 ## decide (function routing)
 
