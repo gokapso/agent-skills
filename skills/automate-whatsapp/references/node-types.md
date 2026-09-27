@@ -178,6 +178,25 @@ Notes:
 }
 ```
 
+## decide (decision model routing)
+
+```json
+{
+  "node_type": "decide",
+  "config": {
+    "decision_type": "decision_model",
+    "conditions": [
+      { "label": "interested", "description": "User shows interest" },
+      { "label": "not_interested", "description": "User declines" }
+    ]
+  }
+}
+```
+
+Notes:
+- No `provider_model_id`, temperature, or max tokens - the decision model is fixed.
+- At most 255 conditions.
+
 ## decide (function routing)
 
 ```json
