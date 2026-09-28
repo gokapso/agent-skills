@@ -227,6 +227,26 @@ Max 10 sections, 10 rows total. Button text max 20 chars.
 }
 ```
 
+### Call button
+
+```json
+{
+  "messaging_product": "whatsapp",
+  "to": "15551234567",
+  "type": "interactive",
+  "interactive": {
+    "type": "voice_call",
+    "body": { "text": "Tap below to call us about your order." },
+    "action": {
+      "name": "voice_call",
+      "parameters": { "display_text": "Call us", "ttl_minutes": 60, "payload": "lead-42" }
+    }
+  }
+}
+```
+
+`parameters` and every field in it are optional. `display_text` max 20 chars (defaults to `Call Now`), `ttl_minutes` between 1 and 43200 (defaults to 10080), `payload` max 512 chars and comes back as `cta_payload` in call webhooks.
+
 ### Location request
 
 ```json
