@@ -242,6 +242,30 @@ Max 10 sections, 10 rows total. Button text max 20 chars.
 }
 ```
 
+### Voice call button
+
+All `parameters` fields are optional (`display_text` max 20 chars, `ttl_minutes` 1-43200, `payload` max 512 chars).
+
+```json
+{
+  "messaging_product": "whatsapp",
+  "to": "15551234567",
+  "type": "interactive",
+  "interactive": {
+    "type": "voice_call",
+    "body": { "text": "Need help with your order? Call us." },
+    "action": {
+      "name": "voice_call",
+      "parameters": {
+        "display_text": "Call support",
+        "ttl_minutes": 1440,
+        "payload": "order-4471"
+      }
+    }
+  }
+}
+```
+
 ### Flow
 
 ```json
