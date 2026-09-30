@@ -169,6 +169,46 @@ test('secrets are redacted from success and error output; one-time secrets can b
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('nested JSON diagnostics share credential redaction with the surrounding response', { skip: !security }, () => {
+  const response = {
+    secret_key: 'synthetic-outer-secret',
+    notice: 'Keep synthetic-inner-token private',
+    diagnostic: JSON.stringify({
+      message: 'Keep synthetic-outer-secret private',
+      access_token: 'synthetic-inner-token',
+      code: 100
+    })
+  };
+  for (const [script, args] of [
+    ['create.js', ['--scope', 'project', '--url', 'https://example.com/hooks', '--events', 'whatsapp.phone_number.created']],
+    ['create-flow.js', ['--phone-number-id', 'phone-123']],
+    ['create-template.mjs', ['--business-account-id', 'waba-123', '--json', '{}']]
+  ]) {
+    for (const status of [200, 400]) {
+      const result = cli(script, args, { fixture: { response, status } });
+      const output = `${result.stdout}${result.stderr}`;
+      assert.ok(!output.includes('synthetic-outer-secret'), `${script} (${status}) leaked the outer secret`);
+      assert.ok(!output.includes('synthetic-inner-token'), `${script} (${status}) leaked the nested token`);
+      assert.ok(output.includes('100'), 'retain non-credential diagnostic fields');
+    }
+  }
+});
+
+test('ordinary Bearer text remains unchanged while Authorization credentials are redacted', { skip: !security }, () => {
+  const response = { data: [
+    { message: 'Bearer bonds are available' },
+    { message: 'Bearer tokens belong in Authorization headers.' },
+    { message: '{ "message": "Bearer bonds are available" }' },
+    { headers: { Authorization: 'Bearer synthetic-auth-token' }, message: 'Do not print synthetic-auth-token' }
+  ] };
+  const result = cli('list-function-logs.js', ['--flow-id', 'flow-123'], { fixture: { response } });
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout).data, { data: [
+    ...response.data.slice(0, 3),
+    { headers: { Authorization: '[REDACTED]' }, message: 'Do not print [REDACTED]' }
+  ] });
+});
+
 test('connection webhook example authenticates raw bytes before mutating records', { skip: !security }, async () => {
   const doc = readFileSync(path.join(skill, 'references/detecting-whatsapp-connection.md'), 'utf8');
   const snippet = doc.split('### Handle the webhook')[1].match(/```javascript\n([\s\S]*?)\n```/)[1];

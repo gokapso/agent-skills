@@ -38,7 +38,7 @@ function redactText(value, secrets = []) {
   if (/^\s*[\[{]/.test(value)) {
     try {
       const parsed = JSON.parse(value);
-      const cleaned = redact(parsed);
+      const cleaned = redact(parsed, secrets);
       if (JSON.stringify(cleaned) !== JSON.stringify(parsed)) return JSON.stringify(cleaned);
     } catch { /* retain non-JSON diagnostics, with text redaction below */ }
   }
@@ -48,15 +48,24 @@ function redactText(value, secrets = []) {
   }
   return text
     .replace(/("(?:[^"]*(?:secret|password|private[_-]?key|api[_-]?key)[^"]*|authorization|cookie|set-cookie|access[_-]?token|refresh[_-]?token|webhook_verify_token|token|embed_url)"\s*:\s*)"(?:\\.|[^"\\])*"/gi, '$1"[REDACTED]"')
-    .replace(/(Bearer\s+)[A-Za-z0-9._~+/=-]+/gi, '$1[REDACTED]')
     .replace(/([?&](?:token|api_key|access_token|secret)=)[^&#\s]*/gi, '$1[REDACTED]');
 }
 
-function redact(value) {
-  const secrets = [];
+function redact(value, knownSecrets = []) {
+  const secrets = [...knownSecrets];
   function collect(item, sensitive = false) {
-    if (typeof item === 'string' && sensitive) secrets.push(item);
-    else if (item && typeof item === 'object') {
+    if (typeof item === 'string') {
+      if (sensitive) {
+        secrets.push(item);
+        // Recognize Bearer credentials only in a sensitive field, while also
+        // removing echoes of its token without the authentication scheme.
+        const bearer = item.match(/^Bearer\s+([A-Za-z0-9._~+/=-]+)$/i);
+        if (bearer) secrets.push(bearer[1]);
+      } else if (/^\s*[\[{]/.test(item)) {
+        // Discover nested credentials before visiting any sibling echoes.
+        try { collect(JSON.parse(item)); } catch { /* non-JSON diagnostic */ }
+      }
+    } else if (item && typeof item === 'object') {
       for (const [key, child] of Object.entries(item)) collect(child, sensitive || sensitiveKey(key));
     }
   }
