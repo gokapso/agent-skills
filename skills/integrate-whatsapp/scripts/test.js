@@ -1,3 +1,4 @@
+const { printJson } = require('./lib/security');
 const { hasHelpFlag, parseFlags, requireFlag } = require('./lib/webhooks/args');
 const { kapsoConfigFromEnv, kapsoRequest } = require('./lib/webhooks/kapso-api');
 
@@ -43,11 +44,11 @@ async function main() {
       { method: 'POST' }
     );
 
-    console.log(JSON.stringify(ok(data), null, 2));
+    printJson(ok(data));
     return 0;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error(JSON.stringify(err('Command failed', { message }), null, 2));
+    printJson(err('Command failed', { message }), { error: true });
     return 1;
   }
 }

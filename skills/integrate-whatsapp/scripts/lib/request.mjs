@@ -1,4 +1,5 @@
 import { metaProxyConfig } from './env.mjs';
+import security from './security.js';
 
 function buildUrl(path, query) {
   const { baseUrl, graphVersion } = metaProxyConfig();
@@ -22,6 +23,8 @@ function shouldParseJson(contentType) {
 export async function metaProxyRequest({ method, path, query, headers, body }) {
   const { apiKey } = metaProxyConfig();
   const url = buildUrl(path, query);
+  security.validateApiUrl(url);
+  security.prepareSecretOutput();
   const finalHeaders = new Headers(headers || {});
 
   finalHeaders.set('X-API-Key', apiKey);
@@ -33,7 +36,8 @@ export async function metaProxyRequest({ method, path, query, headers, body }) {
   const response = await fetch(url, {
     method,
     headers: finalHeaders,
-    body
+    body,
+    redirect: 'error'
   });
 
   const contentType = response.headers.get('content-type') || '';

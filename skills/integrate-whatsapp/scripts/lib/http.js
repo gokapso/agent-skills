@@ -1,4 +1,5 @@
 const { getConfig } = require('./env');
+const { validateApiUrl, prepareSecretOutput } = require('./security');
 
 class RequestError extends Error {
   constructor(message, status, body) {
@@ -38,6 +39,10 @@ function isPlainObject(value) {
 async function request({ baseUrl, path, method, query, body, headers }) {
   const config = getConfig();
   const url = buildUrl(baseUrl, path, query);
+  if (validateApiUrl(url).origin !== new URL(config.baseUrl).origin) {
+    throw new Error('Request destination must match the configured Kapso API origin');
+  }
+  prepareSecretOutput();
   const finalHeaders = new Headers(headers || {});
   finalHeaders.set('X-API-Key', config.apiKey);
 
@@ -59,7 +64,8 @@ async function request({ baseUrl, path, method, query, body, headers }) {
   const response = await fetch(url, {
     method,
     headers: finalHeaders,
-    body: finalBody
+    body: finalBody,
+    redirect: 'error'
   });
 
   const contentType = response.headers.get('content-type') || '';

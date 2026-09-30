@@ -1,3 +1,5 @@
+import security from './security.js';
+
 export function ok(data) {
   return { ok: true, data };
 }
@@ -11,12 +13,9 @@ export function err(message, details) {
 }
 
 export function printResult(result) {
-  const json = JSON.stringify(result, null, 2);
-
   // Skill runners sometimes only surface stdout. Print errors there too so
   // agents don't see only "exit status 2" with no details.
-  // eslint-disable-next-line no-console
-  console.log(json);
+  security.printJson(result);
 
   return result.ok ? 0 : 2;
 }

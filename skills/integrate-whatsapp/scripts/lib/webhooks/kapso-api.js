@@ -1,3 +1,5 @@
+const { validateApiUrl, prepareSecretOutput, redact } = require('../security');
+
 function requireEnv(name) {
   const value = process.env[name];
   if (!value) {
@@ -11,6 +13,7 @@ function normalizeBaseUrl(raw) {
 }
 
 function kapsoConfigFromEnv() {
+  validateApiUrl(requireEnv('KAPSO_API_BASE_URL'), { base: true });
   return {
     baseUrl: normalizeBaseUrl(requireEnv('KAPSO_API_BASE_URL')),
     apiKey: requireEnv('KAPSO_API_KEY')
@@ -18,18 +21,21 @@ function kapsoConfigFromEnv() {
 }
 
 async function kapsoRequest(config, path, init = {}) {
+  validateApiUrl(config.baseUrl, { base: true });
   const url = `${config.baseUrl}${path}`;
+  validateApiUrl(url);
+  prepareSecretOutput();
   const headers = new Headers(init.headers || undefined);
   headers.set('X-API-Key', config.apiKey);
   if (!headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(url, { ...init, headers });
+  const response = await fetch(url, { ...init, headers, redirect: 'error' });
   const text = await response.text();
 
   if (!response.ok) {
-    throw new Error(`Kapso API request failed (status=${response.status}) body=${text}`);
+    throw new Error(`Kapso API request failed (status=${response.status}) body=${redact(text)}`);
   }
 
   return text ? JSON.parse(text) : {};

@@ -1,5 +1,6 @@
 import { getFlag, parseArgs } from './lib/args.mjs';
 import { err, ok, printResult } from './lib/output.mjs';
+import security from './lib/security.js';
 
 function usage() {
   return {
@@ -33,7 +34,9 @@ function normalizePlatformBase(raw) {
 }
 
 function buildUrl(path, query) {
-  const baseUrl = normalizePlatformBase(requireEnv('KAPSO_API_BASE_URL'));
+  const rawBase = requireEnv('KAPSO_API_BASE_URL');
+  security.validateApiUrl(rawBase, { base: true });
+  const baseUrl = normalizePlatformBase(rawBase);
   const cleanedPath = path.replace(/^\/+/, '');
   const url = new URL(`${baseUrl}/platform/v1/${cleanedPath}`);
 
@@ -54,11 +57,13 @@ function shouldParseJson(contentType) {
 async function platformRequest({ method, path, query }) {
   const apiKey = requireEnv('KAPSO_API_KEY');
   const url = buildUrl(path, query);
+  security.validateApiUrl(url);
+  security.prepareSecretOutput();
   const headers = new Headers();
 
   headers.set('X-API-Key', apiKey);
 
-  const response = await fetch(url, { method, headers });
+  const response = await fetch(url, { method, headers, redirect: 'error' });
   const contentType = response.headers.get('content-type') || '';
   const text = await response.text();
   let data = text;
@@ -125,4 +130,3 @@ async function main() {
 }
 
 main().then((code) => process.exit(code));
-

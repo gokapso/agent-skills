@@ -58,6 +58,14 @@ Each skill contains detailed documentation in its `SKILL.md` file.
 
 Shared references in this repo also exist under `kapso-docs/skills/skills`. Keep mirrored docs in sync when updating shared onboarding or API guidance.
 
+Run the offline integration-skill regression tests with Node.js 20 or later:
+
+```bash
+node --test tests/integrate-whatsapp.test.mjs
+```
+
+The tests execute the bundled commands against a synthetic API double, compare supported requests and outputs with the recorded baseline, and exercise callback authentication, transport safeguards, and secret handling. They never contact Kapso or Meta. HTTPS API hosts remain configurable; trusted HTTP development endpoints require `KAPSO_ALLOW_INSECURE_HTTP=true`. See the integration skill's [credential handling](skills/integrate-whatsapp/references/webhooks-reference.md#credential-handling) for capturing one-time secrets privately.
+
 ## SKILL.md format
 
 Each skill requires a `SKILL.md` file with YAML frontmatter:
