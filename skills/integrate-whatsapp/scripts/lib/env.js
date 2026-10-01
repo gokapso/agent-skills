@@ -1,4 +1,5 @@
 const DEFAULT_GRAPH_VERSION = 'v24.0';
+const { validateApiUrl } = require('./security');
 
 function requireEnv(name) {
   const value = process.env[name];
@@ -20,7 +21,9 @@ function normalizeGraphVersion(version) {
 }
 
 function getConfig() {
-  const baseUrl = normalizeBaseUrl(requireEnv('KAPSO_API_BASE_URL'));
+  const rawBase = requireEnv('KAPSO_API_BASE_URL');
+  validateApiUrl(rawBase, { base: true });
+  const baseUrl = normalizeBaseUrl(rawBase);
   return {
     baseUrl,
     apiKey: requireEnv('KAPSO_API_KEY'),

@@ -1,0 +1,761 @@
+{
+  "discover-numbers": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://api.kapso.ai/platform/v1/whatsapp/phone_numbers?page=2&per_page=10\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    },\n    \"ids\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/phone_numbers?page=2&per_page=10",
+        "method": "GET",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "list-webhooks": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/webhooks?kind=kapso",
+        "method": "GET",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "get-webhook": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/phone_numbers/phone-123/webhooks/webhook-123",
+        "method": "GET",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "create-project-webhook": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/webhooks",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "whatsapp_webhook": {
+            "url": "https://example.com/hooks",
+            "events": [
+              "whatsapp.phone_number.created"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "create-phone-webhook": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/phone_numbers/phone-123/webhooks",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "whatsapp_webhook": {
+            "url": "https://example.com/hooks",
+            "events": [
+              "whatsapp.message.received"
+            ],
+            "payload_version": "v2",
+            "buffer_enabled": true
+          }
+        }
+      }
+    ]
+  },
+  "update-webhook": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/webhooks/webhook-123",
+        "method": "PATCH",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "whatsapp_webhook": {
+            "active": false
+          }
+        }
+      }
+    ]
+  },
+  "delete-webhook": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/webhooks/webhook-123",
+        "method": "DELETE",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "test-webhook": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/webhooks/webhook-123/test?event_type=whatsapp.phone_number.created",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "list-templates": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://api.kapso.ai/meta/whatsapp/v24.0/waba-123/message_templates\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/waba-123/message_templates",
+        "method": "GET",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "create-template": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://api.kapso.ai/meta/whatsapp/v24.0/waba-123/message_templates\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/waba-123/message_templates",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "name": "order_status_update",
+          "language": "en_US",
+          "category": "UTILITY",
+          "parameter_format": "NAMED",
+          "components": [
+            {
+              "type": "HEADER",
+              "format": "TEXT",
+              "text": "Order {{order_id}} update",
+              "example": {
+                "header_text_named_params": [
+                  {
+                    "param_name": "order_id",
+                    "example": "ORDER-123"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BODY",
+              "text": "Hi {{customer_name}}, your order is {{status}}. {{details}}",
+              "example": {
+                "body_text_named_params": [
+                  {
+                    "param_name": "customer_name",
+                    "example": "Alex"
+                  },
+                  {
+                    "param_name": "status",
+                    "example": "shipped"
+                  },
+                  {
+                    "param_name": "details",
+                    "example": "Expected delivery: Jan 25"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "FOOTER",
+              "text": "Reply STOP to opt out"
+            },
+            {
+              "type": "BUTTONS",
+              "buttons": [
+                {
+                  "type": "URL",
+                  "text": "Track order",
+                  "url": "https://example.com/orders/{{1}}",
+                  "example": [
+                    "https://example.com/orders/ORDER-123"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "send-template": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/messages\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/messages",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "messaging_product": "whatsapp",
+          "to": "15551234567",
+          "type": "template",
+          "template": {
+            "name": "order_status_update",
+            "language": {
+              "code": "en_US"
+            },
+            "components": [
+              {
+                "type": "header",
+                "parameters": [
+                  {
+                    "type": "text",
+                    "parameter_name": "order_id",
+                    "text": "ORDER-123"
+                  }
+                ]
+              },
+              {
+                "type": "body",
+                "parameters": [
+                  {
+                    "type": "text",
+                    "parameter_name": "customer_name",
+                    "text": "Alex"
+                  },
+                  {
+                    "type": "text",
+                    "parameter_name": "status",
+                    "text": "shipped"
+                  },
+                  {
+                    "type": "text",
+                    "parameter_name": "details",
+                    "text": "Expected delivery: Jan 25"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "sub_type": "url",
+                "index": "0",
+                "parameters": [
+                  {
+                    "type": "text",
+                    "text": "ORDER-123"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "send-interactive": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/messages\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/messages",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "messaging_product": "whatsapp",
+          "to": "15551234567",
+          "type": "interactive",
+          "interactive": {
+            "type": "button",
+            "body": {
+              "text": "Choose an option:"
+            },
+            "action": {
+              "buttons": [
+                {
+                  "type": "reply",
+                  "reply": {
+                    "id": "accept",
+                    "title": "Accept"
+                  }
+                },
+                {
+                  "type": "reply",
+                  "reply": {
+                    "id": "decline",
+                    "title": "Decline"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "upload-media": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/media\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/media",
+        "method": "POST",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "messaging_product": "whatsapp",
+          "type": "application/json",
+          "file": {
+            "name": "sample-flow.json",
+            "type": "application/json",
+            "text": "{\n  \"version\": \"7.3\",\n  \"screens\": [\n    {\n      \"id\": \"WELCOME\",\n      \"terminal\": true,\n      \"title\": \"Quick signup\",\n      \"layout\": {\n        \"type\": \"SingleColumnLayout\",\n        \"children\": [\n          {\n            \"type\": \"TextBody\",\n            \"text\": \"Tell us your name to get started.\"\n          },\n          {\n            \"type\": \"TextInput\",\n            \"name\": \"full_name\",\n            \"label\": \"Full name\",\n            \"required\": true\n          },\n          {\n            \"type\": \"Footer\",\n            \"label\": \"Submit\",\n            \"on-click-action\": {\n              \"name\": \"complete\",\n              \"payload\": {}\n            }\n          }\n        ]\n      }\n    }\n  ]\n}\n"
+          }
+        }
+      }
+    ]
+  },
+  "list-flows": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows?phone_number_id=phone-123",
+        "method": "GET",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "create-flow": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "phone_number_id": "phone-123",
+          "name": "Order form",
+          "flow_json": {
+            "version": "7.3",
+            "screens": [
+              {
+                "id": "WELCOME",
+                "terminal": true,
+                "title": "Quick signup",
+                "layout": {
+                  "type": "SingleColumnLayout",
+                  "children": [
+                    {
+                      "type": "TextBody",
+                      "text": "Tell us your name to get started."
+                    },
+                    {
+                      "type": "TextInput",
+                      "name": "full_name",
+                      "label": "Full name",
+                      "required": true
+                    },
+                    {
+                      "type": "Footer",
+                      "label": "Submit",
+                      "on-click-action": {
+                        "name": "complete",
+                        "payload": {}
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "get-flow": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows/flow-123",
+        "method": "GET",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "update-flow": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows/flow-123/versions",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "flow_json": {
+            "version": "7.3",
+            "data_api_version": "3.0",
+            "routing_model": {
+              "SELECT_DATE": [
+                "SELECT_SLOT",
+                "SUCCESS"
+              ],
+              "SELECT_SLOT": [
+                "SUCCESS"
+              ]
+            },
+            "screens": [
+              {
+                "id": "SELECT_DATE",
+                "title": "Book appointment",
+                "data": {
+                  "error_message": {
+                    "type": "string",
+                    "__example__": ""
+                  }
+                },
+                "layout": {
+                  "type": "SingleColumnLayout",
+                  "children": [
+                    {
+                      "type": "TextBody",
+                      "text": "Select a date for your appointment."
+                    },
+                    {
+                      "type": "DatePicker",
+                      "name": "date",
+                      "label": "Date",
+                      "on-select-action": {
+                        "name": "data_exchange",
+                        "payload": {
+                          "date": "${form.date}"
+                        }
+                      }
+                    },
+                    {
+                      "type": "Footer",
+                      "label": "Continue",
+                      "on-click-action": {
+                        "name": "data_exchange",
+                        "payload": {
+                          "date": "${form.date}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "SELECT_SLOT",
+                "title": "Select time",
+                "data": {
+                  "selected_date": {
+                    "type": "string",
+                    "__example__": "2025-01-15"
+                  },
+                  "available_slots": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "__example__": [
+                      {
+                        "id": "09:00",
+                        "title": "9:00 AM"
+                      },
+                      {
+                        "id": "10:00",
+                        "title": "10:00 AM"
+                      }
+                    ]
+                  },
+                  "error_message": {
+                    "type": "string",
+                    "__example__": ""
+                  }
+                },
+                "terminal": true,
+                "layout": {
+                  "type": "SingleColumnLayout",
+                  "children": [
+                    {
+                      "type": "TextBody",
+                      "text": "Available times for ${data.selected_date}:"
+                    },
+                    {
+                      "type": "RadioButtonsGroup",
+                      "name": "slot",
+                      "label": "Time slot",
+                      "data-source": "${data.available_slots}",
+                      "required": true
+                    },
+                    {
+                      "type": "Footer",
+                      "label": "Book",
+                      "on-click-action": {
+                        "name": "data_exchange",
+                        "payload": {
+                          "date": "${data.selected_date}",
+                          "slot": "${form.slot}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "publish-flow": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows/flow-123/publish",
+        "method": "POST",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "encryption": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows/flow-123/setup_encryption",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "phone_number_id": "phone-123"
+        }
+      }
+    ]
+  },
+  "deploy-endpoint": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows/flow-123/data_endpoint/deploy",
+        "method": "POST",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "register-endpoint": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/platform/v1/whatsapp/flows/flow-123/data_endpoint/register",
+        "method": "POST",
+        "headers": {
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": null
+      }
+    ]
+  },
+  "send-flow-preview": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": \"fixture-id\",\n    \"status\": \"APPROVED\",\n    \"data\": []\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/phone-123/messages",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "messaging_product": "whatsapp",
+          "recipient_type": "individual",
+          "to": "+15551234567",
+          "type": "interactive",
+          "interactive": {
+            "type": "flow",
+            "body": {
+              "text": "Choose a slot"
+            },
+            "action": {
+              "name": "flow",
+              "parameters": {
+                "flow_message_version": "3",
+                "flow_id": "flow-123",
+                "flow_cta": "Open",
+                "flow_token": "flow-123",
+                "mode": "draft"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "custom-https": {
+    "status": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"data\": {\n    \"response\": {\n      \"ok\": true,\n      \"status\": 200,\n      \"url\": \"https://staging.example.com/meta/whatsapp/v23.0/phone-123/messages\",\n      \"data\": {\n        \"id\": \"fixture-id\",\n        \"status\": \"APPROVED\",\n        \"data\": []\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://staging.example.com/meta/whatsapp/v23.0/phone-123/messages",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "messaging_product": "whatsapp",
+          "to": "15551234567",
+          "type": "interactive",
+          "interactive": {
+            "type": "button",
+            "body": {
+              "text": "Choose an option:"
+            },
+            "action": {
+              "buttons": [
+                {
+                  "type": "reply",
+                  "reply": {
+                    "id": "accept",
+                    "title": "Accept"
+                  }
+                },
+                {
+                  "type": "reply",
+                  "reply": {
+                    "id": "decline",
+                    "title": "Decline"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "invalid-payload": {
+    "status": 2,
+    "stdout": "{\n  \"ok\": false,\n  \"error\": {\n    \"message\": \"Failed to send template message\",\n    \"details\": {\n      \"message\": \"type must be template\",\n      \"usage\": \"node scripts/send-template.mjs --phone-number-id <PHONE_NUMBER_ID> --json <payload> | --file <path>\",\n      \"env\": [\n        \"KAPSO_API_BASE_URL\",\n        \"KAPSO_API_KEY\",\n        \"META_GRAPH_VERSION (optional)\"\n      ],\n      \"notes\": [\n        \"Payload must include messaging_product: \\\"whatsapp\\\" and type: \\\"template\\\".\"\n      ],\n      \"hints\": [\n        \"To discover phone_number_id (Meta phone number id), run: node scripts/list-platform-phone-numbers.mjs\",\n        \"Start from an asset payload in assets/ (send-time examples) and adjust the template name/to/components.\"\n      ]\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": []
+  },
+  "api-error": {
+    "status": 2,
+    "stdout": "{\n  \"ok\": false,\n  \"error\": {\n    \"message\": \"Meta proxy request failed\",\n    \"details\": {\n      \"response\": {\n        \"ok\": false,\n        \"status\": 400,\n        \"url\": \"https://api.kapso.ai/meta/whatsapp/v24.0/waba-123/message_templates\",\n        \"data\": {\n          \"error\": {\n            \"message\": \"Invalid template\",\n            \"code\": 100\n          }\n        }\n      }\n    }\n  }\n}\n",
+    "stderr": "",
+    "requests": [
+      {
+        "url": "https://api.kapso.ai/meta/whatsapp/v24.0/waba-123/message_templates",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "x-api-key": "synthetic-api-key"
+        },
+        "body": {
+          "name": "test"
+        }
+      }
+    ]
+  }
+}

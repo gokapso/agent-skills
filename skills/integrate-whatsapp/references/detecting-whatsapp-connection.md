@@ -34,14 +34,38 @@ Configure a project webhook to receive the `whatsapp.phone_number.created` event
 
 ### Handle the webhook
 
+Register this route **before** any global `express.json()` middleware so the signature is checked against the original bytes. Keep the webhook secret and expected Kapso project ID in server-side configuration. Use a dedicated webhook subscribed to `whatsapp.phone_number.created` for this receiver. V2 has connection fields at the body root and its event name in `X-Webhook-Event`; the example also accepts an event/data envelope.
+
 ```javascript
-app.post('/webhooks/project', async (req, res) => {
-  const { event, data } = req.body;
+const { createHmac, timingSafeEqual } = require('node:crypto');
+const webhookSecret = process.env.KAPSO_WEBHOOK_SECRET;
+const expectedProjectId = process.env.KAPSO_PROJECT_ID;
+if (!webhookSecret || !expectedProjectId) throw new Error('Missing webhook configuration');
+
+app.post('/webhooks/project', express.raw({ type: 'application/json' }), async (req, res) => {
+  const signature = req.get('X-Webhook-Signature');
+  if (!Buffer.isBuffer(req.body) || !/^[a-f0-9]{64}$/i.test(signature || '')) {
+    return res.status(401).send('Invalid webhook signature');
+  }
+  const expected = createHmac('sha256', webhookSecret).update(req.body).digest();
+  if (!timingSafeEqual(expected, Buffer.from(signature, 'hex'))) {
+    return res.status(401).send('Invalid webhook signature');
+  }
+
+  let payload;
+  try { payload = JSON.parse(req.body.toString('utf8')); }
+  catch { return res.status(400).send('Invalid JSON'); }
+  const event = payload.event || req.get('X-Webhook-Event');
+  const data = payload.data || payload;
 
   if (event === 'whatsapp.phone_number.created') {
+    if (data?.project?.id !== expectedProjectId) {
+      return res.status(403).send('Unexpected project');
+    }
     const { phone_number_id, customer } = data;
+    if (!phone_number_id || !customer?.id) return res.status(400).send('Missing connection identifiers');
 
-    // Update your database
+    // Map the signed Kapso customer ID to your own record if the IDs differ.
     await db.customers.update(customer.id, {
       phone_number_id,
       whatsapp_connected: true,
@@ -57,6 +81,8 @@ app.post('/webhooks/project', async (req, res) => {
 ```
 
 See [webhooks documentation](/docs/platform/webhooks) for signature verification and best practices.
+
+Kapso retries deliveries; make database updates and the welcome flow idempotent using `X-Idempotency-Key` in your application.
 
 ## 2. Success redirect URL
 
@@ -101,35 +127,50 @@ https://your-app.com/whatsapp/success?setup_link_id=...&status=completed&phone_n
 
 ### Handle the redirect
 
-```javascript
-app.get('/whatsapp/success', async (req, res) => {
-  const {
-    setup_link_id,
-    status,
-    phone_number_id,
-    business_account_id,
-    provisioned_phone_number_id,
-    display_phone_number
-  } = req.query;
+Query parameters are browser-controlled. They help locate a connection but do not prove onboarding succeeded or authorize a customer update. When creating the setup link, persist its ID on your own customer's record. Require your application's authenticated customer session (shown as `requireCustomerSession` below), compare the returned ID with that stored setup link, and verify the number through your project-scoped API key.
 
-  // Update your database
-  await db.customers.update({
-    phone_number_id,
-    business_account_id,
-    display_phone_number: decodeURIComponent(display_phone_number),
+```javascript
+app.get('/whatsapp/success', requireCustomerSession, async (req, res) => {
+  const customer = await db.customers.findById(req.user.customerId);
+  const { setup_link_id, phone_number_id } = req.query;
+  if (!customer || typeof setup_link_id !== 'string' || typeof phone_number_id !== 'string' ||
+      setup_link_id !== customer.kapso_setup_link_id) {
+    return res.status(403).send('Unexpected onboarding session');
+  }
+
+  const query = new URLSearchParams({
+    customer_id: customer.kapso_customer_id,
+    phone_number_id
+  });
+  const response = await fetch(`https://api.kapso.ai/platform/v1/whatsapp/phone_numbers?${query}`, {
+    headers: { 'X-API-Key': process.env.KAPSO_API_KEY },
+    redirect: 'error'
+  });
+  if (!response.ok) return res.status(502).send('Unable to verify connection');
+  const result = await response.json();
+  const number = result.data?.find(item =>
+    item.phone_number_id === phone_number_id && item.customer_id === customer.kapso_customer_id
+  );
+  if (!number) return res.status(409).render('whatsapp-connection-pending');
+
+  // Store verified API values on the authenticated customer's record.
+  await db.customers.update(customer.id, {
+    phone_number_id: number.phone_number_id,
+    business_account_id: number.business_account_id,
+    display_phone_number: number.display_phone_number,
     whatsapp_connected: true,
     connected_at: new Date()
   });
 
   // Show success page to customer
   res.render('whatsapp-connected', {
-    phoneNumber: decodeURIComponent(display_phone_number)
+    phoneNumber: number.display_phone_number
   });
 });
 ```
 
 <Note>
-These parameters are convenience identifiers to avoid extra API fetches. Use `phone_number_id` as the primary identifier.
+Use redirect parameters for navigation and progress displays. Persist a connection only after a verified webhook or authenticated API confirmation for the correct customer. If the customer has no browser session, rely on the verified webhook and show a generic progress page.
 </Note>
 
 ### Failure redirect

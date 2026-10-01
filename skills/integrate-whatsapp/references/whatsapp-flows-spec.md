@@ -174,13 +174,21 @@ In your handler:
 - Current screen: `body.data_exchange.screen`
 - Flow action: `body.data_exchange.action` (`"INIT"`, `"data_exchange"`, `"BACK"`)
 - Flow token: `body.data_exchange.flow_token`
-- Signature: `body.data_exchange.flow_token_signature` + `body.signature_valid` if you want to enforce it.
+- Request signature: `body.signature_valid` reports Kapso's verification of Meta's `X-Hub-Signature-256` HTTP header. It is not verification of `body.data_exchange.flow_token_signature`.
 
 You **do not** need to implement encryption/decryption yourself; Kapso already does that before calling your Function.
 
 Note: in invocation logs we store a simplified shape with a top-level
 `flow_id` for convenience. The JSON sent to your Function uses the `flow`
 object as shown above.
+
+### Request Authentication and Customer Authorization
+
+`signature_valid: false` can mean the Meta signature header or verification secret was missing, as well as an invalid signature. Previews and development calls may be unsigned. Keep public or non-sensitive preview flows usable; do not assume every flow requires this field to be `true`.
+
+For an endpoint that requires signed Meta requests, reject requests whose `signature_valid` is not `true` before returning protected data or making changes. Separately bind each flow session to the intended customer and resource using trusted server-side state and enforce access there. A valid Meta request signature authenticates the sender, not a customer's permission to view another customer's appointments. A caller-supplied `flow_token` or customer ID alone is not authorization. Only trust Kapso's wrapper fields when the Function is reached through an authenticated Kapso invocation.
+
+When demonstrating an unsigned preview, use synthetic data and do not bypass production authorization checks. Kapso handles transport encryption/decryption; application-level authorization remains the handler's responsibility.
 
 ### 3. Action Routing Pattern
 
