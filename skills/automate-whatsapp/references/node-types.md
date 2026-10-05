@@ -262,6 +262,25 @@ Default tools (toggle on/off only):
 Custom tools:
 - `flow_agent_webhooks[]` (webhook tools)
 - `flow_agent_mcp_servers[]` (MCP tools)
+- `flow_agent_knowledge_bases[]` (inline searchable text)
+
+### Knowledge bases
+
+Each entry in `flow_agent_knowledge_bases[]` takes `name`, `description` and `knowledge_base_text`, and becomes its own search tool named after `name` (`"FAQ"` → `search_faq`). Colliding tool names get a `_2`, `_3`, ... suffix.
+
+```json
+"flow_agent_knowledge_bases": [
+  {
+    "name": "Pricing",
+    "description": "Plan prices and billing rules",
+    "knowledge_base_text": "Starter plan: $20/month, 1,000 messages included.\nPro plan: $99/month, 10,000 messages included."
+  }
+]
+```
+
+Set `description` whenever a node has more than one knowledge base — it is passed to the model as part of the tool description and is how the agent picks the right one.
+
+Retrieval is keyword-based, not semantic: the query is split into terms, accent-folded and lowercased, common Spanish/English/Portuguese stopwords are dropped, and lines are ranked by how many terms prefix one of their words. The top 12 lines are returned with neighbouring lines, capped at 6,000 characters. Write `knowledge_base_text` as self-contained lines using the words a user would actually say.
 
 ### Agent tools: exact placement and structure
 
