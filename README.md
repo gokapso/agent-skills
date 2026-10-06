@@ -48,6 +48,7 @@ Skills use **progressive disclosure**: agents load only the name and description
 
 ## Available skills
 
+- **integrate-whatsapp-calling**: Connect voice agents, answer WhatsApp calls, handle outbound permission and dialing, and verify signaling/media
 - **integrate-whatsapp**: Connect WhatsApp, set up webhooks, send messages/templates, manage flows
 - **automate-whatsapp**: Build WhatsApp automations with workflows, agents, functions, and databases
 - **observe-whatsapp**: Search Logs, debug delivery issues, inspect webhook deliveries, triage errors, run health checks
