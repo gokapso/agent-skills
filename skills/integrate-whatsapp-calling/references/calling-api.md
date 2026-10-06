@@ -20,6 +20,8 @@ All requests below use `X-API-Key: $KAPSO_API_KEY`. JSON writes also use `Conten
 
 Calling uses a phone-number `kind: "meta"` webhook, not a project webhook or Kapso message-event subscription. Forwarded payloads retain Meta's structure and can be scoped to the number. Verify raw bytes before JSON parsing; do not recompute the delivery key from the forwarded body. Read back the receiver URL and active state before testing.
 
+Also verify the Meta application's `calls` webhook subscription; an active Kapso receiver alone does not establish that subscription. Native recording/transcription notifications use the same signed batched receiver.
+
 ## Call actions
 
 `POST /meta/whatsapp/{version}/{phone_number_id}/calls`
@@ -34,6 +36,8 @@ Calling uses a phone-number `kind: "meta"` webhook, not a project webhook or Kap
 
 Check HTTP status before parsing JSON; bound and redact error details. Confirm the action's success response, then verify the webhook/media outcome. On cleanup errors, release the remaining resources and report the unsuccessful call action; do not hide the failure.
 
+Native `recording` and `transcription` are independent opt-ins on outbound `connect` or inbound `accept`, never `pre_accept`. Read [Native artifacts](native-artifacts.md) for the required purpose/announcement fields and protected retrieval contract.
+
 ## Permissions and logs
 
 - `GET /meta/whatsapp/{version}/{phone_number_id}/call_permissions?user_wa_id={phone}`. For BSUID-only users, use `recipient={BSUID}` instead. Check the current `start_call` action.
@@ -43,6 +47,8 @@ Check HTTP status before parsing JSON; bound and redact error details. Confirm t
 REST uses snake_case; the TypeScript SDK uses camelCase (`phoneNumberId`, `callId`, `sdpType`, `actionName`, `canPerformAction`). Verify the installed SDK version before using newer recipient options; do not pass REST field names to SDK wrappers.
 
 Call-history direction filters match stored values, case insensitive. Meta calls use `USER_INITIATED` or `BUSINESS_INITIATED`; legacy records may use `INBOUND` or `OUTBOUND`. Do not treat these as interchangeable filter aliases.
+
+The proxy history result's `id` is the saved local call UUID; `call_id` is Meta's ID used for signaling. Proxy history (including exact `call_id` lookup and SDK `calls.get`) does not expose artifacts. Use the local UUID with [saved-call detail and artifact endpoints](native-artifacts.md#retrieve-saved-artifacts). Confirm runtime availability after deployment; merged source alone does not prove the filter or artifact endpoints are live.
 
 ## Current authoritative references
 

@@ -26,6 +26,12 @@ Prepare inbound media without playing the greeting. Start speech after successfu
 
 Wire provider completion and any agent end-call tool to WhatsApp `terminate`, followed by session cleanup. Let farewell playback finish when ending normally; do not depend on a particular client tool callback to observe a native provider end-call tool. A provider socket closing alone does not prove Meta ended the call.
 
+## Provider-owned recordings and transcripts
+
+Choose [Meta native artifacts](native-artifacts.md) when the requested output is Meta's call recording or transcript. For capture in your own bridge, Pipecat's [AudioBufferProcessor](https://docs.pipecat.ai/api-reference/server/utilities/audio/audio-buffer-processor) can emit separate user/bot tracks. ElevenLabs Agents offers a [conversation audio API](https://elevenlabs.io/docs/eleven-agents/api-reference/conversations/get-audio) and [post-call audio/transcription webhooks](https://elevenlabs.io/docs/eleven-agents/workflows/post-call-webhooks) that your application can copy to its storage; verify their own signatures and retention/settings.
+
+These are possible custom integrations, not outputs currently wired into Kapso's native artifact sidebar or independently proven for capture quality. Correlate provider conversation IDs with the Meta call ID and saved local UUID. An agent's turn transcript is distinct from running extra offline STT on captured audio; extra transcription has its own cost and quality checks. Keep capture/retention within the requested scope and use the official provider examples rather than an incomplete copied pipeline.
+
 ## Debug the failing layer
 
 | Evidence | Next check |
