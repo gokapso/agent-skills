@@ -42,6 +42,8 @@ Check HTTP status before parsing JSON; bound and redact error details. Confirm t
 
 REST uses snake_case; the TypeScript SDK uses camelCase (`phoneNumberId`, `callId`, `sdpType`, `actionName`, `canPerformAction`). Verify the installed SDK version before using newer recipient options; do not pass REST field names to SDK wrappers.
 
+Call-history direction filters match stored values, case insensitive. Meta calls use `USER_INITIATED` or `BUSINESS_INITIATED`; legacy records may use `INBOUND` or `OUTBOUND`. Do not treat these as interchangeable filter aliases.
+
 ## Current authoritative references
 
 - [Call actions](https://docs.kapso.ai/api/meta/whatsapp/calls/perform-call-action)
