@@ -80,6 +80,8 @@ Message list query params (use `GET /whatsapp/messages`):
 - `message_type` (text|image|audio|video|document), `has_media` (true|false)
 - `limit` (max 100), `after`, `before` for cursor pagination
 
+`phone_number` matching: a value starting with `+` that resolves to a complete international number (8-15 digits) is matched exactly, including known country variants such as Brazilian numbers with or without the mobile ninth digit. Any other value is matched as a substring after non-digit characters are stripped. A value with no digits returns no results. Send the full `+<country code><number>` form when you want an exact lookup.
+
 Example:
 `GET /whatsapp/messages?conversation_id=<uuid>&phone_number_id=<id>&direction=inbound&limit=50`
 
