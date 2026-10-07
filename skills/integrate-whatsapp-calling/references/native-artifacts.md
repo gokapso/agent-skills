@@ -30,7 +30,7 @@ Correlate each event's `id` (Meta call ID), `value.metadata.phone_number_id`, an
 
 ## Retrieve saved artifacts
 
-Use the trusted Kapso API host and project `X-API-Key`. **`:id` below is the saved local call UUID, not Meta's `call_id`.** Resolve it from the exact proxy history lookup in [Calling API](calling-api.md#permissions-and-logs), or list saved calls:
+Use `https://app.kapso.ai` for the `/api/v1` artifact routes below with the project `X-API-Key`. The WhatsApp proxy uses `https://api.kapso.ai/meta/whatsapp`; it does not serve these artifact routes. **`:id` below is the saved local call UUID, not Meta's `call_id`.** Resolve it from the exact proxy history lookup in [Calling API](calling-api.md#permissions-and-logs), or list saved calls:
 
 ```text
 GET /api/v1/whatsapp_calls?whatsapp_config_id={KAPSO_CONFIG_UUID}&period=week&per_page=20&page=1
