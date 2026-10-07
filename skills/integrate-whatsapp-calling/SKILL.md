@@ -35,7 +35,7 @@ Iterate every `entry`, `change`, and both `value.calls[]` and `value.statuses[]`
 | `statuses[]`: `ACCEPTED` | Match `status.id` to the call ID, clear the ringing timeout, and start the outbound greeting when media is ready. |
 | `statuses[]`: `REJECTED`, or `terminate` | End the matching session without starting another agent; release pending and live resources. |
 | Agent ends, startup fails, or media fails | End the WhatsApp call through the appropriate `reject`/`terminate` action and release provider, pipeline, and media resources. Local cleanup alone does not hang up WhatsApp. |
-| `call_recording_available`, `call_transcription_available` | Save metadata for the matching phone/project and call ID, including after termination. Never launch an agent; see [native artifacts](references/native-artifacts.md). |
+| `call_recording_available`, `call_transcript_available`, `call_transcription_available` | Treat both transcript names as the same late completion event. Save metadata for the matching phone/project and call ID, including after termination. Never launch an agent; see [native artifacts](references/native-artifacts.md). |
 
 Generate SDP from the peer connection that will carry this call's audio. Never use placeholder SDP. Keep the peer alive while ringing and during the conversation. If an outbound event arrives before the dial response returns its ID, briefly buffer it by call ID and drain once associated. Late signaling must not restart a terminal session; artifact notifications still need processing after media-session cleanup.
 
