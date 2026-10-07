@@ -399,6 +399,7 @@ node scripts/openapi-explore.mjs --spec platform search "setup link"
 
 ## Related skills
 
+- `integrate-whatsapp-calling` - Voice agents, inbound/outbound calls, and Calling webhooks
 - `automate-whatsapp` - Workflows, agents, and automations
 - `observe-whatsapp` - Debugging, logs, health checks
 
