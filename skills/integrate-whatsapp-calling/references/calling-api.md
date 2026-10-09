@@ -15,8 +15,16 @@ All requests below use `X-API-Key: $KAPSO_API_KEY`. JSON writes also use `Conten
 | `GET /platform/v1/whatsapp/phone_numbers` | Discover connected numbers in the key's project. Follow pagination when needed. |
 | `PATCH /platform/v1/whatsapp/phone_numbers/{phone_number_id}` | Enable Calling with `{"whatsapp_phone_number":{"calls_enabled":true}}`. |
 | `GET /meta/whatsapp/{version}/{phone_number_id}/settings?fields=calling` | Read back `calling.status`; Meta may reject activation. |
-| `GET /platform/v1/whatsapp/phone_numbers/{phone_number_id}/webhooks?kind=meta` | Inspect the existing receiver before creating or replacing one. |
+| `integrate-whatsapp/scripts/list.js` (command below) | Inspect the existing receiver with secrets redacted before creating or replacing one. |
 | `POST /platform/v1/whatsapp/phone_numbers/{phone_number_id}/webhooks` | Create only if absent: `{"whatsapp_webhook":{"kind":"meta","url":"https://your-app.example/webhooks/whatsapp","secret_key":"YOUR_RANDOM_SECRET","active":true}}`. |
+
+Run the webhook list command from the `integrate-whatsapp-calling` skill directory with the sibling `integrate-whatsapp` skill installed and `KAPSO_API_BASE_URL=https://api.kapso.ai`. If installed elsewhere, use the actual path to that sibling's `scripts/list.js`. Disable raw secret-file output for this inspection:
+
+```bash
+KAPSO_SECRET_OUTPUT_FILE= node ../integrate-whatsapp/scripts/list.js --phone-number-id <META_PHONE_NUMBER_ID> --kind meta
+```
+
+The raw `GET /platform/v1/whatsapp/phone_numbers/{phone_number_id}/webhooks?kind=meta` response includes an unmasked `secret_key`. Never print or persist that raw response or put it in chat; if inspecting the API directly, report only `url`, `kind`, and `active`.
 
 Calling uses a phone-number `kind: "meta"` webhook, not a project webhook or Kapso message-event subscription. Forwarded payloads retain Meta's structure and can be scoped to the number. Verify raw bytes before JSON parsing; do not recompute the delivery key from the forwarded body. Read back the receiver URL and active state before testing.
 

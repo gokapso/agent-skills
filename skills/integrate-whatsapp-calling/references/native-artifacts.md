@@ -1,6 +1,6 @@
 # Native artifacts and pricing
 
-Kapso saves Meta completion metadata and retrieves media on demand. It does not automatically opt calls in, permanently archive audio/text, or run extra STT. The [merged implementation contract](https://github.com/gokapso/cientos-rails/blob/b5d48101c4f822fb1188abcf5ff27639177e7523/docs/whatsapp-calling-artifacts.md) is the source for the endpoints below; confirm deployment and number eligibility before relying on them.
+Kapso saves Meta completion metadata and retrieves media on demand. It does not automatically opt calls in, permanently archive audio/text, or run extra STT. The [public recordings and transcripts guide](https://docs.kapso.ai/docs/whatsapp/calling/recordings-and-transcripts) documents the endpoints below; confirm deployment and number eligibility before relying on them.
 
 ## Opt in on the call action
 
@@ -22,7 +22,9 @@ Use the entrypoint's raw-byte HMAC verification, every entry/change/item, phone 
 | Event | Media object |
 | --- | --- |
 | `call_recording_available` | `call_recording.audio` |
-| `call_transcription_available` | `call_transcript.document` |
+| `call_transcript_available` or `call_transcription_available` | `call_transcript.document` |
+
+Both transcript event names mean the same late completion; route either one to the same handler. Meta's documented payload uses `call_transcript.document`.
 
 Correlate each event's `id` (Meta call ID), `value.metadata.phone_number_id`, and owning project with saved state; preserve BSUID identities when there is no caller phone. Keep metadata handling independent of the media worker: late events after termination/cleanup must not be discarded or launch an agent. Kapso can save an artifact-only placeholder before lifecycle events arrive without establishing pickup, billing, or a conversation. Replays of the same media ID do not extend expiry; older events do not replace newer metadata.
 
@@ -38,6 +40,8 @@ GET /api/v1/whatsapp_calls/:id
 GET /api/v1/whatsapp_calls/:id/artifacts/recording
 GET /api/v1/whatsapp_calls/:id/artifacts/transcription
 ```
+
+Get `KAPSO_CONFIG_UUID` from the phone number's `internal_id` in `GET /platform/v1/whatsapp/phone_numbers` on `https://api.kapso.ai`, or from `whatsapp_config_id` in a proxy call-history row. The platform phone number's `id` is the Meta phone ID; using it as `whatsapp_config_id` can return HTTP 200 with empty `data`. The configuration UUID identifies the number's Kapso configuration; the saved call UUID (`id` on a call-history row) identifies one call and is used for detail/artifact routes.
 
 The external list is paginated (`page`/`per_page`, cap 100; follow response `Link` pagination) and uses the Kapso configuration UUID filter, not a Meta phone ID. Match returned `call_id` to your target and use its `id` for detail. It does not accept the proxy's `call_id`/`since` filters. Neither this list nor proxy list/exact lookup exposes artifacts; do not fetch media while rendering a growing list. No SDK artifact wrapper is promised.
 
