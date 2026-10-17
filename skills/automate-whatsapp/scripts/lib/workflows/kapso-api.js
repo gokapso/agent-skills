@@ -22,6 +22,9 @@ function validateBaseUrl(baseUrl) {
   } catch (error) {
     throw new Error(`Invalid KAPSO_API_BASE_URL: ${baseUrl}`);
   }
+  if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && process.env.KAPSO_ALLOW_INSECURE_HTTP === 'true')) {
+    throw new Error('Kapso API requests require HTTPS. For a trusted development endpoint only, set KAPSO_ALLOW_INSECURE_HTTP=true.');
+  }
   if (!process.env.KAPSO_API_ALLOW_LOCALHOST && isLocalhost(parsed.hostname)) {
     throw new Error(
       `KAPSO_API_BASE_URL points to localhost (${parsed.hostname}). ` +
@@ -76,7 +79,8 @@ export async function requestJson(config, options) {
     response = await fetch(url.toString(), {
       method: options.method,
       headers,
-      body
+      body,
+      redirect: 'error'
     });
   } catch (error) {
     return {
