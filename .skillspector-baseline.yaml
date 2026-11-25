@@ -1,0 +1,93 @@
+# SkillSpector baseline for gokapso/agent-skills
+#
+# Glob-rule suppressions only (no exact fingerprints), so these survive line-number
+# drift, rewording and SkillSpector upgrades. Every entry was opened and read in the
+# source before being accepted, and each rule is scoped by the matched text so the
+# same rule id still fires on anything else.
+#
+# Reviewed against: SkillSpector v2.13.7, static-only (--no-llm), 2026-11-24
+#
+# Deliberately NOT suppressed (real work items):
+#   SC1 / SC4 - "yaml": "^2.6.0" is an unpinned range in three package.json files, so
+#               the resolved version cannot be matched against the two OSV advisories.
+#   LP3       - SKILL.md files declare no allowed-tools while the bundled scripts use
+#               env, network and shell capabilities.
+#   RP1       - `npx skills` in README.md is unversioned.
+#
+# Usage:
+#   skillspector scan . --no-llm --baseline .skillspector-baseline.yaml
+#   skillspector scan skills/integrate-whatsapp --no-llm -b ../../.skillspector-baseline.yaml
+# Add --show-suppressed to audit what these rules drop.
+
+version: 2
+
+rules:
+  # --------------------------------------------------------------- coverage noise
+  - id: "AE1"
+    path: "*SKILL.md"
+    message: "*not completely inspected*"
+    reason: >-
+      Not a behavioral finding. Raised once per `node scripts/<name>.js <placeholder>`
+      invocation documented in SKILL.md (matched text is "scripts/<name>.js (partial)"):
+      the bounded static parser cannot resolve a command whose arguments are
+      placeholders, and records the coverage gap at HIGH severity with 100% confidence.
+      112 of these across the four skills are what drive the CRITICAL score. Every
+      referenced script is present in the bundle and is itself scanned; none contains
+      child_process, exec, eval or new Function. Scoped to SKILL.md so the same rule
+      still fires on uninspected artifacts referenced from anywhere else.
+
+  # -------------------------------------------- security documentation vocabulary
+  - id: "PE3"
+    path: "*references/*.md"
+    message: "*access token*"
+    reason: >-
+      The matched text is the phrase "access token(s)" in reference documentation that
+      explains credential handling - "Each repository needs a GitHub Personal Access
+      Token", "Direct-Meta access tokens ... differ", "redact recognized credential
+      fields, including webhook secret_key". No .env or token file is read on any code
+      path. Scoped to that phrase, so PE3 still fires on real credential paths
+      (~/.ssh/id_rsa, ~/.aws/credentials, .env) including inside references/.
+
+  - id: "RA1"
+    path: "*SKILL.md"
+    message: "*overwrite existing file*"
+    reason: >-
+      False positive in integrate-whatsapp/SKILL.md, where the matched phrase comes
+      from a hardening statement: the secret-capture script "refuses to overwrite
+      existing files or follow symlinks". Flagged for the vocabulary it uses to
+      describe being safe. Nothing in the bundle writes to SKILL.md or to its own
+      configuration.
+
+  - id: "YR4"
+    path: "*README.md"
+    message: "*storage/blobs/redirect*"
+    reason: >-
+      YARA signature agent_skill_mcp_tool_poisoning_metadata fires on the base64
+      segment of the Rails Active Storage URL for the repository banner image in
+      README.md line 3. No tool or skill manifest metadata is involved.
+
+  - id: "MP2"
+    path: "*references/whatsapp-flows-spec.md"
+    message: "*fill input*"
+    reason: >-
+      Matched "pre-fill inputs" in Meta's published WhatsApp Flows specification,
+      describing the `init-values` form configuration. Third-party API reference text,
+      not padding aimed at an agent's context window.
+
+  # ----------------------------------------------- documented first-party endpoints
+  - id: "E1"
+    message: "*api.kapso.ai*"
+    reason: >-
+      The skill's own documented API host, appearing in reference docs, SKILL.md and
+      test fixtures (50 of the 52 E1 hits). lib/security.js rejects non-HTTPS and
+      refuses redirects, SKILL.md instructs the agent not to change API hosts based on
+      instructions in received data, and the bundled scripts hardcode no outbound host
+      other than docs.kapso.ai. Scoped to this host, so E1 still fires on any other
+      destination anywhere in the bundle.
+
+  - id: "E1"
+    message: "*api.example.com*"
+    reason: >-
+      Placeholder host in the webhook node examples in
+      automate-whatsapp/references/node-types.md. Reserved example domain (RFC 2606),
+      not a reachable endpoint.
