@@ -67,6 +67,19 @@ node --test tests/integrate-whatsapp.test.mjs
 
 The tests execute the bundled commands against a synthetic API double, compare supported requests and outputs with the recorded baseline, and exercise callback authentication, transport safeguards, and secret handling. They never contact Kapso or Meta. HTTPS API hosts remain configurable; trusted HTTP development endpoints require `KAPSO_ALLOW_INSECURE_HTTP=true`. See the integration skill's [credential handling](skills/integrate-whatsapp/references/webhooks-reference.md#credential-handling) for capturing one-time secrets privately.
 
+## Security scanning
+
+These skills are scanned with [SkillSpector](https://github.com/NVIDIA/skillspector). Scan a single skill before installing it, or the whole repo:
+
+```bash
+skillspector scan skills/integrate-whatsapp --no-llm -b ../../.skillspector-baseline.yaml
+skillspector scan . --no-llm -b .skillspector-baseline.yaml
+```
+
+`--recursive` reports "no sub-skills detected" here, because the skills live under `skills/` rather than at the repo root. Scan each `skills/*` directory separately to get per-skill coverage and scores.
+
+[`.skillspector-baseline.yaml`](.skillspector-baseline.yaml) suppresses reviewed false positives: parser coverage gaps on the `node scripts/<name>.js <placeholder>` lines in each `SKILL.md`, and keyword matches on documentation that explains credential handling. Each rule is scoped to the matched text and carries its reason, so the same rule still fires on anything else. Add `--show-suppressed` to audit what it drops. A clean scan reports only unpinned-dependency and tool-scope findings.
+
 ## SKILL.md format
 
 Each skill requires a `SKILL.md` file with YAML frontmatter:
